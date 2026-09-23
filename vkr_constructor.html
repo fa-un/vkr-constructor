@@ -593,6 +593,7 @@ function build(){
   const methods = METHODS.filter(m=>state.method.includes(m.id));
   const babok = BABOK.filter(b=>state.babok.includes(b.id));
   const M = methods[0];
+  const mAll = methods.map(m=>m.short).join(methods.length===2?' и ':', ');
   const research = state.form==='research';
   const sysShort = P.sys.replace(/^(системы|модуля|платформы|портала|адаптеров|витрины)\s+/,'');
   let sol;
@@ -632,7 +633,8 @@ function build(){
   else if(state.tobe-state.asis===1 && state.asis>=2) dir = 4;
   if(!research && state.evm && dir===8) dir = 5;
   alts = [...new Set(alts)].filter(a=>a!==topic);
-  return {S,P,kpis,methods,babok,M,research,sol,verb,topic,alts,dir,sysShort};
+  const solAll = state.tobe>=5 && methods.length ? mAll : sol;
+  return {S,P,kpis,methods,babok,M,mAll,solAll,research,sol,verb,topic,alts,dir,sysShort};
 }
 
 let LAST = null;
@@ -677,13 +679,13 @@ function render(){
 
   const materials = state.base==='real' ? S.ex : state.base==='seek' ? `организация сектора «${S.label}», подбирается на первом этапе` : `открытые и синтетические данные сектора «${S.label}»`;
   const goal = research
-    ? `разработать и проверить ${M?'модель на основе '+M.short:'метод'} для повышения ${kpis.map(k=>k.imp).join(', ')||'эффективности'} процесса ${P.name} ${S.org}`
-    : `повысить ${kpis.map(k=>k.imp).join(', ')||'эффективность'} процесса ${P.name} ${S.org} за счёт ${b.sol}`;
+    ? `разработать и проверить ${M?'модель на основе '+b.mAll:'метод'} для повышения ${kpis.map(k=>k.imp).join(', ')||'эффективности'} процесса ${P.name} ${S.org}`
+    : `повысить ${kpis.map(k=>k.imp).join(', ')||'эффективность'} процесса ${P.name} ${S.org} за счёт ${b.solAll}`;
   const kv = [
     ['Форма', research?'исследовательская работа':'работа практической направленности'],
     ['Материалы', materials],
     ['Объект', `${state.ptype==='core'?'основной':'поддерживающий'} процесс ${P.name} ${research?'типового '+S.org:S.org}`],
-    ['Предмет', research?`методы и модели повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса`:`методы и средства ${b.sol} в процессе ${P.name}`],
+    ['Предмет', research?`методы и модели повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса`:`методы и средства ${b.solAll} в процессе ${P.name}`],
     ['Цель', goal],
     ['Зрелость', `${state.asis} «${LEVELS[state.asis].t}» → ${state.tobe} «${LEVELS[state.tobe].t}»`],
     ['Направление', `${b.dir}. ${DIRECTIONS[b.dir]} (ориентир по приложению А программы ГИА)`]
@@ -697,11 +699,11 @@ function render(){
     `сформулировать бизнес-проблему и требования к решению${babok.length?' ('+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
   ];
   if(research){
-    tasks.push(`обосновать ${M?'метод на основе '+M.short:'метод решения'} и подготовить данные`, 'построить и проверить модель, сравнить с базовым подходом', 'оценить применимость метода на типовом объекте и сформулировать рекомендации');
+    tasks.push(`обосновать ${M?'метод на основе '+b.mAll:'метод решения'} и подготовить данные`, 'построить и проверить модель, сравнить с базовым подходом', 'оценить применимость метода на типовом объекте и сформулировать рекомендации');
   } else {
     tasks.push(`сравнить классы ПО и обосновать выбор ${b.sysShort}`, `спроектировать процесс TO-BE${state.deliv.includes('arch')?' и архитектуру решения':''}${state.deliv.includes('er')?', модель данных':''}`);
     if(state.deliv.includes('req')) tasks.push('разработать требования: техническое задание или user stories');
-    if(state.deliv.includes('proto')) tasks.push(M?`реализовать прототип ${M.short} и оценить точность`:'реализовать прототип решения на данных организации');
+    if(state.deliv.includes('proto')) tasks.push(M?`реализовать прототип ${b.mAll} и оценить качество`:'реализовать прототип решения на данных организации');
     if(state.pm!=='none') tasks.push(`спланировать проект внедрения (${{pmbok:'PMBOK 7',gost:'каскад по ГОСТ 34',agile:'Scrum или Kanban',hybrid:'гибридная модель'}[state.pm]})${state.evm?' с контролем по EVM':''}`);
     tasks.push('рассчитать экономический эффект: NPV, DPP, TCO, ROI');
     if(state.deliv.includes('pilot')) tasks.push('провести пилот, сравнить показатели до и после, получить справку о внедрении');
@@ -713,7 +715,7 @@ function render(){
     ['Глава 1. Теоретические основы', `Обзор методов и инструментов по теме ${S.lit}; ${methods.length?'сравнение методов: '+methods.map(m=>m.t.toLowerCase()).join(', ')+'; ':''}анализ рынка ПО класса «${b.sysShort}» в табличной форме; выводы по главе.`],
     ['Глава 2. Анализ объекта и концепция решения', `${state.base==='seek'?'Критерии подбора организации и её характеристика. ':'Деятельность организации, '}схема информационных потоков, уровень ИТ-поддержки процессов; ${babok.length?'техники анализа: '+babok.map(x=>x.t.toLowerCase()).join(', ')+'; ':''}процесс ${P.name} AS-IS${state.deliv.includes('bpmn')?' (BPMN)':''}; требования к решению; варианты решения и критерии выбора ПО; ${state.deliv.includes('arch')?'архитектура TO-BE (ArchiMate)':'концепция TO-BE'}${state.deliv.includes('er')?'; модель данных (ER)':''}.`],
     ['Глава 3. Реализация и оценка', research
-      ? `Постановка эксперимента, данные, ${M?'модель на основе '+M.short:'метод'}, метрики качества (${kpis.map(k=>k.m.split(',')[0]).join(', ')||'…'}), сравнение с базовым подходом, ограничения и рекомендации.`
+      ? `Постановка эксперимента, данные, ${M?'модель на основе '+b.mAll:'метод'}, метрики качества (${kpis.map(k=>k.m.split(',')[0]).join(', ')||'…'}), сравнение с базовым подходом, ограничения и рекомендации.`
       : `${state.deliv.includes('proto')?'Прототип и тестирование. ':''}${state.pm!=='none'?'Организация проектных работ по '+{pmbok:'PMBOK 7: устав, WBS, план-график, реестр рисков, заинтересованные стороны',gost:'ГОСТ 34: стадии, ТЗ, приёмочные испытания',agile:'Agile: бэклог, спринты, инкременты',hybrid:'гибридной модели: вехи каскада, спринты внутри'}[state.pm]+(state.evm?'; контроль по EVM':'')+'. ':''}Экономическая оценка: NPV, IRR, DPP, PI, TCO; влияние на показатели ${kpis.map(k=>k.t.toLowerCase()).join(', ')||'…'}. ${state.deliv.includes('pilot')?'Результаты пилота и справка о внедрении.':''}`],
     ['Заключение', 'Выводы по задачам, достигнутые значения показателей, направления развития.']
   ];
