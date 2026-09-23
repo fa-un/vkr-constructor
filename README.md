@@ -13,4 +13,7 @@
 - `vkr_constructor.html` — приложение, один файл без сборки; откройте в браузере.
 - `vkr_constructor_requirements.md` — нормативная база, структура опций, правила
   согласованности, логика генерации, идеи для следующих версий.
-- Опубликованная версия: https://claude.ai/artifact/CPS8kRLg8SBUcxDU4NZpGB
+- `index.html` — та же страница в полной HTML-обёртке для GitHub Pages; собирается скриптом `./build.sh`,
+  вручную не редактируется.
+- Онлайн: https://fa-un.github.io/vkr-constructor/ (GitHub Pages)
+  и https://claude.ai/artifact/CPS8kRLg8SBUcxDU4NZpGB (артефакт claude.ai).
