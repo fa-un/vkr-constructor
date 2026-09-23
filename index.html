@@ -170,7 +170,7 @@ textarea{width:100%;min-height:260px;margin-top:8px;font-family:var(--mono);font
 
 <fieldset>
   <legend>5. Уровень автоматизации: сейчас и цель</legend>
-  <p class="hint">Шкала зрелости процесса. Уровни 4 и 5 соответствуют описательной и предиктивно-предписывающей аналитике. Для сравнения: MIT CISR описывает зрелость архитектуры стадиями «бизнес-силосы → стандартизированные технологии → оптимизированное ядро → бизнес-модульность».</p>
+  <p class="hint">Шкала кумулятивная: каждый уровень предполагает предыдущие. Уровни 0–3 описывают транзакционный контур (OLTP), уровень 4 добавляет хранилище и BI, уровень 5 добавляет DSS и ML/AI; контуры уточняются в блоке 6. Для сравнения: MIT CISR описывает зрелость архитектуры стадиями «бизнес-силосы → стандартизированные технологии → оптимизированное ядро → бизнес-модульность».</p>
   <div class="scale">
     <div><h3>AS-IS</h3><div class="lvl" id="g-asis"></div></div>
     <div><h3>TO-BE</h3><div class="lvl" id="g-tobe"></div></div>
@@ -178,25 +178,31 @@ textarea{width:100%;min-height:260px;margin-top:8px;font-family:var(--mono);font
 </fieldset>
 
 <fieldset>
-  <legend>6. Метрики и KPI</legend>
+  <legend>6. Контуры систем</legend>
+  <p class="hint">Какие классы систем затрагивает решение. Набор подставляется по уровню TO-BE, его можно поправить. В паспорте у каждого контура показано, есть ли он уже на уровне AS-IS или создаётся в работе.</p>
+  <div class="opts grid" id="g-contour"></div>
+</fieldset>
+
+<fieldset>
+  <legend>7. Метрики и KPI</legend>
   <p class="hint">Сгруппированы по перспективам сбалансированной системы показателей. Отраслевые системы: SCOR для логистики, TM Forum для телекома, DORA для ИТ-процессов. Программа ГИА требует свести качественные эффекты к количественным показателям.</p>
   <div id="g-kpi"></div>
 </fieldset>
 
 <fieldset>
-  <legend>7. Методы анализа и прогнозирования</legend>
+  <legend>8. Методы анализа и прогнозирования</legend>
   <p class="hint">Нужны при TO-BE 4–5 и в исследовательской форме. Правило MIT Sloan для аналитических капстоунов: постановка начинается с проблемы, а не с метода; модель либо предсказывает, либо предписывает; код сдаётся вместе с отчётом.</p>
   <div class="opts grid" id="g-method"></div>
 </fieldset>
 
 <fieldset>
-  <legend>8. Техники бизнес-анализа (BABOK)</legend>
-  <p class="hint">Что применяется во второй главе при анализе объекта и выработке требований. Это действия аналитика, а не документы: документы выбираются в блоке 10.</p>
+  <legend>9. Техники бизнес-анализа (BABOK)</legend>
+  <p class="hint">Что применяется во второй главе при анализе объекта и выработке требований. Выявление требований и оценка вариантов обязательны по программе ГИА и не снимаются. Это действия аналитика, а не документы: документы выбираются в блоке 11.</p>
   <div class="opts grid" id="g-babok"></div>
 </fieldset>
 
 <fieldset>
-  <legend>9. Управление проектом внедрения</legend>
+  <legend>10. Управление проектом внедрения</legend>
   <p class="hint">Третья глава по программе ГИА описывает организацию проектных работ. Для исследовательской формы раздел не нужен.</p>
   <div class="opts row" id="g-pm">
     <label class="opt"><input type="radio" name="pm" id="pm-pmbok" value="pmbok" checked><span class="box"></span><span><span class="t">PMBOK 7</span><span class="d">домены производительности, устав, WBS, риски</span></span></label>
@@ -211,8 +217,8 @@ textarea{width:100%;min-height:260px;margin-top:8px;font-family:var(--mono);font
 </fieldset>
 
 <fieldset>
-  <legend>10. Артефакты практической части</legend>
-  <p class="hint">Что сдаётся помимо текста. Хотя бы одна диаграмма в стандартной нотации обязательна. Экономическая оценка для практической формы обязательна по программе ГИА и включается автоматически.</p>
+  <legend>11. Артефакты практической части</legend>
+  <p class="hint">Что сдаётся помимо текста. Хотя бы одна диаграмма в стандартной нотации обязательна. Экономическая оценка для практической формы обязательна по программе ГИА и включается автоматически. В исследовательской форме прототип модели обязателен, а ТЗ и пилот не применяются.</p>
   <div class="opts grid" id="g-deliv">
     <label class="opt"><input type="checkbox" name="deliv" id="deliv-bpmn" value="bpmn" checked><span class="box"></span><span class="t">BPMN AS-IS и TO-BE</span></label>
     <label class="opt"><input type="checkbox" name="deliv" id="deliv-er" value="er" checked><span class="box"></span><span class="t">ER-диаграмма, модель данных</span></label>
@@ -249,7 +255,8 @@ textarea{width:100%;min-height:260px;margin-top:8px;font-family:var(--mono);font
       <li><b>Форма</b>: какой жанр работы (проект для предприятия или метод).</li>
       <li><b>Материалы</b>: откуда данные (организация есть, ищем, открытые).</li>
       <li><b>Сектор и процесс</b>: что именно улучшаем. Тип процесса только фильтрует список.</li>
-      <li><b>Уровень AS-IS → TO-BE</b>: насколько глубоко меняем процесс. Задаёт глагол темы и класс решения.</li>
+      <li><b>Уровень AS-IS → TO-BE</b>: насколько глубоко меняем процесс. Задаёт глагол темы и класс решения. Шкала кумулятивная: 0–3 транзакционный контур, 4 хранилище и BI, 5 DSS и ML/AI.</li>
+      <li><b>Контуры систем</b>: какие классы систем (OLTP, DWH, BI, DSS, ML/AI) затрагивает решение и какие из них уже есть.</li>
       <li><b>Метрики</b>: чем докажем эффект. Не зависят от уровня и метода.</li>
       <li><b>Методы</b>: как считаем прогноз или аномалии. Нужны только для уровней 4–5.</li>
       <li><b>Техники BABOK</b>: как анализируем объект во второй главе.</li>
@@ -263,7 +270,8 @@ textarea{width:100%;min-height:260px;margin-top:8px;font-family:var(--mono);font
     <ul>
       <li>Практическая форма требует организацию: реальную или подбираемую. Открытые данные допустимы только в исследовательской форме.</li>
       <li>TO-BE строго выше AS-IS; скачок больше двух уровней дробится на этапы.</li>
-      <li>Уровень 5 требует метод из блока 7 и прототип из блока 10. Метод без уровня 4–5 остаётся инструментом анализа, а не темой.</li>
+      <li>Уровень 5 требует метод из блока 8, контур DSS или ML/AI из блока 6 и прототип из блока 11. Метод без уровня 4–5 остаётся инструментом анализа, а не темой.</li>
+      <li>Аналитический контур без хранилища данных помечается: модель и отчётность должны откуда-то брать данные.</li>
       <li>Пилот и справка о внедрении невозможны без реальной организации.</li>
       <li>Тема называет класс решения (OMS, биллинг, антифрод), а не продукт: выбор продукта делается во второй главе по критериям.</li>
       <li>Название темы не длиннее 11 слов; организация указывается в заявлении, а не в названии.</li>
@@ -293,8 +301,8 @@ textarea{width:100%;min-height:260px;margin-top:8px;font-family:var(--mono);font
 const LEVELS = [
   {n:0, t:'Бумага и устные договорённости', d:'журналы, телефон, встречи'},
   {n:1, t:'Excel и мессенджеры', d:'таблицы, почта, чаты, ручная сверка'},
-  {n:2, t:'Учётная система без workflow', d:'1С, базовая CRM, ручной ввод'},
-  {n:3, t:'Специализированная система с workflow', d:'BPM, CRM, OMS, TMS, биллинг; маршруты, интеграции, SLA'},
+  {n:2, t:'Учётная система без workflow', d:'1С как картотека, CRM как база контактов; ручной ввод и контроль'},
+  {n:3, t:'Специализированная система с workflow', d:'BPM, CRM с маршрутами и SLA, OMS, TMS, биллинг; интеграции'},
   {n:4, t:'Описательная аналитика и KPI', d:'хранилище, BI-дашборды, регулярный контроль показателей'},
   {n:5, t:'Предиктивная и предписывающая аналитика', d:'прогноз, поиск аномалий, рекомендации и оптимизация'}
 ];
@@ -341,12 +349,21 @@ const METHODS = [
   {id:'pm', t:'Process Mining', d:'PM4Py: восстановление процесса по логам, узкие места', short:'process mining', aim:'анализа'}
 ];
 
+const CONTOURS = [
+  {id:'oltp', t:'OLTP: транзакционные системы', d:'ERP, CRM, биллинг, OMS, TMS, BPM; учёт операций и workflow', min:2},
+  {id:'dwh', t:'DWH: хранилище и интеграция данных', d:'ETL/ELT, витрины, MDM, качество данных', min:4},
+  {id:'bi', t:'BI: отчётность и дашборды', d:'описательная аналитика, KPI, self-service', min:4},
+  {id:'dss', t:'DSS: поддержка принятия решений', d:'сценарии what-if, оптимизация, предписывающая аналитика', min:5},
+  {id:'ml', t:'ML/AI: модели и интеллектуальные сервисы', d:'прогноз, аномалии, классификация, языковые модели', min:5}
+];
+const defaultContours = tobe => tobe<=3 ? ['oltp'] : tobe===4 ? ['oltp','dwh','bi'] : ['oltp','dwh','bi','ml'];
+
 const BABOK = [
-  {id:'elicit', t:'Выявление требований', d:'интервью, наблюдение, анализ документов и логов'},
+  {id:'elicit', req:true, t:'Выявление требований', d:'интервью, наблюдение, анализ документов и логов'},
   {id:'stake', t:'Анализ заинтересованных сторон', d:'список ролей, матрица влияния и интереса, RACI'},
   {id:'reqtypes', t:'Классификация требований', d:'бизнес, стейкхолдеров, к решению (функциональные и нефункциональные), переходные'},
   {id:'rootcause', t:'Анализ первопричин', d:'«5 почему», диаграмма Исикавы, SWOT текущего состояния'},
-  {id:'options', t:'Оценка вариантов решения', d:'критерии, взвешенная оценка, MoSCoW-приоритеты'},
+  {id:'options', req:true, t:'Оценка вариантов решения', d:'критерии, взвешенная оценка, MoSCoW-приоритеты'},
   {id:'accept', t:'Критерии приёмки', d:'измеримые условия для каждого требования и для KPI'}
 ];
 
@@ -564,7 +581,7 @@ const BANK = [
 ];
 
 const $ = s => document.querySelector(s);
-const DEFAULT = {form:'practical', base:'real', sector:'ecom', ptype:'core', process:null, asis:1, tobe:3, kpi:['t2d'], method:[], babok:['elicit','stake','reqtypes'], pm:'pmbok', evm:false, deliv:['bpmn','er','req']};
+const DEFAULT = {form:'practical', base:'real', sector:'ecom', ptype:'core', process:null, asis:1, tobe:3, contour:['oltp'], kpi:['t2d'], method:[], babok:['elicit','stake','reqtypes','options'], pm:'pmbok', evm:false, deliv:['bpmn','er','req']};
 const state = JSON.parse(JSON.stringify(DEFAULT));
 
 function opt(name, id, value, title, desc, checked, radio=true, prefix='', tag=''){
@@ -575,8 +592,10 @@ function renderStatic(){
   $('#g-asis').innerHTML = LEVELS.map(l=>opt('asis',`asis-${l.n}`,l.n,l.t,l.d,state.asis===l.n,true,`<span class="n">${l.n}</span>`)).join('');
   $('#g-tobe').innerHTML = LEVELS.map(l=>opt('tobe',`tobe-${l.n}`,l.n,l.t,l.d,state.tobe===l.n,true,`<span class="n">${l.n}</span>`)).join('');
   $('#g-kpi').innerHTML = KPI_GROUPS.map(g=>`<h4>${g.g}</h4><div class="opts grid">${g.items.map(k=>opt('kpi',`kpi-${k.id}`,k.id,k.t,k.m,state.kpi.includes(k.id),false)).join('')}</div>`).join('');
+  $('#g-contour').innerHTML = CONTOURS.map(c=>opt('contour',`contour-${c.id}`,c.id,c.t,c.d,state.contour.includes(c.id),false,'',`уровень ${c.min}+`)).join('');
   $('#g-method').innerHTML = METHODS.map(m=>opt('method',`method-${m.id}`,m.id,m.t,m.d,state.method.includes(m.id),false)).join('');
-  $('#g-babok').innerHTML = BABOK.map(b=>opt('babok',`babok-${b.id}`,b.id,b.t,b.d,state.babok.includes(b.id),false)).join('');
+  $('#g-babok').innerHTML = BABOK.map(b=>opt('babok',`babok-${b.id}`,b.id,b.t,b.d,b.req||state.babok.includes(b.id),false,'',b.req?'обязательно по программе ГИА':'')).join('');
+  BABOK.filter(b=>b.req).forEach(b=>{ $(`#babok-${b.id}`).disabled = true; });
 }
 function renderProcesses(){
   const list = SECTORS[state.sector][state.ptype];
@@ -588,7 +607,7 @@ function read(){
   const all = n => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(i=>i.value);
   state.form=v('form'); state.base=v('base'); state.sector=v('sector'); state.ptype=v('ptype'); state.process=v('process');
   state.asis=+v('asis'); state.tobe=+v('tobe'); state.pm=v('pm'); state.evm=!!v('evm');
-  state.kpi=all('kpi'); state.method=all('method'); state.babok=all('babok'); state.deliv=all('deliv');
+  state.kpi=all('kpi'); state.contour=all('contour'); state.method=all('method'); state.babok=all('babok'); state.deliv=all('deliv');
 }
 const words = s => s.trim().split(/\s+/).length;
 const plural = (n,a,b,c) => n%10===1&&n%100!==11?a:(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?b:c;
@@ -599,6 +618,7 @@ function build(){
   const kpis = KPIS.filter(k=>state.kpi.includes(k.id));
   const methods = METHODS.filter(m=>state.method.includes(m.id));
   const babok = BABOK.filter(b=>state.babok.includes(b.id));
+  const contours = CONTOURS.filter(c=>state.contour.includes(c.id)).map(c=>({...c, exists: state.asis>=c.min}));
   const M = methods[0];
   const mAll = methods.map(m=>m.short).join(methods.length===2?' и ':', ');
   const research = state.form==='research';
@@ -639,10 +659,9 @@ function build(){
   else if(state.deliv.includes('arch') && !state.deliv.includes('proto')) dir = 3;
   else if(state.sector==='ecom' && ['market','ads','pricing'].includes(P.id)) dir = 7;
   else if(state.tobe-state.asis===1 && state.asis>=2) dir = 4;
-  if(!research && state.evm && dir===8) dir = 5;
   alts = [...new Set(alts)].filter(a=>a!==topic);
   const solAll = state.tobe>=5 && methods.length ? mAll : sol;
-  return {S,P,kpis,methods,babok,M,mAll,solAll,research,sol,verb,topic,alts,dir,sysShort,hasSys};
+  return {S,P,kpis,methods,babok,contours,M,mAll,solAll,research,sol,verb,topic,alts,dir,sysShort,hasSys};
 }
 
 let LAST = null;
@@ -657,11 +676,15 @@ function render(){
   if(research){ state.pm='none'; $('#pm-none').checked=true; $('#pm-evm').checked=false; state.evm=false; }
   else if(state.pm==='none' && !document.querySelector('input[name="pm"]:checked')) { state.pm='pmbok'; $('#pm-pmbok').checked=true; }
   $('#pm-evm').disabled = research;
-  $('#deliv-pilot').disabled = state.base==='open';
-  if(state.base==='open' && state.deliv.includes('pilot')){ $('#deliv-pilot').checked=false; state.deliv=state.deliv.filter(d=>d!=='pilot'); }
+  $('#deliv-pilot').disabled = research || state.base==='open';
+  $('#deliv-req').disabled = research;
+  $('#deliv-proto').disabled = research;
+  if(research){ $('#deliv-req').checked=false; $('#deliv-pilot').checked=false; $('#deliv-proto').checked=true; }
+  else if(state.base==='open'){ $('#deliv-pilot').checked=false; }
+  state.deliv=[...document.querySelectorAll('input[name="deliv"]:checked')].map(i=>i.value);
 
   const b = build(); LAST = b;
-  const {S,P,kpis,methods,babok,M} = b;
+  const {S,P,kpis,methods,babok,contours,M} = b;
   $('#topic').textContent = b.topic;
   const wc = words(b.topic);
   $('#meta').innerHTML = `<span class="chip ${wc>11?'warn':'on'}">${wc} ${plural(wc,'слово','слова','слов')} из 11</span><span class="chip">направление ${b.dir}: ${DIRECTIONS[b.dir]}</span>`;
@@ -672,17 +695,22 @@ function render(){
   if(state.tobe-state.asis>=3) al.push(['warn','Скачок на три и более уровня велик для бакалаврской работы. Опишите дорожную карту целиком, детально проработайте и оцените первый этап.']);
   if(wc>11) al.push(['warn','Программа ГИА: в названии темы не более 11 слов. Возьмите короткий вариант ниже или уберите уточнения.']);
   if(state.base==='seek') al.push(['info',`Первый шаг: найти организацию. Где искать: ${S.where}; место практики; партнёры кафедры (Диасофт, Норбит, Ланит, Росбанк, Директум, 1С). Признак релевантности: есть процесс ${P.name} на уровне «${LEVELS[state.asis].t}» и доступ к данным по показателям ${kpis.map(k=>'«'+k.t+'»').join(', ')||'(выберите KPI)'}.`]);
-  if(research && state.base!=='open') al.push(['info','Исследовательская форма на данных реальной организации: объект в работе всё равно описывается как типовой, а данные организации служат для проверки метода.']);
+  if(research && state.base==='real') al.push(['info','Исследовательская форма на данных реальной организации: объект в работе описывается как типовой, а данные организации служат для проверки метода.']);
+  if(research && state.base==='seek') al.push(['info','Исследовательская форма с поиском организации: организация нужна только как источник данных для проверки метода; альтернатива — открытые данные.']);
   if(state.kpi.length===0) al.push(['warn','Не выбран показатель: без количественной метрики нельзя обосновать эффект в третьей главе.']);
   if(kpis.length && kpis.every(k=>k.proxy)) al.push(['warn','Точность прогноза измеряет модель, а не процесс. Добавьте бизнес-показатель, на который влияет прогноз: уровень сервиса, стоимость операции, выручку.']);
-  if(state.tobe===5 && !methods.length) al.push(['warn','Уровень 5 предполагает конкретный метод прогнозирования, оптимизации или поиска аномалий. Отметьте метод в блоке 7.']);
+  if(state.tobe===5 && !methods.length) al.push(['warn','Уровень 5 предполагает конкретный метод прогнозирования, оптимизации или поиска аномалий. Отметьте метод в блоке 8.']);
   if(state.tobe===5 && !state.deliv.includes('proto')) al.push(['warn','Для уровня 5 прототип модели обязателен: иначе аналитика остаётся декларацией. Код прототипа сдаётся вместе с текстом.']);
   if(methods.length>2) al.push(['warn','Больше двух методов: для бакалаврской работы достаточно одного основного и одного базового для сравнения.']);
   if(state.tobe<4 && methods.length) al.push(['info','Методы выбраны при целевом уровне ниже 4. Либо поднимите TO-BE, либо используйте метод только в аналитической главе.']);
   if(state.method.includes('opt') && !(state.sector==='logistics' || ['fulfil','delivery','route','schedule','fieldplan','beds'].includes(P.id))) al.push(['info','Оптимизационные модели лучше ложатся на распределение ресурсов: маршруты, склады, расписания, коечный фонд.']);
   if(state.method.includes('geo') && !['crime','traffic','forest','water','fish','delivery','route','crops','city'].includes(P.id)) al.push(['info','Геоаналитика уместна там, где есть координаты: происшествия, дороги, лес, вода, доставка, поля.']);
+  const cid = contours.map(c=>c.id);
+  if(!cid.length) al.push(['warn','Не выбран ни один контур систем: укажите, какие классы систем затрагивает решение.']);
+  if(state.tobe===5 && !cid.includes('ml') && !cid.includes('dss')) al.push(['warn','Уровень 5 предполагает контур DSS или ML/AI.']);
+  if((cid.includes('ml')||cid.includes('dss')||cid.includes('bi')) && !cid.includes('dwh')) al.push(['info','Аналитические контуры без хранилища данных: укажите, откуда модель или отчётность берут данные, иначе сбор данных станет ручным.']);
+  if(state.tobe<=3 && cid.some(c=>['bi','dss','ml'].includes(c))) al.push(['info','Аналитические контуры выбраны при TO-BE не выше 3: либо поднимите уровень, либо оставьте только OLTP.']);
   if(!['bpmn','er','arch'].some(d=>state.deliv.includes(d))) al.push(['warn','Программа ГИА требует диаграммы в стандартных нотациях. Отметьте BPMN, ER или ArchiMate.']);
-  if(!babok.length) al.push(['info','Не выбраны техники анализа: вторая глава всё равно должна содержать выявление требований и анализ заинтересованных сторон.']);
   if(!al.length) al.push(['ok','Сочетание критериев согласовано с требованиями программы ГИА.']);
   $('#alerts').innerHTML = al.map(([c,t])=>`<div class="alert ${c}"><span class="m">${c==='warn'?'[!]':c==='info'?'[i]':'[✓]'}</span><span>${t}</span></div>`).join('');
 
@@ -697,15 +725,19 @@ function render(){
     ['Предмет', research?`методы и модели повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса`:`методы и средства ${b.solAll} в процессе ${P.name}`],
     ['Цель', goal],
     ['Зрелость', `${state.asis} «${LEVELS[state.asis].t}» → ${state.tobe} «${LEVELS[state.tobe].t}»`],
+    ['Контуры', contours.length ? contours.map(c=>`${c.t.split(':')[0]} (${c.exists?'есть, развивается':'создаётся'})`).join(', ') : 'не выбраны'],
     ['Направление', `${b.dir}. ${DIRECTIONS[b.dir]} (ориентир по приложению А программы ГИА)`]
   ];
   $('#kv').innerHTML = kv.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('');
 
   const tasks = [
     `провести обзор литературы и рынка ПО по теме ${S.lit}`,
-    state.base==='seek' ? `подобрать организацию и получить доступ к данным процесса ${P.name}` : `описать ${state.base==='real'?S.ex:'типовую организацию'}, схему информационных потоков и место ИТ-подразделения`,
+    research
+      ? (state.base==='open' ? `описать типовой процесс ${P.name} ${S.org} и подобрать открытые или синтетические данные` : state.base==='seek' ? `описать типовой процесс ${P.name} ${S.org} и найти организацию как источник данных` : `описать типовой процесс ${P.name} ${S.org}; данные ${S.ex} использовать для проверки метода`)
+      : state.base==='seek' ? `подобрать организацию и получить доступ к данным процесса ${P.name}` : `описать ${S.ex}, схему информационных потоков и место ИТ-подразделения`,
     `построить модель процесса ${P.name} AS-IS${state.deliv.includes('bpmn')?' в нотации BPMN':''} и измерить базовые значения показателей ${kpis.map(k=>'«'+k.t+'»').join(', ')||'(выбрать показатели)'}`,
-    `сформулировать бизнес-проблему и требования к решению${babok.length?' ('+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
+    research ? `поставить задачу: входы и выходы процесса, ограничения, базовый подход для сравнения${babok.length?' ('+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
+             : `сформулировать бизнес-проблему и требования к решению${babok.length?' ('+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
   ];
   if(research){
     tasks.push(`обосновать ${M?'метод на основе '+b.mAll:'метод решения'} и подготовить данные`, 'построить и проверить модель, сравнить с базовым подходом', 'оценить применимость метода на типовом объекте и сформулировать рекомендации');
@@ -722,7 +754,9 @@ function render(){
   const ch = [
     ['Введение (до 4 страниц)', 'Актуальность; цель и задачи; объект и предмет; инструменты и методы; публикации и апробация.'],
     ['Глава 1. Теоретические основы', `Обзор методов и инструментов по теме ${S.lit}; ${methods.length?'сравнение методов: '+methods.map(m=>m.t.toLowerCase()).join(', ')+'; ':''}анализ рынка ПО класса «${b.sysShort}» в табличной форме; выводы по главе.`],
-    ['Глава 2. Анализ объекта и концепция решения', `${state.base==='seek'?'Критерии подбора организации и её характеристика. ':'Деятельность организации, '}схема информационных потоков, уровень ИТ-поддержки процессов; ${babok.length?'техники анализа: '+babok.map(x=>x.t.toLowerCase()).join(', ')+'; ':''}процесс ${P.name} AS-IS${state.deliv.includes('bpmn')?' (BPMN)':''}; требования к решению; варианты решения и критерии выбора ПО; ${state.deliv.includes('arch')?'архитектура TO-BE (ArchiMate)':'концепция TO-BE'}${state.deliv.includes('er')?'; модель данных (ER)':''}.`],
+    research
+      ? ['Глава 2. Типовой объект и постановка задачи', `Характеристика типового процесса ${P.name} ${S.org}: участники, входы и выходы, ограничения; ${state.base==='open'?'открытые и синтетические данные: состав, объём, разметка':state.base==='seek'?'критерии подбора организации как источника данных':'данные '+S.ex+' как материал для проверки метода'}; ${babok.length?'техники анализа: '+babok.map(x=>x.t.toLowerCase()).join(', ')+'; ':''}процесс AS-IS${state.deliv.includes('bpmn')?' (BPMN)':''}; базовый подход, с которым сравнивается метод${contours.length?'; контуры '+contours.map(c=>c.t.split(':')[0]).join(', '):''}${state.deliv.includes('er')?'; модель данных (ER)':''}.`]
+      : ['Глава 2. Анализ объекта и концепция решения', `${state.base==='seek'?'Критерии подбора организации и её характеристика. ':'Деятельность организации, '}схема информационных потоков, уровень ИТ-поддержки процессов; ${babok.length?'техники анализа: '+babok.map(x=>x.t.toLowerCase()).join(', ')+'; ':''}процесс ${P.name} AS-IS${state.deliv.includes('bpmn')?' (BPMN)':''}; требования к решению; варианты решения и критерии выбора ПО; ${state.deliv.includes('arch')?'архитектура TO-BE (ArchiMate)':'концепция TO-BE'}${contours.length?' по контурам '+contours.map(c=>c.t.split(':')[0]).join(', '):''}${state.deliv.includes('er')?'; модель данных (ER)':''}.`],
     ['Глава 3. Реализация и оценка', research
       ? `Постановка эксперимента, данные, ${M?'модель на основе '+b.mAll:'метод'}, метрики качества (${kpis.map(k=>k.m.split(',')[0]).join(', ')||'…'}), сравнение с базовым подходом, ограничения и рекомендации.`
       : `${state.deliv.includes('proto')?'Прототип и тестирование. ':''}${state.pm!=='none'?'Организация проектных работ по '+{pmbok:'PMBOK 7: устав, WBS, план-график, реестр рисков, заинтересованные стороны',gost:'ГОСТ 34: стадии, ТЗ, приёмочные испытания',agile:'Agile: бэклог, спринты, инкременты',hybrid:'гибридной модели: вехи каскада, спринты внутри'}[state.pm]+(state.evm?'; контроль по EVM':'')+'. ':''}Экономическая оценка: NPV, IRR, DPP, PI, TCO; влияние на показатели ${kpis.map(k=>'«'+k.t+'»').join(', ')||'…'}. ${state.deliv.includes('pilot')?'Результаты пилота и справка о внедрении.':''}`],
@@ -733,14 +767,17 @@ function render(){
   const rec = P.kpi.filter(id=>!state.kpi.includes(id)).map(id=>KPIS.find(k=>k.id===id));
   $('#kpit tbody').innerHTML = kpis.map(k=>`<tr><td><b>${k.t}</b></td><td>${k.m}</td><td>${k.src}</td></tr>`).join('')
     + rec.map(k=>`<tr style="opacity:.55"><td>${k.t}<br><span style="font-size:11.5px;color:var(--muted)">типичен для процесса, не выбран</span></td><td>${k.m}</td><td>${k.src}</td></tr>`).join('')
-    || '<tr><td colspan="3">Выберите показатели в блоке 6</td></tr>';
+    || '<tr><td colspan="3">Выберите показатели в блоке 7</td></tr>';
 
   const tools = [];
   if(state.deliv.includes('bpmn')) tools.push('BPMN 2.0: Camunda Modeler, Bizagi');
   if(state.deliv.includes('er')) tools.push('ER: draw.io, DBeaver, PostgreSQL');
   if(state.deliv.includes('arch')) tools.push('ArchiMate: Archi');
   if(state.tobe>=3) tools.push({telecom:'BSS-стек: биллинг, CRM, каталог',gov:'BPM и СЭД: ELMA365, Directum',govmon:'аналитическая платформа ведомства, ГИС',logistics:'TMS/WMS: 1С:TMS, AXELOT',ecom:'OMS/PIM: 1С:УНФ, RetailCRM, Ensi',manuf:'MES/EAM: 1С:ERP, Галактика',health:'МИС: БАРС, 1С:Медицина',energy:'АСКУЭ, биллинг ЖКУ',edu:'LMS: Moodle, 1С:Университет',agro:'агро-ERP: 1С:АПК, ExactFarming',insurance:'страховой стек: Диасофт, Ортикон',bank:'BPM: Camunda, ELMA365'}[state.sector]);
-  if(state.tobe>=4 || b.research) tools.push('BI: Yandex DataLens, Superset', 'Python: pandas');
+  if(cid.includes('dwh')) tools.push('DWH: PostgreSQL, ClickHouse, Airflow');
+  if(cid.includes('bi') || b.research) tools.push('BI: Yandex DataLens, Superset');
+  if(cid.includes('dss')) tools.push('DSS: сценарные модели, OR-Tools');
+  if(cid.includes('ml') || b.research) tools.push('Python: pandas, scikit-learn');
   methods.forEach(m=>tools.push({gd:'scikit-learn: SGDRegressor',boost:'CatBoost, LightGBM',ts:'statsmodels, Prophet',nn:'PyTorch, Keras',anomaly:'scikit-learn: IsolationForest',opt:'OR-Tools, PuLP',geo:'GeoPandas, H3, QGIS',llm:'YandexGPT API, GigaChat, sentence-transformers',pm:'PM4Py'}[m.id]));
   if(state.pm!=='none') tools.push(state.pm==='agile'?'Jira, Kaiten':'MS Project, GanttPRO');
   if(state.evm) tools.push('EVM: PV, EV, AC, CPI, SPI');
@@ -764,7 +801,7 @@ function render(){
   $('#check').innerHTML = checks.map(t=>`<div><span class="m">[ ]</span><span>${t}</span></div>`).join('');
 
   $('#md').value = markdown(b, kv, tasks, ch, tools, checks, al);
-  try{ localStorage.setItem('vkr-state-v3', JSON.stringify(state)); }catch(e){}
+  try{ localStorage.setItem('vkr-state-v4', JSON.stringify(state)); }catch(e){}
 }
 
 function markdown(b, kv, tasks, ch, tools, checks, al){
@@ -798,11 +835,12 @@ function markdown(b, kv, tasks, ch, tools, checks, al){
   L.push('**3. Сектор**'); SECTOR_ORDER.forEach(k=>L.push(`- ${mark(state.sector===k)} ${SECTORS[k].label}`)); L.push('');
   L.push(`**4. Процесс** (${state.ptype==='core'?'основной':'поддерживающий'})`); S[state.ptype].forEach(p=>L.push(`- ${mark(p.id===P.id)} ${p.name}${p.tag?' — '+p.tag:''}`)); L.push('');
   L.push('**5. Уровень автоматизации**'); L.push(`- AS-IS: ${state.asis} «${LEVELS[state.asis].t}»`, `- TO-BE: ${state.tobe} «${LEVELS[state.tobe].t}»`, '');
-  L.push('**6. Метрики и KPI**'); KPI_GROUPS.forEach(g=>{ L.push(`- ${g.g}`); g.items.forEach(k=>L.push(`  - ${mark(state.kpi.includes(k.id))} ${k.t}`)); }); L.push('');
-  L.push('**7. Методы анализа и прогнозирования**'); METHODS.forEach(m=>L.push(`- ${mark(state.method.includes(m.id))} ${m.t}`)); L.push('');
-  L.push('**8. Техники бизнес-анализа (BABOK)**'); BABOK.forEach(x=>L.push(`- ${mark(state.babok.includes(x.id))} ${x.t}`)); L.push('');
-  L.push('**9. Управление проектом**'); [['pmbok','PMBOK 7'],['gost','Каскад по ГОСТ 34'],['agile','Agile'],['hybrid','Гибрид'],['none','Без раздела']].forEach(([v,t])=>L.push(`- ${mark(state.pm===v)} ${t}`)); L.push(`- ${mark(state.evm)} Контроль по методу освоенного объёма (EVM)`, '');
-  L.push('**10. Артефакты**'); [['bpmn','BPMN AS-IS и TO-BE'],['er','ER-диаграмма, модель данных'],['arch','Архитектура TO-BE (ArchiMate)'],['req','Требования: ТЗ или user stories'],['proto','Прототип'],['pilot','Пилот и справка о внедрении']].forEach(([v,t])=>L.push(`- ${mark(state.deliv.includes(v))} ${t}`)); L.push('');
+  L.push('**6. Контуры систем**'); CONTOURS.forEach(c=>L.push(`- ${mark(state.contour.includes(c.id))} ${c.t}${state.contour.includes(c.id)?(state.asis>=c.min?' (есть, развивается)':' (создаётся)'):''}`)); L.push('');
+  L.push('**7. Метрики и KPI**'); KPI_GROUPS.forEach(g=>{ L.push(`- ${g.g}`); g.items.forEach(k=>L.push(`  - ${mark(state.kpi.includes(k.id))} ${k.t}`)); }); L.push('');
+  L.push('**8. Методы анализа и прогнозирования**'); METHODS.forEach(m=>L.push(`- ${mark(state.method.includes(m.id))} ${m.t}`)); L.push('');
+  L.push('**9. Техники бизнес-анализа (BABOK)**'); BABOK.forEach(x=>L.push(`- ${mark(state.babok.includes(x.id))} ${x.t}`)); L.push('');
+  L.push('**10. Управление проектом**'); [['pmbok','PMBOK 7'],['gost','Каскад по ГОСТ 34'],['agile','Agile'],['hybrid','Гибрид'],['none','Без раздела']].forEach(([v,t])=>L.push(`- ${mark(state.pm===v)} ${t}`)); L.push(`- ${mark(state.evm)} Контроль по методу освоенного объёма (EVM)`, '');
+  L.push('**11. Артефакты**'); [['bpmn','BPMN AS-IS и TO-BE'],['er','ER-диаграмма, модель данных'],['arch','Архитектура TO-BE (ArchiMate)'],['req','Требования: ТЗ или user stories'],['proto','Прототип'],['pilot','Пилот и справка о внедрении']].forEach(([v,t])=>L.push(`- ${mark(state.deliv.includes(v))} ${t}`)); L.push('');
   return L.join('\n');
 }
 
@@ -818,6 +856,7 @@ function applyState(){
 document.addEventListener('change', e=>{
   if(!e.target.matches('input')) return;
   if(e.target.name==='sector' || e.target.name==='ptype'){ read(); renderProcesses(); }
+  if(e.target.name==='tobe'){ const def=defaultContours(+e.target.value); document.querySelectorAll('input[name="contour"]').forEach(i=>i.checked=def.includes(i.value)); }
   render();
 });
 $('#copy').addEventListener('click', async ()=>{
@@ -829,11 +868,11 @@ $('#copy').addEventListener('click', async ()=>{
 });
 $('#reset').addEventListener('click', ()=>{
   Object.assign(state, JSON.parse(JSON.stringify(DEFAULT)));
-  try{ localStorage.removeItem('vkr-state-v3'); }catch(e){}
+  try{ localStorage.removeItem('vkr-state-v4'); }catch(e){}
   applyState(); render();
 });
 
-try{ const s=JSON.parse(localStorage.getItem('vkr-state-v3')||'null'); if(s&&typeof s==='object'&&SECTORS[s.sector]) Object.assign(state,s); }catch(e){}
+try{ const s=JSON.parse(localStorage.getItem('vkr-state-v4')||'null'); if(s&&typeof s==='object'&&SECTORS[s.sector]) Object.assign(state,s); }catch(e){}
 applyState(); render();
 </script>
 </body>
