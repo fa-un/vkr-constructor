@@ -229,7 +229,7 @@ textarea{width:100%;min-height:260px;margin-top:8px;font-family:var(--mono);font
   <div class="panel-head"><h2>Паспорт темы</h2><div><button type="button" id="copy">Скопировать Markdown</button> <button type="button" class="ghost" id="reset">Сбросить</button></div></div>
   <div id="alerts" style="display:flex;flex-direction:column;gap:8px"></div>
   <div><div class="topic" id="topic"></div><div class="meta" id="meta"></div></div>
-  <div><h3>Варианты формулировки</h3><ul class="alts" id="alts"></ul></div>
+  <div><h3>Варианты формулировки: по одному на каждый выбранный показатель и метод</h3><ul class="alts" id="alts"></ul></div>
   <dl class="kv" id="kv"></dl>
   <div><h3>Задачи работы</h3><ol class="tasks" id="tasks"></ol></div>
   <div><h3>Структура по требованиям кафедры</h3><div class="chap" id="chap"></div></div>
@@ -616,14 +616,17 @@ function build(){
     topic = M ? `Разработка модели ${M.aim} в процессе ${P.name} ${S.org} на основе ${M.short}`
               : `Метод повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса ${P.name} ${S.org}`;
     alts = [
-      `Оценка влияния ${sol} на ${kpis[0]?kpis[0].t.toLowerCase():'показатели'} процесса ${P.name} ${S.org}`,
+      ...kpis.map(k=>`Оценка влияния ${sol} на ${k.t.toLowerCase()} процесса ${P.name} ${S.org}`),
+      ...methods.slice(1).map(m=>`Разработка модели ${m.aim} в процессе ${P.name} ${S.org} на основе ${m.short}`),
       `Сравнительный анализ подходов к автоматизации процесса ${P.name} ${S.org}`,
       `Модель зрелости процесса ${P.name} ${S.org}: от уровня ${state.asis} к уровню ${state.tobe}`
     ];
   } else {
     topic = `${verb} процесса ${P.name} ${S.org} на основе ${sol}`;
     alts = [
-      `Повышение ${kpis.length?kpis.slice(0,2).map(k=>k.imp).join(' и '):'эффективности'} процесса ${P.name} ${S.org}`,
+      ...kpis.map(k=>`Повышение ${k.imp} процесса ${P.name} ${S.org} на основе ${sysShort}`),
+      ...(kpis.length>1 ? [`Повышение ${kpis.map(k=>k.imp).join(', ')} процесса ${P.name} ${S.org}`] : []),
+      ...methods.map(m=>`${verb} процесса ${P.name} ${S.org} на основе ${m.short}`),
       `Разработка проекта внедрения ${sysShort} для процесса ${P.name} ${S.org}`,
       `Реинжиниринг процесса ${P.name} ${S.org} с переходом на уровень «${LEVELS[state.tobe].t}»`
     ];
@@ -635,6 +638,7 @@ function build(){
   else if(state.sector==='ecom' && ['market','ads','pricing'].includes(P.id)) dir = 7;
   else if(state.tobe-state.asis===1 && state.asis>=2) dir = 4;
   if(!research && state.evm && dir===8) dir = 5;
+  alts = [...new Set(alts)].filter(a=>a!==topic);
   return {S,P,kpis,methods,babok,M,research,sol,verb,topic,alts,dir,sysShort};
 }
 
