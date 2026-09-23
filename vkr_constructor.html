@@ -1,0 +1,823 @@
+<title>Конструктор тем ВКР</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,600&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F5F7F5; --surface:#FFFFFF; --surface-2:#EEF2F0; --ink:#1B2430; --muted:#5B6772; --line:#D6DDD9;
+  --accent:#1F6E6A; --accent-ink:#134B48; --accent-soft:#E1EFED;
+  --warn:#A75E19; --warn-soft:#F8EBDC; --ok:#2E7D4F; --ok-soft:#E3F1E8; --info:#3B5B8C; --info-soft:#E4EBF5;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --serif:"Literata",Georgia,"Times New Roman",serif;
+  --sans:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141A1D; --surface:#1D2427; --surface-2:#232C30; --ink:#E7ECEA; --muted:#9BA7AD; --line:#33403F;
+    --accent:#5DBDB5; --accent-ink:#8ED8D1; --accent-soft:#1C3533;
+    --warn:#E3A45F; --warn-soft:#3B2C1B; --ok:#6CC28F; --ok-soft:#1E3529; --info:#8FB0E0; --info-soft:#1F2C3F;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141A1D; --surface:#1D2427; --surface-2:#232C30; --ink:#E7ECEA; --muted:#9BA7AD; --line:#33403F;
+  --accent:#5DBDB5; --accent-ink:#8ED8D1; --accent-soft:#1C3533;
+  --warn:#E3A45F; --warn-soft:#3B2C1B; --ok:#6CC28F; --ok-soft:#1E3529; --info:#8FB0E0; --info-soft:#1F2C3F;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;margin:0;padding-block:0 48px;padding-inline:16px}
+.wrap{max-width:1280px;margin:0 auto}
+header.top{padding-block:28px 18px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 6px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(26px,3.4vw,36px);line-height:1.15;margin:0 0 8px;text-wrap:balance}
+.lead{color:var(--muted);max-width:72ch;margin:0}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:900px){.layout{grid-template-columns:1fr}}
+h2{font-family:var(--serif);font-weight:600;font-size:19px;margin:0}
+h3{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:700}
+h4{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:8px 0 4px;font-weight:700}
+fieldset{border:0;padding:0;margin:0 0 22px}
+legend{font-family:var(--serif);font-weight:600;font-size:17px;margin-bottom:4px;padding:0}
+.hint{color:var(--muted);font-size:13px;margin:0 0 10px}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opts.row{flex-direction:row;flex-wrap:wrap}
+.opts.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media (max-width:560px){.opts.grid{grid-template-columns:1fr}}
+label.opt{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);cursor:pointer;position:relative}
+label.opt:hover{border-color:var(--accent)}
+label.opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+label.opt:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+label.opt:has(input:disabled){opacity:.5;cursor:not-allowed}
+label.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.box{font-family:var(--mono);font-size:14px;line-height:1.35;color:var(--muted);flex:0 0 auto;margin-top:1px}
+label.opt:has(input:checked) .box{color:var(--accent-ink)}
+.box::before{content:"[ ]"}
+label.opt:has(input:checked) .box::before{content:"[x]"}
+.opt .t{display:block;font-weight:600}
+.opt .d{display:block;color:var(--muted);font-size:13px}
+.opt .tag{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.scale{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.scale{grid-template-columns:1fr}}
+.lvl{display:flex;flex-direction:column;gap:4px}
+.lvl label.opt{padding:6px 8px}
+.lvl .n{font-family:var(--mono);color:var(--muted);font-size:13px;width:1.4em}
+.panel{position:sticky;top:env(safe-area-inset-top,0px);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;display:flex;flex-direction:column;gap:18px;max-height:calc(100vh - 16px);overflow-y:auto}
+@media (max-width:900px){.panel{position:static;max-height:none}}
+.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+button{font:inherit;font-weight:600;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:6px;padding:7px 14px;cursor:pointer}
+button.ghost{background:transparent;color:var(--accent-ink)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.topic{font-family:var(--serif);font-size:19px;line-height:1.35;font-weight:600;padding:14px 16px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 6px 6px 0;text-wrap:balance}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.alts{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.alts li{font-family:var(--mono);font-size:13px;color:var(--muted);padding-left:14px;text-indent:-14px}
+.alts li::before{content:"› ";color:var(--accent)}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:6px 14px;margin:0}
+.kv dt{color:var(--muted);font-size:13px;padding-top:2px}
+.kv dd{margin:0}
+@media (max-width:560px){.kv{grid-template-columns:1fr}.kv dt{padding-top:6px}}
+ol.tasks{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.chap{display:flex;flex-direction:column;gap:10px}
+.chap div{padding:10px 12px;border:1px solid var(--line);border-radius:6px}
+.chap b{display:block;margin-bottom:2px}
+.chap span{color:var(--muted);font-size:13px}
+.alert{display:flex;gap:10px;padding:10px 12px;border-radius:6px;font-size:13.5px;border:1px solid transparent}
+.alert.warn{background:var(--warn-soft);border-color:var(--warn)}
+.alert.ok{background:var(--ok-soft);border-color:var(--ok)}
+.alert.info{background:var(--info-soft);border-color:var(--info)}
+.alert .m{font-family:var(--mono);flex:0 0 auto}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;padding:3px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink)}
+.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.chip.warn{background:var(--warn-soft);border-color:var(--warn);font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.tscroll{overflow-x:auto}
+.bank{display:flex;flex-direction:column;gap:8px}
+.bank .item{padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.bank .item.dim{opacity:.55}
+.bank .item b{display:block;font-weight:600}
+.bank .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.bank .tg{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.check{display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.check div{display:flex;gap:8px}
+.check .m{font-family:var(--mono);color:var(--accent-ink);flex:0 0 auto}
+details{border:1px solid var(--line);border-radius:6px;padding:8px 12px;background:var(--surface-2)}
+summary{cursor:pointer;font-weight:600;font-size:13.5px}
+textarea{width:100%;min-height:260px;margin-top:8px;font-family:var(--mono);font-size:12px;line-height:1.4;border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--surface);color:var(--ink);resize:vertical}
+.logic{margin-top:36px;border-top:1px solid var(--line);padding-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media (max-width:900px){.logic{grid-template-columns:1fr}}
+.logic h2{margin-bottom:8px}
+.logic ul,.logic ol{margin:0;padding-left:20px;font-size:14px;display:flex;flex-direction:column;gap:5px}
+.logic p{font-size:14px;color:var(--muted);margin:0 0 8px}
+.sources{margin-top:30px;border-top:1px solid var(--line);padding-top:18px}
+.sources ul{margin:0;padding-left:20px;font-size:13.5px;display:flex;flex-direction:column;gap:4px}
+.sources a{color:var(--accent-ink)}
+.sources p{font-size:13px;color:var(--muted);max-width:84ch}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:6px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <p class="eyebrow">Финансовый университет · кафедра бизнес-информатики · 38.03.05 · бакалавриат</p>
+  <h1>Конструктор тем выпускной квалификационной работы</h1>
+  <p class="lead">Отметьте критерии слева. Справа собирается паспорт темы по программе ГИА кафедры: формулировка не длиннее 11 слов, объект и предмет, задачи, структура глав, метрики, инструменты, календарь. Паспорт вместе с отмеченными опциями копируется в Markdown для доработки.</p>
+</header>
+
+<div class="layout">
+<section aria-label="Критерии">
+
+<fieldset>
+  <legend>1. Форма работы</legend>
+  <p class="hint">По программе ГИА: практическая форма даёт проектные решения для конкретного предприятия типовыми средствами; исследовательская разрабатывает метод, а объект берёт типовой. То же разделение у MIT: capstone с компанией-спонсором против thesis с теоретической постановкой.</p>
+  <div class="opts" id="g-form">
+    <label class="opt"><input type="radio" name="form" id="form-practical" value="practical" checked><span class="box"></span><span><span class="t">Практическая работа</span><span class="d">Конкретное предприятие, проект внедрения, экономическая оценка, по возможности справка о внедрении</span></span></label>
+    <label class="opt"><input type="radio" name="form" id="form-research" value="research"><span class="box"></span><span><span class="t">Исследовательская работа</span><span class="d">Метод или модель, проверка на данных, сравнение с базовым подходом; объект типовой</span></span></label>
+  </div>
+</fieldset>
+
+<fieldset>
+  <legend>2. Материалы</legend>
+  <p class="hint">Откуда берутся данные. В заявлении на тему указывается, на материалах какой организации пишется работа.</p>
+  <div class="opts" id="g-base">
+    <label class="opt"><input type="radio" name="base" id="base-real" value="real" checked><span class="box"></span><span><span class="t">Реальная организация есть</span><span class="d">Место практики или работы: доступ к процессам, данным и людям</span></span></label>
+    <label class="opt"><input type="radio" name="base" id="base-seek" value="seek"><span class="box"></span><span><span class="t">Организации пока нет, будем искать</span><span class="d">Первый шаг работы: подбор релевантной организации в секторе. Паспорт подскажет, где искать и по каким признакам отбирать</span></span></label>
+    <label class="opt"><input type="radio" name="base" id="base-open" value="open"><span class="box"></span><span><span class="t">Открытые и синтетические данные</span><span class="d">Открытые наборы, отчётность, кейсы вендоров, сгенерированные данные; только для исследовательской формы</span></span></label>
+  </div>
+</fieldset>
+
+<fieldset>
+  <legend>3. Сектор</legend>
+  <div class="opts row" id="g-sector"></div>
+</fieldset>
+
+<fieldset>
+  <legend>4. Процесс</legend>
+  <p class="hint">Фильтр «основной / поддерживающий» сужает список; сам критерий выбора один: процесс. Основной создаёт ценность для клиента или гражданина, поддерживающий обеспечивает основные.</p>
+  <div class="opts row" id="g-ptype">
+    <label class="opt"><input type="radio" name="ptype" id="ptype-core" value="core" checked><span class="box"></span><span class="t">Основной</span></label>
+    <label class="opt"><input type="radio" name="ptype" id="ptype-support" value="support"><span class="box"></span><span class="t">Поддерживающий</span></label>
+  </div>
+  <div class="opts" id="g-process" style="margin-top:10px"></div>
+</fieldset>
+
+<fieldset>
+  <legend>5. Уровень автоматизации: сейчас и цель</legend>
+  <p class="hint">Шкала зрелости процесса. Уровни 4 и 5 соответствуют описательной и предиктивно-предписывающей аналитике. Для сравнения: MIT CISR описывает зрелость архитектуры стадиями «бизнес-силосы → стандартизированные технологии → оптимизированное ядро → бизнес-модульность».</p>
+  <div class="scale">
+    <div><h3>AS-IS</h3><div class="lvl" id="g-asis"></div></div>
+    <div><h3>TO-BE</h3><div class="lvl" id="g-tobe"></div></div>
+  </div>
+</fieldset>
+
+<fieldset>
+  <legend>6. Метрики и KPI</legend>
+  <p class="hint">Сгруппированы по перспективам сбалансированной системы показателей. Отраслевые системы: SCOR для логистики, TM Forum для телекома, DORA для ИТ-процессов. Программа ГИА требует свести качественные эффекты к количественным показателям.</p>
+  <div id="g-kpi"></div>
+</fieldset>
+
+<fieldset>
+  <legend>7. Методы анализа и прогнозирования</legend>
+  <p class="hint">Нужны при TO-BE 4–5 и в исследовательской форме. Правило MIT Sloan для аналитических капстоунов: постановка начинается с проблемы, а не с метода; модель либо предсказывает, либо предписывает; код сдаётся вместе с отчётом.</p>
+  <div class="opts grid" id="g-method"></div>
+</fieldset>
+
+<fieldset>
+  <legend>8. Техники бизнес-анализа (BABOK)</legend>
+  <p class="hint">Что применяется во второй главе при анализе объекта и выработке требований. Это действия аналитика, а не документы: документы выбираются в блоке 10.</p>
+  <div class="opts grid" id="g-babok"></div>
+</fieldset>
+
+<fieldset>
+  <legend>9. Управление проектом внедрения</legend>
+  <p class="hint">Третья глава по программе ГИА описывает организацию проектных работ. Для исследовательской формы раздел не нужен.</p>
+  <div class="opts row" id="g-pm">
+    <label class="opt"><input type="radio" name="pm" id="pm-pmbok" value="pmbok" checked><span class="box"></span><span><span class="t">PMBOK 7</span><span class="d">домены производительности, устав, WBS, риски</span></span></label>
+    <label class="opt"><input type="radio" name="pm" id="pm-gost" value="gost"><span class="box"></span><span><span class="t">Каскад по ГОСТ 34</span><span class="d">стадии создания АС, ТЗ, приёмка</span></span></label>
+    <label class="opt"><input type="radio" name="pm" id="pm-agile" value="agile"><span class="box"></span><span><span class="t">Agile</span><span class="d">Scrum, Kanban, инкременты</span></span></label>
+    <label class="opt"><input type="radio" name="pm" id="pm-hybrid" value="hybrid"><span class="box"></span><span><span class="t">Гибрид</span><span class="d">каскад на верхнем уровне, спринты внутри</span></span></label>
+    <label class="opt"><input type="radio" name="pm" id="pm-none" value="none"><span class="box"></span><span class="t">Без раздела</span></label>
+  </div>
+  <div class="opts" style="margin-top:6px">
+    <label class="opt"><input type="checkbox" name="evm" id="pm-evm" value="evm"><span class="box"></span><span><span class="t">Контроль хода проекта методом освоенного объёма (EVM)</span><span class="d">Рекомендован программой ГИА</span></span></label>
+  </div>
+</fieldset>
+
+<fieldset>
+  <legend>10. Артефакты практической части</legend>
+  <p class="hint">Что сдаётся помимо текста. Хотя бы одна диаграмма в стандартной нотации обязательна. Экономическая оценка для практической формы обязательна по программе ГИА и включается автоматически.</p>
+  <div class="opts grid" id="g-deliv">
+    <label class="opt"><input type="checkbox" name="deliv" id="deliv-bpmn" value="bpmn" checked><span class="box"></span><span class="t">BPMN AS-IS и TO-BE</span></label>
+    <label class="opt"><input type="checkbox" name="deliv" id="deliv-er" value="er" checked><span class="box"></span><span class="t">ER-диаграмма, модель данных</span></label>
+    <label class="opt"><input type="checkbox" name="deliv" id="deliv-arch" value="arch"><span class="box"></span><span class="t">Архитектура TO-BE (ArchiMate)</span></label>
+    <label class="opt"><input type="checkbox" name="deliv" id="deliv-req" value="req" checked><span class="box"></span><span class="t">Требования: ТЗ или user stories</span></label>
+    <label class="opt"><input type="checkbox" name="deliv" id="deliv-proto" value="proto"><span class="box"></span><span class="t">Прототип: настройка системы, дашборд, модель</span></label>
+    <label class="opt"><input type="checkbox" name="deliv" id="deliv-pilot" value="pilot"><span class="box"></span><span class="t">Пилот и справка о внедрении</span></label>
+  </div>
+</fieldset>
+
+</section>
+
+<aside class="panel" aria-live="polite">
+  <div class="panel-head"><h2>Паспорт темы</h2><div><button type="button" id="copy">Скопировать Markdown</button> <button type="button" class="ghost" id="reset">Сбросить</button></div></div>
+  <div id="alerts" style="display:flex;flex-direction:column;gap:8px"></div>
+  <div><div class="topic" id="topic"></div><div class="meta" id="meta"></div></div>
+  <div><h3>Варианты формулировки</h3><ul class="alts" id="alts"></ul></div>
+  <dl class="kv" id="kv"></dl>
+  <div><h3>Задачи работы</h3><ol class="tasks" id="tasks"></ol></div>
+  <div><h3>Структура по требованиям кафедры</h3><div class="chap" id="chap"></div></div>
+  <div><h3>Метрики и KPI</h3><div class="tscroll"><table id="kpit"><thead><tr><th>Показатель</th><th>Как измерить</th><th>Источник данных</th></tr></thead><tbody></tbody></table></div></div>
+  <div><h3>Инструменты</h3><div class="chips" id="tools"></div></div>
+  <div><h3>Похожие темы</h3><div class="bank" id="bank"></div></div>
+  <div><h3>Чек-лист и календарь по программе ГИА</h3><div class="check" id="check"></div></div>
+  <details><summary>Markdown для копирования вручную</summary><textarea id="md" readonly spellcheck="false"></textarea></details>
+</aside>
+</div>
+
+<section class="logic">
+  <div>
+    <h2>Логика конструктора</h2>
+    <p>Каждый блок отвечает на один вопрос. Ответы не повторяют друг друга, а паспорт выводится из них по правилам ниже.</p>
+    <ol>
+      <li><b>Форма</b>: какой жанр работы (проект для предприятия или метод).</li>
+      <li><b>Материалы</b>: откуда данные (организация есть, ищем, открытые).</li>
+      <li><b>Сектор и процесс</b>: что именно улучшаем. Тип процесса только фильтрует список.</li>
+      <li><b>Уровень AS-IS → TO-BE</b>: насколько глубоко меняем процесс. Задаёт глагол темы и класс решения.</li>
+      <li><b>Метрики</b>: чем докажем эффект. Не зависят от уровня и метода.</li>
+      <li><b>Методы</b>: как считаем прогноз или аномалии. Нужны только для уровней 4–5.</li>
+      <li><b>Техники BABOK</b>: как анализируем объект во второй главе.</li>
+      <li><b>Проект</b>: как организуем внедрение в третьей главе.</li>
+      <li><b>Артефакты</b>: какие документы и модели сдаём.</li>
+    </ol>
+  </div>
+  <div>
+    <h2>Правила согласованности</h2>
+    <p>Конструктор проверяет их сам и показывает предупреждения над темой.</p>
+    <ul>
+      <li>Практическая форма требует организацию: реальную или подбираемую. Открытые данные допустимы только в исследовательской форме.</li>
+      <li>TO-BE строго выше AS-IS; скачок больше двух уровней дробится на этапы.</li>
+      <li>Уровень 5 требует метод из блока 7 и прототип из блока 10. Метод без уровня 4–5 остаётся инструментом анализа, а не темой.</li>
+      <li>Пилот и справка о внедрении невозможны без реальной организации.</li>
+      <li>Тема называет класс решения (OMS, биллинг, антифрод), а не продукт: выбор продукта делается во второй главе по критериям.</li>
+      <li>Название темы не длиннее 11 слов; организация указывается в заявлении, а не в названии.</li>
+      <li>Хотя бы один показатель и хотя бы одна диаграмма в стандартной нотации.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sources">
+  <h2>Использованные источники</h2>
+  <p>Требования и примеры тем взяты из документов ниже. Актуальный перечень тем кафедра публикует ежегодно на странице «Учебная работа. Бакалавриат».</p>
+  <ul>
+    <li><a href="https://www.fa.ru/upload/constructor/25e/aq8tn5o7tdtrk0u483iohmk0qa0u83m9/GIA_BI_2025.pdf">Программа ГИА по направлению 38.03.05 «Бизнес-информатика», кафедра бизнес-информатики Финуниверситета, 2025</a>: формы ВКР, объём, структура глав, методы оценки эффективности, календарь, приложение А с научными направлениями и примерами тем.</li>
+    <li><a href="https://www.fa.ru/university/structure/scientific-educational-departments/itabd/bi/study/bak/">Страница бакалавриата кафедры бизнес-информатики</a>: примерный перечень тем, дорожная карта ВКР, учебные планы профилей.</li>
+    <li><a href="https://www.fa.ru/for-applicants/educational-programs/bachelor/cifrovaya-trans-uprav-biznesom-o/">Программа «Цифровая трансформация управления бизнесом»</a>: профильные дисциплины, партнёры-работодатели.</li>
+    <li><a href="https://www.hse.ru/data/2015/05/26/1097029628/Требования%20к%20выпускным%20квалификационным%20..акультет%20бизнеса%20и%20%20менеджмента.pdf">Требования к ВКР бакалавров факультета бизнеса и менеджмента НИУ ВШЭ</a>: справочно: типы работ, три элемента ВКР, норма по литературе.</li>
+    <li><a href="https://scm.mit.edu/thesis-and-capstone-research-projects/">MIT Center for Transportation &amp; Logistics: Thesis and Capstone Projects</a>: разделение capstone (со спонсором) и thesis (концептуальная), практичность и релевантность для отрасли.</li>
+    <li><a href="https://mitsloan.mit.edu/programs/master-business-analytics/mit-sloan-analytics-capstone">MIT Sloan Analytics Capstone</a>: предиктивная или предписывающая постановка, проблема прежде метода, отчёт и передача кода.</li>
+    <li><a href="https://cisr.mit.edu/content/classic-topics-enterprise-architecture">MIT CISR: Enterprise Architecture</a>: операционная модель и стадии зрелости архитектуры.</li>
+    <li>Стандарты и системы показателей: PMBOK Guide 7th ed. (PMI); BABOK v3 (IIBA); TM Forum Application Framework (TAM); SCOR (ASCM); DORA metrics; Balanced Scorecard (Kaplan, Norton); ГОСТ 34.601, ГОСТ Р 54869.</li>
+  </ul>
+</section>
+</div>
+<div class="toast" id="toast">Скопировано</div>
+
+<script>
+const LEVELS = [
+  {n:0, t:'Бумага и устные договорённости', d:'журналы, телефон, встречи'},
+  {n:1, t:'Excel и мессенджеры', d:'таблицы, почта, чаты, ручная сверка'},
+  {n:2, t:'Учётная система без workflow', d:'1С, базовая CRM, ручной ввод'},
+  {n:3, t:'Специализированная система с workflow', d:'BPM, CRM, OMS, TMS, биллинг; маршруты, интеграции, SLA'},
+  {n:4, t:'Описательная аналитика и KPI', d:'хранилище, BI-дашборды, регулярный контроль показателей'},
+  {n:5, t:'Предиктивная и предписывающая аналитика', d:'прогноз, поиск аномалий, рекомендации и оптимизация'}
+];
+
+const KPI_GROUPS = [
+  {g:'Финансы', items:[
+    {id:'revenue', imp:'объёма продаж', t:'Выручка и средний чек', m:'прирост выручки, средний чек, конверсия, доля повторных покупок', src:'продажи, CRM, платёжный шлюз'},
+    {id:'cost', imp:'экономичности операций', t:'Стоимость операции', m:'затраты на транзакцию, FTE, доля ручных операций', src:'хронометраж, учёт рабочего времени'},
+    {id:'romi', imp:'отдачи от рекламы', t:'ROMI и CAC', m:'возврат на маркетинг, стоимость привлечения, доля органических заказов', src:'сквозная аналитика, рекламные кабинеты'},
+    {id:'arpu', imp:'доходности клиента', t:'ARPU и LTV', m:'средний доход на клиента, пожизненная ценность, доля апселла', src:'биллинг, CRM'},
+    {id:'budget', imp:'бюджетной эффективности', t:'Экономия бюджета', m:'экономия на закупках и эксплуатации, доля освоения бюджета в срок', src:'бюджетная система, ЕИС'}
+  ]},
+  {g:'Клиенты и граждане', items:[
+    {id:'csat', imp:'удовлетворённости клиентов', t:'NPS и CSAT', m:'оценка услуги, доля жалоб, индекс лояльности', src:'опросы, оценки в приложении, портал услуг'},
+    {id:'churn', imp:'удержания клиентов', t:'Отток', m:'churn rate, доля возвращённых клиентов', src:'биллинг, CRM'},
+    {id:'otif', imp:'уровня сервиса', t:'OTIF и уровень сервиса', m:'доля заказов вовремя и в полном объёме, fill rate, дефицит', src:'OMS, WMS, TMS'}
+  ]},
+  {g:'Процессы', items:[
+    {id:'volume', imp:'пропускной способности', t:'Пропускная способность', m:'обработано заказов, заявок, обращений за период; загрузка сотрудников', src:'журнал системы'},
+    {id:'t2d', imp:'скорости исполнения заказов', t:'Time-to-deliver', m:'lead time от приёма до результата; доля в срок', src:'временные метки процесса, Process Mining'},
+    {id:'t2m', imp:'скорости вывода продуктов', t:'Time-to-market', m:'дни от заявки на продукт, тариф, услугу до запуска', src:'вехи в проектной системе'},
+    {id:'react', imp:'скорости реакции', t:'Реакция на инцидент или обращение', m:'MTTA, MTTR, доля в рамках SLA, решено с первого раза', src:'Service Desk, контакт-центр'},
+    {id:'quality', imp:'качества операций', t:'Качество и ошибки', m:'доля ошибок, возвратов, повторных обращений, расхождений', src:'рекламации, журналы контроля'},
+    {id:'forecast', imp:'точности прогноза', t:'Точность прогноза', m:'MAPE, WAPE, смещение прогноза спроса или потребности', src:'история продаж, остатков, нагрузки'},
+    {id:'detect', imp:'выявляемости нарушений', t:'Выявляемость', m:'доля выявленных нарушений, precision и recall, время до выявления', src:'журналы проверок, разметка инцидентов'}
+  ]},
+  {g:'Развитие и ИТ', items:[
+    {id:'auto', imp:'степени автоматизации', t:'Доля автоматизации', m:'доля операций без ручного участия (STP), доля цифровых обращений', src:'журналы систем'},
+    {id:'dora', imp:'скорости изменений', t:'DORA-метрики', m:'частота релизов, lead time изменений, доля неудачных изменений', src:'система управления задачами, CI/CD'},
+    {id:'dataq', imp:'качества данных', t:'Качество данных', m:'полнота, дубликаты, своевременность, согласованность справочников', src:'профилирование данных'}
+  ]}
+];
+const KPIS = KPI_GROUPS.flatMap(g=>g.items);
+
+const METHODS = [
+  {id:'gd', t:'Регрессия с градиентным спуском', d:'линейная и логистическая регрессия, SGD; базовая модель спроса и потребности', short:'регрессионной модели', aim:'прогнозирования'},
+  {id:'boost', t:'Градиентный бустинг', d:'CatBoost, LightGBM; спрос, отток, скоринг, риск', short:'градиентного бустинга', aim:'прогнозирования'},
+  {id:'ts', t:'Временные ряды', d:'ARIMA, экспоненциальное сглаживание, Prophet', short:'моделей временных рядов', aim:'прогнозирования'},
+  {id:'nn', t:'Нейронные сети', d:'LSTM, трансформеры; многомерные ряды, изображения, спутниковые снимки', short:'нейросетевой модели', aim:'прогнозирования'},
+  {id:'anomaly', t:'Поиск аномалий', d:'Isolation Forest, контрольные карты; фрод, сбои, выбросы', short:'детекции аномалий', aim:'выявления аномалий'},
+  {id:'opt', t:'Оптимизация', d:'линейное программирование, VRP-маршрутизация, распределение ресурсов', short:'оптимизационной модели', aim:'оптимизации'},
+  {id:'geo', t:'Геоаналитика', d:'кластеризация точек, тепловые карты, пространственные индексы', short:'геоаналитической модели', aim:'пространственного анализа'},
+  {id:'llm', t:'Языковые модели', d:'классификация и извлечение из обращений, документов, отзывов', short:'языковой модели', aim:'классификации обращений'},
+  {id:'pm', t:'Process Mining', d:'PM4Py: восстановление процесса по логам, узкие места', short:'process mining', aim:'анализа'}
+];
+
+const BABOK = [
+  {id:'elicit', t:'Выявление требований', d:'интервью, наблюдение, анализ документов и логов'},
+  {id:'stake', t:'Анализ заинтересованных сторон', d:'список ролей, матрица влияния и интереса, RACI'},
+  {id:'reqtypes', t:'Классификация требований', d:'бизнес, стейкхолдеров, к решению (функциональные и нефункциональные), переходные'},
+  {id:'rootcause', t:'Анализ первопричин', d:'«5 почему», диаграмма Исикавы, SWOT текущего состояния'},
+  {id:'options', t:'Оценка вариантов решения', d:'критерии, взвешенная оценка, MoSCoW-приоритеты'},
+  {id:'accept', t:'Критерии приёмки', d:'измеримые условия для каждого требования и для KPI'}
+];
+
+const SECTORS = {
+  ecom:{ label:'E-commerce', org:'интернет-магазина', ex:'ООО «Маркет-Онлайн» (доставка в 40 городов РФ и Казахстан)', lit:'электронной коммерции, распределённой логистики и ценообразования', where:'интернет-магазины с несколькими складами или странами доставки, селлеры на Яндекс Маркете и Ozon, агентства performance-маркетинга',
+    core:[
+      {id:'pricing', name:'ценообразования и мониторинга цен конкурентов', sys:'системы динамического ценообразования', kpi:['revenue','forecast','quality'], tag:'Яндекс Маркет, price.ru, репрайсеры'},
+      {id:'market', name:'размещения и продвижения на прайс-агрегаторах', sys:'PIM-системы с управлением фидами и ставками', kpi:['revenue','romi','t2m'], tag:'фиды, ставки, карточки'},
+      {id:'fulfil', name:'распределённого фулфилмента по складам', sys:'OMS с правилами выбора склада', kpi:['t2d','otif','cost'], tag:'несколько городов, split-заказы'},
+      {id:'delivery', name:'доставки в разные города и страны', sys:'модуля управления перевозчиками и трекингом', kpi:['t2d','otif','csat'], tag:'трансграничная доставка'},
+      {id:'demand', name:'прогнозирования спроса и пополнения запасов', sys:'системы прогнозирования спроса', kpi:['forecast','otif','cost'], tag:'по складам и регионам'},
+      {id:'ads', name:'управления рекламой и атрибуцией', sys:'платформы сквозной аналитики', kpi:['romi','revenue'], tag:'performance-маркетинг'},
+      {id:'returns', name:'возвратов и обращений покупателей', sys:'help-desk с автоклассификацией', kpi:['react','csat','cost'], tag:''}
+    ],
+    support:[
+      {id:'recon', name:'сверки расчётов с маркетплейсами и платёжными сервисами', sys:'модуля автоматической сверки', kpi:['cost','quality'], tag:''},
+      {id:'it', name:'поддержки платформы интернет-магазина', sys:'ITSM-системы', kpi:['react','dora'], tag:''},
+      {id:'procure', name:'закупок и работы с поставщиками', sys:'SRM-системы', kpi:['t2d','cost'], tag:''},
+      {id:'hr', name:'найма и обучения операторов и сборщиков', sys:'HRM и LMS', kpi:['t2d','cost'], tag:''}
+    ]},
+  telecom:{ label:'Телеком', org:'оператора связи', ex:'ПАО «Регион-Телеком»', lit:'BSS/OSS-систем оператора связи и клиентского опыта', where:'региональные операторы, MVNO, разработчики биллинга (Nexign, Bercut, Forward), ИТ-подразделения федеральных операторов',
+    core:[
+      {id:'crm', name:'обслуживания абонентов в CRM', sys:'омниканальной CRM', kpi:['react','csat','churn'], tag:'TAM: Customer Management'},
+      {id:'lk', name:'самообслуживания абонентов в личном кабинете', sys:'личного кабинета и мобильного приложения', kpi:['auto','csat','cost'], tag:'TAM: Customer Self-Management'},
+      {id:'billing', name:'биллинга и тарификации', sys:'конвергентного биллинга с онлайн-тарификацией', kpi:['quality','cost','t2m'], tag:'TAM: Billing, Rating & Charging'},
+      {id:'policy', name:'управления политиками и квотами услуг PCRF/PCEF', sys:'системы управления политиками', kpi:['react','quality','arpu'], tag:'TAM: Policy Management'},
+      {id:'catalog', name:'вывода тарифов и продуктов', sys:'централизованного продуктового каталога', kpi:['t2m','revenue'], tag:'TAM: Product Catalog Management'},
+      {id:'order', name:'управления заказами и активации услуг', sys:'системы управления заказами', kpi:['t2d','volume','quality'], tag:'TAM: Order Management, Provisioning'},
+      {id:'churn', name:'удержания абонентов', sys:'CRM с моделью оттока', kpi:['churn','arpu'], tag:'TAM: Customer Retention & Loyalty'}
+    ],
+    support:[
+      {id:'ra', name:'контроля доходов и взыскания задолженности', sys:'системы revenue assurance', kpi:['quality','cost','detect'], tag:'TAM: Revenue Assurance'},
+      {id:'oss', name:'эксплуатации сетевого оборудования', sys:'системы управления сетью (OSS)', kpi:['react','cost'], tag:'OSS'},
+      {id:'procure', name:'закупки оборудования и подрядных услуг', sys:'SRM-системы', kpi:['t2d','cost'], tag:''},
+      {id:'it', name:'внутренних ИТ-заявок', sys:'ITSM-системы', kpi:['react','dora'], tag:''}
+    ]},
+  logistics:{ label:'Логистика', org:'логистической компании', ex:'ООО «Курьер-Экспресс» (последняя миля в 15 городах)', lit:'управления цепями поставок и транспортной логистики', where:'курьерские службы, 3PL-операторы и фулфилмент-центры, транспортные компании, логистические подразделения ритейлеров',
+    core:[
+      {id:'tms', name:'приёма и распределения заказов на перевозку', sys:'TMS', kpi:['t2d','volume','cost'], tag:'SCOR: Deliver'},
+      {id:'route', name:'планирования маршрутов и загрузки транспорта', sys:'модуля маршрутизации (VRP)', kpi:['cost','otif','t2d'], tag:'оптимизация'},
+      {id:'wms', name:'складской обработки и фулфилмента', sys:'WMS', kpi:['volume','quality','cost'], tag:'SCOR: Make/Deliver'},
+      {id:'track', name:'отслеживания отправлений и уведомления клиентов', sys:'трекинг-платформы', kpi:['csat','react'], tag:''},
+      {id:'carriers', name:'управления подрядчиками-перевозчиками', sys:'портала перевозчиков', kpi:['otif','cost','quality'], tag:'SCOR: Source'},
+      {id:'tariff', name:'расчёта стоимости и сроков доставки', sys:'тарифного калькулятора', kpi:['revenue','quality','t2d'], tag:'города и страны'}
+    ],
+    support:[
+      {id:'fleet', name:'обслуживания и ремонта автопарка', sys:'EAM-системы', kpi:['react','cost'], tag:''},
+      {id:'claims', name:'претензий и страховых случаев', sys:'системы управления претензиями', kpi:['react','quality','csat'], tag:''},
+      {id:'hr', name:'найма и адаптации водителей и курьеров', sys:'HRM-системы', kpi:['t2d','cost'], tag:''},
+      {id:'it', name:'ИТ-поддержки терминалов и мобильных устройств', sys:'ITSM-системы', kpi:['react','cost'], tag:''}
+    ]},
+  gov:{ label:'Госуслуги и управление', org:'органа государственной власти', ex:'Департамента информационных технологий региона', lit:'цифровизации государственного управления и предоставления услуг', where:'региональные министерства и департаменты, МФЦ, подведомственные учреждения, ИТ-подрядчики госорганов',
+    core:[
+      {id:'service', name:'предоставления государственной услуги', sys:'ведомственной системы с интеграцией через СМЭВ', kpi:['t2d','volume','csat'], tag:''},
+      {id:'appeal', name:'работы с обращениями граждан', sys:'системы обращений с автоклассификацией', kpi:['react','quality','csat'], tag:'ПОС, 59-ФЗ'},
+      {id:'control', name:'контрольно-надзорной деятельности', sys:'системы риск-ориентированного планирования проверок', kpi:['detect','cost','volume'], tag:'248-ФЗ'},
+      {id:'program', name:'мониторинга показателей госпрограмм', sys:'аналитической платформы с витринами данных', kpi:['react','dataq'], tag:''},
+      {id:'procure44', name:'закупок по 44-ФЗ', sys:'системы управления закупками', kpi:['t2d','budget','quality'], tag:'ЕИС'},
+      {id:'city', name:'управления городским хозяйством', sys:'платформы «умного города»', kpi:['react','csat','budget'], tag:'ЖКХ, благоустройство'}
+    ],
+    support:[
+      {id:'docflow', name:'ведомственного документооборота', sys:'СЭД с маршрутизацией и электронной подписью', kpi:['t2d','cost'], tag:''},
+      {id:'hr', name:'кадрового делопроизводства', sys:'кадровой системы', kpi:['t2d','cost','quality'], tag:''},
+      {id:'budget', name:'планирования и исполнения бюджета учреждения', sys:'системы бюджетного планирования', kpi:['t2d','budget'], tag:''},
+      {id:'it', name:'поддержки рабочих мест и ведомственных систем', sys:'ITSM-системы', kpi:['react','cost'], tag:''}
+    ]},
+  govmon:{ label:'Госконтроль и мониторинг', org:'контрольного ведомства', ex:'территориального управления федеральной службы', lit:'риск-ориентированного контроля и аналитических систем государственных органов', where:'территориальные управления ФНС, Росфинмониторинга, МВД, ЦОДД, Рослесхоза, Росводресурсов, Росрыболовства; ИТ-подрядчики ведомств; банки как субъекты 115-ФЗ',
+    core:[
+      {id:'finmon', name:'выявления подозрительных операций (финансовый мониторинг)', sys:'системы анализа операций с риск-скорингом', kpi:['detect','quality','react'], tag:'Росфинмониторинг, 115-ФЗ'},
+      {id:'taxrisk', name:'риск-ориентированного отбора налогоплательщиков для проверок', sys:'аналитической системы налоговых рисков', kpi:['detect','cost','volume'], tag:'ФНС, АСК НДС'},
+      {id:'taxmon', name:'налогового мониторинга крупных налогоплательщиков', sys:'витрины данных для налогового мониторинга', kpi:['t2d','cost','dataq'], tag:'ФНС, онлайн-доступ к учёту'},
+      {id:'crime', name:'анализа криминогенной обстановки', sys:'геоаналитической платформы по происшествиям', kpi:['detect','react','forecast'], tag:'МВД, карты рисков, расстановка нарядов'},
+      {id:'traffic', name:'мониторинга дорожной обстановки и ДТП', sys:'интеллектуальной транспортной системы', kpi:['react','quality','forecast'], tag:'ЦОДД, детекторы, камеры'},
+      {id:'forest', name:'мониторинга лесных ресурсов и вырубок', sys:'системы спутникового мониторинга и ЛесЕГАИС', kpi:['detect','react','volume'], tag:'Рослесхоз, пожары, незаконные рубки'},
+      {id:'water', name:'мониторинга водных объектов и паводков', sys:'системы гидромониторинга с прогнозом уровней', kpi:['forecast','react','detect'], tag:'Росводресурсы, гидропосты'},
+      {id:'fish', name:'контроля вылова и квот водных биоресурсов', sys:'отраслевой системы мониторинга судов и электронного промыслового журнала', kpi:['detect','quality','cost'], tag:'Росрыболовство, ОСМ'}
+    ],
+    support:[
+      {id:'smev', name:'межведомственного обмена данными', sys:'адаптеров СМЭВ и витрин НСУД', kpi:['t2d','dataq','auto'], tag:''},
+      {id:'docflow', name:'ведомственного документооборота', sys:'СЭД', kpi:['t2d','cost'], tag:''},
+      {id:'it', name:'эксплуатации ведомственных систем', sys:'ITSM-системы', kpi:['react','dora'], tag:''}
+    ]},
+  bank:{ label:'Банки', org:'коммерческого банка', ex:'АО «Банк Столичный»', lit:'цифровой трансформации банковского обслуживания и управления рисками', where:'банки-партнёры кафедры (Росбанк), МФО, банковские ИТ-подрядчики (Диасофт, Норбит, Ланит)',
+    core:[
+      {id:'credit', name:'кредитного конвейера для физических лиц', sys:'BPM-платформы с автоматическим скорингом', kpi:['t2d','volume','quality'], tag:''},
+      {id:'onboard', name:'дистанционного онбординга клиентов', sys:'системы онбординга с биометрией', kpi:['t2d','revenue','csat'], tag:''},
+      {id:'claims', name:'рассмотрения претензий клиентов', sys:'CRM с управлением обращениями', kpi:['react','quality','csat'], tag:''},
+      {id:'fraud', name:'мониторинга операций и противодействия мошенничеству', sys:'антифрод-системы', kpi:['detect','react','cost'], tag:''},
+      {id:'aml', name:'внутреннего контроля по 115-ФЗ', sys:'AML-системы с риск-скорингом клиентов', kpi:['detect','cost','auto'], tag:'финансовый мониторинг'},
+      {id:'product', name:'вывода новых банковских продуктов', sys:'платформы продуктового каталога', kpi:['t2m','revenue'], tag:''}
+    ],
+    support:[
+      {id:'compliance', name:'подготовки регуляторной отчётности', sys:'системы регуляторной отчётности', kpi:['t2d','quality','cost'], tag:''},
+      {id:'hr', name:'подбора и адаптации сотрудников фронт-офиса', sys:'HRM-системы', kpi:['t2d','cost'], tag:''},
+      {id:'procure', name:'закупок и управления договорами', sys:'SRM и электронного документооборота', kpi:['t2d','cost'], tag:''},
+      {id:'it', name:'управления инцидентами ИТ-инфраструктуры', sys:'ITSM-системы', kpi:['react','dora'], tag:''}
+    ]},
+  manuf:{ label:'Производство', org:'производственного предприятия', ex:'АО «Приборный завод»', lit:'управления производством и активами промышленного предприятия', where:'машиностроительные и приборостроительные заводы, пищевые производства, ИТ-подразделения холдингов',
+    core:[
+      {id:'plan', name:'планирования производства', sys:'MES или APS-системы', kpi:['volume','t2d','cost'], tag:'ERP и MES'},
+      {id:'maint', name:'обслуживания и ремонта оборудования', sys:'EAM-системы с обслуживанием по состоянию', kpi:['react','cost','detect'], tag:'ТОиР, IIoT'},
+      {id:'qms', name:'контроля качества продукции', sys:'системы управления качеством со статистическим контролем', kpi:['quality','cost','detect'], tag:'SPC'},
+      {id:'mrp', name:'снабжения и расчёта потребности в материалах', sys:'модуля MRP', kpi:['otif','cost','forecast'], tag:''}
+    ],
+    support:[
+      {id:'hr', name:'учёта рабочего времени и охраны труда', sys:'HRM-системы', kpi:['cost','quality'], tag:''},
+      {id:'it', name:'поддержки цеховых ИТ-систем', sys:'ITSM-системы', kpi:['react','cost'], tag:''},
+      {id:'docs', name:'ведения конструкторско-технологической документации', sys:'PDM-системы', kpi:['t2d','dataq'], tag:''}
+    ]},
+  insurance:{ label:'Страхование', org:'страховой компании', ex:'АО «СК Гарант-Полис»', lit:'цифровизации страхового бизнеса и управления рисками', where:'страховые компании, страховые брокеры, ИТ-подрядчики страховщиков',
+    core:[
+      {id:'underwrite', name:'андеррайтинга и котирования', sys:'системы автоматического андеррайтинга', kpi:['t2d','quality','revenue'], tag:''},
+      {id:'claims', name:'урегулирования убытков', sys:'системы урегулирования с фотофиксацией', kpi:['t2d','csat','cost'], tag:''},
+      {id:'online', name:'онлайн-продаж полисов', sys:'страхового маркетплейса и API-каналов', kpi:['revenue','romi','auto'], tag:''},
+      {id:'fraud', name:'выявления страхового мошенничества', sys:'антифрод-системы', kpi:['detect','cost'], tag:''}
+    ],
+    support:[
+      {id:'report', name:'подготовки отчётности для Банка России', sys:'системы регуляторной отчётности', kpi:['t2d','quality'], tag:''},
+      {id:'it', name:'ИТ-поддержки агентской сети', sys:'ITSM-системы', kpi:['react','cost'], tag:''}
+    ]},
+  health:{ label:'Здравоохранение', org:'медицинской организации', ex:'ГБУЗ «Городская клиническая больница»', lit:'цифровизации здравоохранения и медицинских информационных систем', where:'поликлиники и больницы, частные клиники, региональные МИАЦ, разработчики МИС',
+    core:[
+      {id:'sched', name:'записи и маршрутизации пациентов', sys:'МИС с электронной очередью', kpi:['t2d','csat','volume'], tag:'ЕГИСЗ'},
+      {id:'emr', name:'ведения электронной медицинской карты', sys:'МИС с СППВР', kpi:['quality','dataq','cost'], tag:''},
+      {id:'beds', name:'управления коечным фондом и госпитализацией', sys:'модуля управления госпитализацией', kpi:['volume','t2d','forecast'], tag:''},
+      {id:'pharma', name:'закупок и учёта лекарственных средств', sys:'системы учёта лекарств с маркировкой', kpi:['otif','cost','quality'], tag:'МДЛП'}
+    ],
+    support:[
+      {id:'hr', name:'планирования нагрузки медицинского персонала', sys:'HRM-системы', kpi:['cost','quality'], tag:''},
+      {id:'it', name:'поддержки медицинского оборудования и ИТ', sys:'ITSM и EAM', kpi:['react','cost'], tag:''}
+    ]},
+  energy:{ label:'Энергетика и ЖКХ', org:'ресурсоснабжающей организации', ex:'АО «Городские электросети»', lit:'цифровизации энергетики и жилищно-коммунального хозяйства', where:'сетевые и сбытовые компании, управляющие компании, водоканалы, теплосети, региональные операторы',
+    core:[
+      {id:'metering', name:'учёта потребления ресурсов', sys:'АСКУЭ с интеллектуальными счётчиками', kpi:['quality','cost','detect'], tag:'потери, небаланс'},
+      {id:'emergency', name:'обработки аварийных заявок', sys:'диспетчерской системы с мобильными бригадами', kpi:['react','csat','cost'], tag:''},
+      {id:'billing', name:'начислений и расчётов за услуги', sys:'биллинга ЖКУ', kpi:['quality','cost','auto'], tag:'ГИС ЖКХ'},
+      {id:'repair', name:'планирования ремонтов сетей', sys:'EAM с оценкой технического состояния', kpi:['react','cost','forecast'], tag:''}
+    ],
+    support:[
+      {id:'procure', name:'закупок по 223-ФЗ', sys:'системы управления закупками', kpi:['t2d','budget'], tag:''},
+      {id:'it', name:'поддержки АСУ ТП и корпоративных систем', sys:'ITSM-системы', kpi:['react','cost'], tag:''}
+    ]},
+  edu:{ label:'Образование', org:'образовательной организации', ex:'университета или колледжа', lit:'цифровизации образования и управления учебным процессом', where:'вузы и колледжи, онлайн-школы, EdTech-компании, региональные органы управления образованием',
+    core:[
+      {id:'admission', name:'приёмной кампании', sys:'системы приёма с интеграцией с «Госуслугами»', kpi:['t2d','volume','csat'], tag:'суперсервис «Поступление в вуз онлайн»'},
+      {id:'schedule', name:'составления расписания и распределения нагрузки', sys:'системы планирования расписания', kpi:['cost','quality','t2d'], tag:'оптимизация'},
+      {id:'lms', name:'обучения и контроля успеваемости', sys:'LMS с аналитикой обучения', kpi:['quality','churn','auto'], tag:'learning analytics'},
+      {id:'career', name:'практик и трудоустройства выпускников', sys:'платформы карьерного центра', kpi:['revenue','csat','volume'], tag:''}
+    ],
+    support:[
+      {id:'docflow', name:'документооборота и выдачи справок', sys:'СЭД и личного кабинета студента', kpi:['t2d','auto'], tag:''},
+      {id:'it', name:'поддержки цифровой инфраструктуры', sys:'ITSM-системы', kpi:['react','cost'], tag:''}
+    ]},
+  agro:{ label:'Агропром', org:'агропредприятия', ex:'ООО «Агрохолдинг Юг»', lit:'цифровизации сельского хозяйства', where:'агрохолдинги, фермерские хозяйства, агротех-компании, поставщики техники',
+    core:[
+      {id:'fieldplan', name:'планирования полевых работ', sys:'агро-ERP с картами полей', kpi:['cost','volume','t2d'], tag:''},
+      {id:'crops', name:'мониторинга состояния посевов', sys:'системы спутникового и дронового мониторинга', kpi:['forecast','detect','volume'], tag:'NDVI'},
+      {id:'herd', name:'учёта и здоровья стада', sys:'системы управления стадом', kpi:['volume','quality','detect'], tag:''},
+      {id:'sales', name:'сбыта продукции и ценообразования', sys:'торговой платформы', kpi:['revenue','forecast'], tag:''}
+    ],
+    support:[
+      {id:'fleet', name:'обслуживания сельхозтехники', sys:'EAM с телематикой', kpi:['react','cost'], tag:''},
+      {id:'it', name:'ИТ-поддержки удалённых подразделений', sys:'ITSM-системы', kpi:['react','cost'], tag:''}
+    ]}
+};
+const SECTOR_ORDER = ['ecom','telecom','logistics','gov','govmon','bank','manuf','insurance','health','energy','edu','agro'];
+
+const DIRECTIONS = {
+  1:'Управление и контроль ИТ', 3:'Проектирование элементов архитектуры предприятия', 4:'Моделирование и совершенствование бизнес-процессов',
+  5:'Совершенствование процессов управления ИТ-проектами', 7:'Цифровая трансформация бизнес-моделей предприятия',
+  8:'Повышение эффективности деятельности компаний за счёт внедрения ИТ-решений', 9:'Использование средств бизнес-аналитики для управления организацией'
+};
+
+const BANK = [
+  {s:'ecom', p:'core', l:5, t:'Прогнозирование спроса интернет-магазина по регионам доставки на основе градиентного бустинга'},
+  {s:'ecom', p:'core', l:4, t:'Совершенствование ценообразования интернет-магазина на основе мониторинга прайс-агрегаторов'},
+  {s:'ecom', p:'core', l:3, t:'Автоматизация распределённого фулфилмента интернет-магазина на основе OMS'},
+  {s:'ecom', p:'core', l:3, t:'Омниканальная трансформация глобального торгового ритейлера на основе внедрения диджитал-платформы', src:'ФУ'},
+  {s:'ecom', p:'support', l:3, t:'Автоматизация сверки расчётов интернет-магазина с маркетплейсами и платёжными сервисами'},
+  {s:'telecom', p:'core', l:3, t:'Совершенствование тарификации услуг оператора связи на основе конвергентного биллинга'},
+  {s:'telecom', p:'core', l:5, t:'Прогнозирование оттока абонентов оператора связи методами машинного обучения'},
+  {s:'telecom', p:'core', l:3, t:'Развитие самообслуживания абонентов оператора связи в личном кабинете'},
+  {s:'telecom', p:'core', l:4, t:'Совершенствование управления политиками услуг PCRF оператора связи на основе анализа потребления'},
+  {s:'telecom', p:'support', l:5, t:'Автоматизация контроля доходов оператора связи с поиском аномалий в биллинге'},
+  {s:'logistics', p:'core', l:4, t:'Разработка целевой модели архитектуры логистического предприятия', src:'ФУ'},
+  {s:'logistics', p:'core', l:3, t:'Автоматизация процессов складской логистики в производственной компании', src:'ФУ'},
+  {s:'logistics', p:'core', l:5, t:'Оптимизация маршрутов доставки курьерской службы на основе VRP-модели'},
+  {s:'logistics', p:'support', l:3, t:'Совершенствование обслуживания автопарка транспортной компании на основе EAM-системы'},
+  {s:'gov', p:'core', l:3, t:'Совершенствование предоставления государственной услуги на основе BPM-платформы'},
+  {s:'gov', p:'core', l:5, t:'Автоматическая классификация обращений граждан для сокращения времени реакции ведомства'},
+  {s:'gov', p:'core', l:4, t:'Разработка элементов архитектуры предприятия федерального масштаба на основе референтных моделей', src:'ФУ'},
+  {s:'gov', p:'support', l:3, t:'Моделирование и оптимизация документооборота органа власти с использованием СЭД'},
+  {s:'govmon', p:'core', l:5, t:'Выявление подозрительных операций в финансовом мониторинге на основе детекции аномалий'},
+  {s:'govmon', p:'core', l:5, t:'Риск-ориентированный отбор налогоплательщиков для проверок на основе градиентного бустинга'},
+  {s:'govmon', p:'core', l:4, t:'Геоаналитика криминогенной обстановки для планирования расстановки нарядов'},
+  {s:'govmon', p:'core', l:5, t:'Прогнозирование дорожной обстановки по данным детекторов интеллектуальной транспортной системы'},
+  {s:'govmon', p:'core', l:5, t:'Выявление незаконных рубок по спутниковым снимкам на основе нейросетевой модели'},
+  {s:'govmon', p:'core', l:4, t:'Контроль вылова водных биоресурсов на основе данных отраслевой системы мониторинга судов'},
+  {s:'bank', p:'core', l:3, t:'Реинжиниринг бизнес-процессов взаимодействия с клиентами в кредитном отделе коммерческого банка', src:'ФУ'},
+  {s:'bank', p:'core', l:5, t:'Разработка риск-чувствительных банковских продуктов на основе анализа поведения клиентов', src:'ФУ'},
+  {s:'bank', p:'core', l:4, t:'Повышение качества управленческой отчётности коммерческого банка на основе инструментов бизнес-анализа', src:'ФУ'},
+  {s:'bank', p:'support', l:3, t:'Повышение эффективности управления ИТ-проектами в кредитной организации', src:'ФУ'},
+  {s:'manuf', p:'core', l:3, t:'Повышение качества управления производством в службах цехов промышленного предприятия на основе совершенствования бизнес-процессов', src:'ФУ'},
+  {s:'manuf', p:'core', l:5, t:'Обслуживание оборудования по состоянию на основе детекции аномалий в данных датчиков'},
+  {s:'insurance', p:'core', l:4, t:'Разработка интерактивной визуальной отчётности для руководства страховой компании', src:'ФУ'},
+  {s:'insurance', p:'core', l:5, t:'Выявление страхового мошенничества при урегулировании убытков на основе градиентного бустинга'},
+  {s:'health', p:'core', l:3, t:'Совершенствование записи и маршрутизации пациентов поликлиники на основе МИС'},
+  {s:'health', p:'core', l:5, t:'Прогнозирование загрузки коечного фонда больницы на основе моделей временных рядов'},
+  {s:'energy', p:'core', l:5, t:'Выявление коммерческих потерь электроэнергии на основе анализа данных АСКУЭ'},
+  {s:'energy', p:'core', l:3, t:'Автоматизация обработки аварийных заявок ресурсоснабжающей организации'},
+  {s:'edu', p:'core', l:5, t:'Прогнозирование риска отчисления студентов на основе данных LMS'},
+  {s:'edu', p:'core', l:3, t:'Автоматизация приёмной кампании колледжа на основе интеграции с «Госуслугами»'},
+  {s:'agro', p:'core', l:5, t:'Прогнозирование урожайности по спутниковым индексам на основе регрессионной модели'},
+  {s:'agro', p:'core', l:3, t:'Автоматизация планирования полевых работ агрохолдинга на основе агро-ERP'}
+];
+
+const $ = s => document.querySelector(s);
+const DEFAULT = {form:'practical', base:'real', sector:'ecom', ptype:'core', process:null, asis:1, tobe:3, kpi:['t2d'], method:[], babok:['elicit','stake','reqtypes'], pm:'pmbok', evm:false, deliv:['bpmn','er','req']};
+const state = JSON.parse(JSON.stringify(DEFAULT));
+
+function opt(name, id, value, title, desc, checked, radio=true, prefix='', tag=''){
+  return `<label class="opt"><input type="${radio?'radio':'checkbox'}" name="${name}" id="${id}" value="${value}"${checked?' checked':''}><span class="box"></span>${prefix}<span><span class="t">${title}</span>${desc?`<span class="d">${desc}</span>`:''}${tag?`<span class="tag">${tag}</span>`:''}</span></label>`;
+}
+function renderStatic(){
+  $('#g-sector').innerHTML = SECTOR_ORDER.map(k=>opt('sector',`sector-${k}`,k,SECTORS[k].label,'',state.sector===k)).join('');
+  $('#g-asis').innerHTML = LEVELS.map(l=>opt('asis',`asis-${l.n}`,l.n,l.t,l.d,state.asis===l.n,true,`<span class="n">${l.n}</span>`)).join('');
+  $('#g-tobe').innerHTML = LEVELS.map(l=>opt('tobe',`tobe-${l.n}`,l.n,l.t,l.d,state.tobe===l.n,true,`<span class="n">${l.n}</span>`)).join('');
+  $('#g-kpi').innerHTML = KPI_GROUPS.map(g=>`<h4>${g.g}</h4><div class="opts grid">${g.items.map(k=>opt('kpi',`kpi-${k.id}`,k.id,k.t,k.m,state.kpi.includes(k.id),false)).join('')}</div>`).join('');
+  $('#g-method').innerHTML = METHODS.map(m=>opt('method',`method-${m.id}`,m.id,m.t,m.d,state.method.includes(m.id),false)).join('');
+  $('#g-babok').innerHTML = BABOK.map(b=>opt('babok',`babok-${b.id}`,b.id,b.t,b.d,state.babok.includes(b.id),false)).join('');
+}
+function renderProcesses(){
+  const list = SECTORS[state.sector][state.ptype];
+  if(!list.some(p=>p.id===state.process)) state.process = list[0].id;
+  $('#g-process').innerHTML = list.map(p=>opt('process',`process-${state.sector}-${state.ptype}-${p.id}`,p.id,'Процесс '+p.name,'Класс решения: '+p.sys,state.process===p.id,true,'',p.tag)).join('');
+}
+function read(){
+  const v = n => document.querySelector(`input[name="${n}"]:checked`)?.value;
+  const all = n => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(i=>i.value);
+  state.form=v('form'); state.base=v('base'); state.sector=v('sector'); state.ptype=v('ptype'); state.process=v('process');
+  state.asis=+v('asis'); state.tobe=+v('tobe'); state.pm=v('pm'); state.evm=!!v('evm');
+  state.kpi=all('kpi'); state.method=all('method'); state.babok=all('babok'); state.deliv=all('deliv');
+}
+const words = s => s.trim().split(/\s+/).length;
+const plural = (n,a,b,c) => n%10===1&&n%100!==11?a:(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?b:c;
+
+function build(){
+  const S = SECTORS[state.sector];
+  const P = S[state.ptype].find(p=>p.id===state.process);
+  const kpis = KPIS.filter(k=>state.kpi.includes(k.id));
+  const methods = METHODS.filter(m=>state.method.includes(m.id));
+  const babok = BABOK.filter(b=>state.babok.includes(b.id));
+  const M = methods[0];
+  const research = state.form==='research';
+  const sysShort = P.sys.replace(/^(системы|модуля|платформы|портала|адаптеров|витрины)\s+/,'');
+  let sol;
+  switch(state.tobe){
+    case 1: sol='регламентации и электронных таблиц'; break;
+    case 2: sol='внедрения учётной системы'; break;
+    case 3: sol=`внедрения ${P.sys}`; break;
+    case 4: sol=`внедрения ${P.sys} и системы KPI`; break;
+    default: sol = M ? M.short : `${P.sys} с предиктивной аналитикой`;
+  }
+  const verb = state.asis<=1 ? 'Автоматизация' : state.asis<=3 ? 'Совершенствование' : 'Развитие аналитического обеспечения';
+  let topic, alts;
+  if(research){
+    topic = M ? `Разработка модели ${M.aim} в процессе ${P.name} ${S.org} на основе ${M.short}`
+              : `Метод повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса ${P.name} ${S.org}`;
+    alts = [
+      `Оценка влияния ${sol} на ${kpis[0]?kpis[0].t.toLowerCase():'показатели'} процесса ${P.name} ${S.org}`,
+      `Сравнительный анализ подходов к автоматизации процесса ${P.name} ${S.org}`,
+      `Модель зрелости процесса ${P.name} ${S.org}: от уровня ${state.asis} к уровню ${state.tobe}`
+    ];
+  } else {
+    topic = `${verb} процесса ${P.name} ${S.org} на основе ${sol}`;
+    alts = [
+      `Повышение ${kpis.length?kpis.slice(0,2).map(k=>k.imp).join(' и '):'эффективности'} процесса ${P.name} ${S.org}`,
+      `Разработка проекта внедрения ${sysShort} для процесса ${P.name} ${S.org}`,
+      `Реинжиниринг процесса ${P.name} ${S.org} с переходом на уровень «${LEVELS[state.tobe].t}»`
+    ];
+  }
+  let dir = 8;
+  if(state.tobe>=4 || methods.length) dir = 9;
+  else if(state.ptype==='support' && P.id==='it') dir = 1;
+  else if(state.deliv.includes('arch') && !state.deliv.includes('proto')) dir = 3;
+  else if(state.sector==='ecom' && ['market','ads','pricing'].includes(P.id)) dir = 7;
+  else if(state.tobe-state.asis===1 && state.asis>=2) dir = 4;
+  if(!research && state.evm && dir===8) dir = 5;
+  return {S,P,kpis,methods,babok,M,research,sol,verb,topic,alts,dir,sysShort};
+}
+
+let LAST = null;
+function render(){
+  read();
+  // dependency rules
+  const research = state.form==='research';
+  $('#base-open').disabled = !research;
+  if(!research && state.base==='open'){ state.base='real'; $('#base-real').checked=true; }
+  $('#pm-none').disabled = false;
+  document.querySelectorAll('input[name="pm"]').forEach(i=>{ i.disabled = research && i.value!=='none'; });
+  if(research){ state.pm='none'; $('#pm-none').checked=true; $('#pm-evm').checked=false; state.evm=false; }
+  else if(state.pm==='none' && !document.querySelector('input[name="pm"]:checked')) { state.pm='pmbok'; $('#pm-pmbok').checked=true; }
+  $('#pm-evm').disabled = research;
+  $('#deliv-pilot').disabled = state.base==='open';
+  if(state.base==='open' && state.deliv.includes('pilot')){ $('#deliv-pilot').checked=false; state.deliv=state.deliv.filter(d=>d!=='pilot'); }
+
+  const b = build(); LAST = b;
+  const {S,P,kpis,methods,babok,M} = b;
+  $('#topic').textContent = b.topic;
+  const wc = words(b.topic);
+  $('#meta').innerHTML = `<span class="chip ${wc>11?'warn':'on'}">${wc} ${plural(wc,'слово','слова','слов')} из 11</span><span class="chip">направление ${b.dir}: ${DIRECTIONS[b.dir]}</span>`;
+  $('#alts').innerHTML = b.alts.map(a=>`<li>${a} <span style="opacity:.6">(${words(a)})</span></li>`).join('');
+
+  const al = [];
+  if(state.tobe<=state.asis) al.push(['warn','Целевой уровень должен быть выше текущего: иначе в работе нет проектной части.']);
+  if(state.tobe-state.asis>=3) al.push(['warn','Скачок на три и более уровня велик для бакалаврской работы. Опишите дорожную карту целиком, детально проработайте и оцените первый этап.']);
+  if(wc>11) al.push(['warn','Программа ГИА: в названии темы не более 11 слов. Возьмите короткий вариант ниже или уберите уточнения.']);
+  if(state.base==='seek') al.push(['info',`Первый шаг: найти организацию. Где искать: ${S.where}; место практики; партнёры кафедры (Диасофт, Норбит, Ланит, Росбанк, Директум, 1С). Признак релевантности: есть процесс ${P.name} на уровне «${LEVELS[state.asis].t}» и доступ к данным по показателям ${kpis.map(k=>k.t.toLowerCase()).join(', ')||'(выберите KPI)'}.`]);
+  if(research && state.base!=='open') al.push(['info','Исследовательская форма на данных реальной организации: объект в работе всё равно описывается как типовой, а данные организации служат для проверки метода.']);
+  if(state.kpi.length===0) al.push(['warn','Не выбран показатель: без количественной метрики нельзя обосновать эффект в третьей главе.']);
+  if(state.tobe===5 && !methods.length) al.push(['warn','Уровень 5 предполагает конкретный метод прогнозирования, оптимизации или поиска аномалий. Отметьте метод в блоке 7.']);
+  if(state.tobe===5 && !state.deliv.includes('proto')) al.push(['warn','Для уровня 5 прототип модели обязателен: иначе аналитика остаётся декларацией. Код прототипа сдаётся вместе с текстом.']);
+  if(methods.length>2) al.push(['warn','Больше двух методов: для бакалаврской работы достаточно одного основного и одного базового для сравнения.']);
+  if(state.tobe<4 && methods.length) al.push(['info','Методы выбраны при целевом уровне ниже 4. Либо поднимите TO-BE, либо используйте метод только в аналитической главе.']);
+  if(state.method.includes('opt') && !(state.sector==='logistics' || ['fulfil','delivery','route','schedule','fieldplan','beds'].includes(P.id))) al.push(['info','Оптимизационные модели лучше ложатся на распределение ресурсов: маршруты, склады, расписания, коечный фонд.']);
+  if(state.method.includes('geo') && !['crime','traffic','forest','water','fish','delivery','route','crops','city'].includes(P.id)) al.push(['info','Геоаналитика уместна там, где есть координаты: происшествия, дороги, лес, вода, доставка, поля.']);
+  if(!['bpmn','er','arch'].some(d=>state.deliv.includes(d))) al.push(['warn','Программа ГИА требует диаграммы в стандартных нотациях. Отметьте BPMN, ER или ArchiMate.']);
+  if(!babok.length) al.push(['info','Не выбраны техники анализа: вторая глава всё равно должна содержать выявление требований и анализ заинтересованных сторон.']);
+  if(!al.length) al.push(['ok','Сочетание критериев согласовано с требованиями программы ГИА.']);
+  $('#alerts').innerHTML = al.map(([c,t])=>`<div class="alert ${c}"><span class="m">${c==='warn'?'[!]':c==='info'?'[i]':'[✓]'}</span><span>${t}</span></div>`).join('');
+
+  const materials = state.base==='real' ? S.ex : state.base==='seek' ? `организация сектора «${S.label}», подбирается на первом этапе` : `открытые и синтетические данные сектора «${S.label}»`;
+  const goal = research
+    ? `разработать и проверить ${M?'модель на основе '+M.short:'метод'} для повышения ${kpis.map(k=>k.imp).join(', ')||'эффективности'} процесса ${P.name} ${S.org}`
+    : `повысить ${kpis.map(k=>k.imp).join(', ')||'эффективность'} процесса ${P.name} ${S.org} за счёт ${b.sol}`;
+  const kv = [
+    ['Форма', research?'исследовательская работа':'работа практической направленности'],
+    ['Материалы', materials],
+    ['Объект', `${state.ptype==='core'?'основной':'поддерживающий'} процесс ${P.name} ${research?'типового '+S.org:S.org}`],
+    ['Предмет', research?`методы и модели повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса`:`методы и средства ${b.sol} в процессе ${P.name}`],
+    ['Цель', goal],
+    ['Зрелость', `${state.asis} «${LEVELS[state.asis].t}» → ${state.tobe} «${LEVELS[state.tobe].t}»`],
+    ['Направление', `${b.dir}. ${DIRECTIONS[b.dir]} (ориентир по приложению А программы ГИА)`]
+  ];
+  $('#kv').innerHTML = kv.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('');
+
+  const tasks = [
+    `провести обзор литературы и рынка ПО по теме ${S.lit}`,
+    state.base==='seek' ? `подобрать организацию и получить доступ к данным процесса ${P.name}` : `описать ${state.base==='real'?S.ex:'типовую организацию'}, схему информационных потоков и место ИТ-подразделения`,
+    `построить модель процесса ${P.name} AS-IS${state.deliv.includes('bpmn')?' в нотации BPMN':''} и измерить базовые значения: ${kpis.map(k=>k.t.toLowerCase()).join('; ')||'выбрать показатели'}`,
+    `сформулировать бизнес-проблему и требования к решению${babok.length?' ('+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
+  ];
+  if(research){
+    tasks.push(`обосновать ${M?'метод на основе '+M.short:'метод решения'} и подготовить данные`, 'построить и проверить модель, сравнить с базовым подходом', 'оценить применимость метода на типовом объекте и сформулировать рекомендации');
+  } else {
+    tasks.push(`сравнить классы ПО и обосновать выбор ${b.sysShort}`, `спроектировать процесс TO-BE${state.deliv.includes('arch')?' и архитектуру решения':''}${state.deliv.includes('er')?', модель данных':''}`);
+    if(state.deliv.includes('req')) tasks.push('разработать требования: техническое задание или user stories');
+    if(state.deliv.includes('proto')) tasks.push(M?`реализовать прототип ${M.short} и оценить точность`:'реализовать прототип решения на данных организации');
+    if(state.pm!=='none') tasks.push(`спланировать проект внедрения (${{pmbok:'PMBOK 7',gost:'каскад по ГОСТ 34',agile:'Scrum или Kanban',hybrid:'гибридная модель'}[state.pm]})${state.evm?' с контролем по EVM':''}`);
+    tasks.push('рассчитать экономический эффект: NPV, DPP, TCO, ROI');
+    if(state.deliv.includes('pilot')) tasks.push('провести пилот, сравнить показатели до и после, получить справку о внедрении');
+  }
+  $('#tasks').innerHTML = tasks.map(t=>`<li>${t}</li>`).join('');
+
+  const ch = [
+    ['Введение (до 4 страниц)', 'Актуальность; цель и задачи; объект и предмет; инструменты и методы; публикации и апробация.'],
+    ['Глава 1. Теоретические основы', `Обзор методов и инструментов по теме ${S.lit}; ${methods.length?'сравнение методов: '+methods.map(m=>m.t.toLowerCase()).join(', ')+'; ':''}анализ рынка ПО класса «${b.sysShort}» в табличной форме; выводы по главе.`],
+    ['Глава 2. Анализ объекта и концепция решения', `${state.base==='seek'?'Критерии подбора организации и её характеристика. ':'Деятельность организации, '}схема информационных потоков, уровень ИТ-поддержки процессов; ${babok.length?'техники анализа: '+babok.map(x=>x.t.toLowerCase()).join(', ')+'; ':''}процесс ${P.name} AS-IS${state.deliv.includes('bpmn')?' (BPMN)':''}; требования к решению; варианты решения и критерии выбора ПО; ${state.deliv.includes('arch')?'архитектура TO-BE (ArchiMate)':'концепция TO-BE'}${state.deliv.includes('er')?'; модель данных (ER)':''}.`],
+    ['Глава 3. Реализация и оценка', research
+      ? `Постановка эксперимента, данные, ${M?'модель на основе '+M.short:'метод'}, метрики качества (${kpis.map(k=>k.m.split(',')[0]).join(', ')||'…'}), сравнение с базовым подходом, ограничения и рекомендации.`
+      : `${state.deliv.includes('proto')?'Прототип и тестирование. ':''}${state.pm!=='none'?'Организация проектных работ по '+{pmbok:'PMBOK 7: устав, WBS, план-график, реестр рисков, заинтересованные стороны',gost:'ГОСТ 34: стадии, ТЗ, приёмочные испытания',agile:'Agile: бэклог, спринты, инкременты',hybrid:'гибридной модели: вехи каскада, спринты внутри'}[state.pm]+(state.evm?'; контроль по EVM':'')+'. ':''}Экономическая оценка: NPV, IRR, DPP, PI, TCO; влияние на показатели ${kpis.map(k=>k.t.toLowerCase()).join(', ')||'…'}. ${state.deliv.includes('pilot')?'Результаты пилота и справка о внедрении.':''}`],
+    ['Заключение', 'Выводы по задачам, достигнутые значения показателей, направления развития.']
+  ];
+  $('#chap').innerHTML = ch.map(([h,t])=>`<div><b>${h}</b><span>${t}</span></div>`).join('');
+
+  const rec = P.kpi.filter(id=>!state.kpi.includes(id)).map(id=>KPIS.find(k=>k.id===id));
+  $('#kpit tbody').innerHTML = kpis.map(k=>`<tr><td><b>${k.t}</b></td><td>${k.m}</td><td>${k.src}</td></tr>`).join('')
+    + rec.map(k=>`<tr style="opacity:.55"><td>${k.t}<br><span style="font-size:11.5px;color:var(--muted)">типичен для процесса, не выбран</span></td><td>${k.m}</td><td>${k.src}</td></tr>`).join('')
+    || '<tr><td colspan="3">Выберите показатели в блоке 6</td></tr>';
+
+  const tools = [];
+  if(state.deliv.includes('bpmn')) tools.push('BPMN 2.0: Camunda Modeler, Bizagi');
+  if(state.deliv.includes('er')) tools.push('ER: draw.io, DBeaver, PostgreSQL');
+  if(state.deliv.includes('arch')) tools.push('ArchiMate: Archi');
+  if(state.tobe>=3) tools.push({telecom:'BSS-стек: биллинг, CRM, каталог',gov:'BPM и СЭД: ELMA365, Directum',govmon:'аналитическая платформа ведомства, ГИС',logistics:'TMS/WMS: 1С:TMS, AXELOT',ecom:'OMS/PIM: 1С:УНФ, RetailCRM, Ensi',manuf:'MES/EAM: 1С:ERP, Галактика',health:'МИС: БАРС, 1С:Медицина',energy:'АСКУЭ, биллинг ЖКУ',edu:'LMS: Moodle, 1С:Университет',agro:'агро-ERP: 1С:АПК, ExactFarming',insurance:'страховой стек: Диасофт, Ортикон',bank:'BPM: Camunda, ELMA365'}[state.sector]);
+  if(state.tobe>=4 || b.research) tools.push('BI: Yandex DataLens, Superset', 'Python: pandas');
+  methods.forEach(m=>tools.push({gd:'scikit-learn: SGDRegressor',boost:'CatBoost, LightGBM',ts:'statsmodels, Prophet',nn:'PyTorch, Keras',anomaly:'scikit-learn: IsolationForest',opt:'OR-Tools, PuLP',geo:'GeoPandas, H3, QGIS',llm:'YandexGPT API, GigaChat, sentence-transformers',pm:'PM4Py'}[m.id]));
+  if(state.pm!=='none') tools.push(state.pm==='agile'?'Jira, Kaiten':'MS Project, GanttPRO');
+  if(state.evm) tools.push('EVM: PV, EV, AC, CPI, SPI');
+  if(!b.research) tools.push('Финмодель: NPV, DPP, TCO в Excel');
+  $('#tools').innerHTML = tools.map(t=>`<span class="chip on">${t}</span>`).join('');
+
+  const items = BANK.filter(x=>x.s===state.sector);
+  $('#bank').innerHTML = items.length ? items.map(x=>`<div class="item${x.p===state.ptype?'':' dim'}"><b>${x.t}</b><div class="tags"><span class="tg">${x.p==='core'?'основной':'поддерживающий'}</span><span class="tg">уровень ${x.l}</span>${x.src?`<span class="tg">из перечня кафедры</span>`:''}<span class="tg">${words(x.t)} ${plural(words(x.t),'слово','слова','слов')}</span></div></div>`).join('') : '<div class="item dim">Примеров для сектора пока нет: ориентируйтесь на паспорт.</div>';
+
+  const checks = [
+    'Объём 60–80 страниц без приложений; Times New Roman 14, интервал 1,5',
+    'Название темы не более 11 слов; в заявлении указать, на материалах какой организации пишется работа',
+    'Введение до 4 страниц: актуальность, цель и задачи, объект и предмет, методы, апробация',
+    'Глава 1: обзор методов и анализ рынка ПО в табличной форме; глава 2: шесть шагов анализа объекта и концепция TO-BE; глава 3: реализация, проектные работы, тестирование, экономическая оценка',
+    'Диаграммы в стандартных нотациях (BPMN, ArchiMate, ER) с текстовым описанием каждой',
+    b.research ? 'Исследовательская форма: акцент на методе, объект типовой, сравнение с базовым подходом, код и данные прилагаются' : 'Практическая форма: проектные решения для конкретного предприятия типовыми средствами; справка о внедрении усиливает оценку',
+    'Постановка начинается с проблемы организации, а не с метода или продукта',
+    'Литература: не менее 15 источников, половина из академических журналов (ориентир ВШЭ)',
+    'Календарь: заявление до 30 ноября; задание и план до 15 декабря; глава 1 до 1 марта; глава 2 до 30 марта; полный текст до 30 апреля; предзащита с отчётом «Антиплагиат» до 17 мая; отзыв и справка о внедрении до 29 мая'
+  ];
+  $('#check').innerHTML = checks.map(t=>`<div><span class="m">[ ]</span><span>${t}</span></div>`).join('');
+
+  $('#md').value = markdown(b, kv, tasks, ch, tools, checks, al);
+  try{ localStorage.setItem('vkr-state-v3', JSON.stringify(state)); }catch(e){}
+}
+
+function markdown(b, kv, tasks, ch, tools, checks, al){
+  const S=b.S, P=b.P;
+  const mark = (on)=> on?'[x]':'[ ]';
+  const L = [];
+  L.push(`# Паспорт темы ВКР`, '', `**Тема:** ${b.topic}  `, `Слов в названии: ${words(b.topic)} из 11`, '');
+  if(al.some(a=>a[0]!=='ok')){ L.push('## Предупреждения и подсказки', ''); al.filter(a=>a[0]!=='ok').forEach(a=>L.push(`- ${a[0]==='warn'?'⚠':'ℹ'} ${a[1]}`)); L.push(''); }
+  L.push('## Паспорт', ''); kv.forEach(([k,v])=>L.push(`- **${k}:** ${v}`)); L.push('');
+  L.push('**Варианты формулировки**', ''); b.alts.forEach((a,i)=>L.push(`${i+1}. ${a} (${words(a)} сл.)`)); L.push('');
+  L.push('## Задачи работы', ''); tasks.forEach((t,i)=>L.push(`${i+1}. ${t}`)); L.push('');
+  L.push('## Структура работы', ''); ch.forEach(([h,t])=>L.push(`### ${h}`, '', t, ''));
+  L.push('## Метрики и KPI', '', '| Показатель | Как измерить | Источник данных |', '|---|---|---|'); b.kpis.forEach(k=>L.push(`| ${k.t} | ${k.m} | ${k.src} |`)); L.push('');
+  if(b.methods.length){ L.push('## Методы', ''); b.methods.forEach(m=>L.push(`- **${m.t}:** ${m.d}`)); L.push(''); }
+  L.push('## Инструменты', '', tools.map(t=>`- ${t}`).join('\n'), '');
+  L.push('## Чек-лист по программе ГИА', ''); checks.forEach(c=>L.push(`- [ ] ${c}`)); L.push('');
+  L.push('## Источники', '',
+    '- Программа ГИА 38.03.05, кафедра бизнес-информатики Финуниверситета, 2025: https://www.fa.ru/upload/constructor/25e/aq8tn5o7tdtrk0u483iohmk0qa0u83m9/GIA_BI_2025.pdf',
+    '- Страница бакалавриата кафедры (перечень тем, дорожная карта): https://www.fa.ru/university/structure/scientific-educational-departments/itabd/bi/study/bak/',
+    '- Требования к ВКР ФБМ НИУ ВШЭ (справочно): https://www.hse.ru/data/2015/05/26/1097029628/',
+    '- MIT CTL Thesis and Capstone: https://scm.mit.edu/thesis-and-capstone-research-projects/',
+    '- MIT Sloan Analytics Capstone: https://mitsloan.mit.edu/programs/master-business-analytics/mit-sloan-analytics-capstone',
+    '- MIT CISR Enterprise Architecture: https://cisr.mit.edu/content/classic-topics-enterprise-architecture',
+    '- PMBOK 7, BABOK v3, TM Forum TAM, SCOR, DORA, Balanced Scorecard, ГОСТ 34.601', '',
+    `_Сформировано конструктором тем ВКР, ${new Date().toLocaleDateString('ru-RU')}_`);
+  L.push('', '## Выбранные опции (для справки)', '');
+  L.push('**1. Форма работы**');
+  L.push(`- ${mark(state.form==='practical')} Практическая работа`, `- ${mark(state.form==='research')} Исследовательская работа`, '');
+  L.push('**2. Материалы**');
+  [['real','Реальная организация есть'],['seek','Организации пока нет, будем искать'],['open','Открытые и синтетические данные']].forEach(([v,t])=>L.push(`- ${mark(state.base===v)} ${t}`)); L.push('');
+  L.push('**3. Сектор**'); SECTOR_ORDER.forEach(k=>L.push(`- ${mark(state.sector===k)} ${SECTORS[k].label}`)); L.push('');
+  L.push(`**4. Процесс** (${state.ptype==='core'?'основной':'поддерживающий'})`); S[state.ptype].forEach(p=>L.push(`- ${mark(p.id===P.id)} ${p.name}${p.tag?' — '+p.tag:''}`)); L.push('');
+  L.push('**5. Уровень автоматизации**'); L.push(`- AS-IS: ${state.asis} «${LEVELS[state.asis].t}»`, `- TO-BE: ${state.tobe} «${LEVELS[state.tobe].t}»`, '');
+  L.push('**6. Метрики и KPI**'); KPI_GROUPS.forEach(g=>{ L.push(`- ${g.g}`); g.items.forEach(k=>L.push(`  - ${mark(state.kpi.includes(k.id))} ${k.t}`)); }); L.push('');
+  L.push('**7. Методы анализа и прогнозирования**'); METHODS.forEach(m=>L.push(`- ${mark(state.method.includes(m.id))} ${m.t}`)); L.push('');
+  L.push('**8. Техники бизнес-анализа (BABOK)**'); BABOK.forEach(x=>L.push(`- ${mark(state.babok.includes(x.id))} ${x.t}`)); L.push('');
+  L.push('**9. Управление проектом**'); [['pmbok','PMBOK 7'],['gost','Каскад по ГОСТ 34'],['agile','Agile'],['hybrid','Гибрид'],['none','Без раздела']].forEach(([v,t])=>L.push(`- ${mark(state.pm===v)} ${t}`)); L.push(`- ${mark(state.evm)} Контроль по методу освоенного объёма (EVM)`, '');
+  L.push('**10. Артефакты**'); [['bpmn','BPMN AS-IS и TO-BE'],['er','ER-диаграмма, модель данных'],['arch','Архитектура TO-BE (ArchiMate)'],['req','Требования: ТЗ или user stories'],['proto','Прототип'],['pilot','Пилот и справка о внедрении']].forEach(([v,t])=>L.push(`- ${mark(state.deliv.includes(v))} ${t}`)); L.push('');
+  return L.join('\n');
+}
+
+function applyState(){
+  const set = (n,v)=>{ const el=document.querySelector(`input[name="${n}"][value="${v}"]`); if(el) el.checked=true; };
+  renderStatic();
+  set('form',state.form); set('base',state.base); set('sector',state.sector); set('ptype',state.ptype); set('pm',state.pm);
+  $('#pm-evm').checked = !!state.evm;
+  renderProcesses(); set('process',state.process);
+  document.querySelectorAll('input[name="deliv"]').forEach(i=>i.checked=state.deliv.includes(i.value));
+}
+
+document.addEventListener('change', e=>{
+  if(!e.target.matches('input')) return;
+  if(e.target.name==='sector' || e.target.name==='ptype'){ read(); renderProcesses(); }
+  render();
+});
+$('#copy').addEventListener('click', async ()=>{
+  const txt = $('#md').value; let ok=false;
+  try{ await navigator.clipboard.writeText(txt); ok=true; }catch(e){
+    try{ const ta=$('#md'); ta.closest('details').open=true; ta.select(); ok=document.execCommand('copy'); }catch(e2){}
+  }
+  const t=$('#toast'); t.textContent = ok?'Markdown скопирован':'Не удалось скопировать: откройте блок Markdown и выделите текст'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200);
+});
+$('#reset').addEventListener('click', ()=>{
+  Object.assign(state, JSON.parse(JSON.stringify(DEFAULT)));
+  try{ localStorage.removeItem('vkr-state-v3'); }catch(e){}
+  applyState(); render();
+});
+
+try{ const s=JSON.parse(localStorage.getItem('vkr-state-v3')||'null'); if(s&&typeof s==='object'&&SECTORS[s.sector]) Object.assign(state,s); }catch(e){}
+applyState(); render();
+</script>
