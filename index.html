@@ -218,10 +218,10 @@ textarea{width:100%;min-height:260px;margin-top:8px;font-family:var(--mono);font
 
 <fieldset>
   <legend>11. Артефакты практической части</legend>
-  <p class="hint">Что сдаётся помимо текста. Хотя бы одна диаграмма в стандартной нотации обязательна. Экономическая оценка для практической формы обязательна по программе ГИА и включается автоматически. В исследовательской форме прототип модели обязателен, а ТЗ и пилот не применяются.</p>
+  <p class="hint">Что сдаётся помимо текста. Хотя бы одна диаграмма в стандартной нотации обязательна. Экономическая оценка для практической формы обязательна по программе ГИА и включается автоматически. ER-модель предметной области обязательна в обеих формах и строится до диаграмм процессов. В исследовательской форме прототип модели обязателен, а ТЗ и пилот не применяются.</p>
   <div class="opts grid" id="g-deliv">
     <label class="opt"><input type="checkbox" name="deliv" id="deliv-bpmn" value="bpmn" checked><span class="box"></span><span class="t">BPMN AS-IS и TO-BE</span></label>
-    <label class="opt"><input type="checkbox" name="deliv" id="deliv-er" value="er" checked><span class="box"></span><span class="t">ER-диаграмма, модель данных</span></label>
+    <label class="opt"><input type="checkbox" name="deliv" id="deliv-er" value="er" checked disabled><span class="box"></span><span><span class="t">ER-модель предметной области</span><span class="d">обязательно: глоссарий, субъекты и роли, объекты и их цифровые двойники</span></span></label>
     <label class="opt"><input type="checkbox" name="deliv" id="deliv-arch" value="arch"><span class="box"></span><span class="t">Архитектура TO-BE (ArchiMate)</span></label>
     <label class="opt"><input type="checkbox" name="deliv" id="deliv-req" value="req" checked><span class="box"></span><span class="t">Требования: ТЗ или user stories</span></label>
     <label class="opt"><input type="checkbox" name="deliv" id="deliv-proto" value="proto"><span class="box"></span><span class="t">Прототип: настройка системы, дашборд, модель</span></label>
@@ -261,7 +261,7 @@ textarea{width:100%;min-height:260px;margin-top:8px;font-family:var(--mono);font
       <li><b>Методы</b>: как считаем прогноз или аномалии. Нужны только для уровней 4–5.</li>
       <li><b>Техники BABOK</b>: как анализируем объект во второй главе.</li>
       <li><b>Проект</b>: как организуем внедрение в третьей главе.</li>
-      <li><b>Артефакты</b>: какие документы и модели сдаём.</li>
+      <li><b>Артефакты</b>: какие документы и модели сдаём. ER-модель предметной области обязательна всегда.</li>
     </ol>
   </div>
   <div>
@@ -275,7 +275,7 @@ textarea{width:100%;min-height:260px;margin-top:8px;font-family:var(--mono);font
       <li>Пилот и справка о внедрении невозможны без реальной организации.</li>
       <li>Тема называет класс решения (OMS, биллинг, антифрод), а не продукт: выбор продукта делается во второй главе по критериям.</li>
       <li>Название темы не длиннее 11 слов; организация указывается в заявлении, а не в названии.</li>
-      <li>Хотя бы один показатель и хотя бы одна диаграмма в стандартной нотации.</li>
+      <li>Хотя бы один показатель. ER-модель предметной области обязательна и предшествует BPMN: сначала словарь (субъекты, роли, объекты, их цифровые двойники), потом процессы.</li>
     </ul>
   </div>
 </section>
@@ -684,6 +684,7 @@ function render(){
   state.deliv=[...document.querySelectorAll('input[name="deliv"]:checked')].map(i=>i.value);
 
   const b = build(); LAST = b;
+  const domainText = `глоссарий и модель предметной области: субъекты и роли (кто действует), объекты, которыми они манипулируют (что), и отражение тех и других в информационной системе как цифровых двойников; ER-модель`;
   const {S,P,kpis,methods,babok,contours,M} = b;
   $('#topic').textContent = b.topic;
   const wc = words(b.topic);
@@ -710,7 +711,6 @@ function render(){
   if(state.tobe===5 && !cid.includes('ml') && !cid.includes('dss')) al.push(['warn','Уровень 5 предполагает контур DSS или ML/AI.']);
   if((cid.includes('ml')||cid.includes('dss')||cid.includes('bi')) && !cid.includes('dwh')) al.push(['info','Аналитические контуры без хранилища данных: укажите, откуда модель или отчётность берут данные, иначе сбор данных станет ручным.']);
   if(state.tobe<=3 && cid.some(c=>['bi','dss','ml'].includes(c))) al.push(['info','Аналитические контуры выбраны при TO-BE не выше 3: либо поднимите уровень, либо оставьте только OLTP.']);
-  if(!['bpmn','er','arch'].some(d=>state.deliv.includes(d))) al.push(['warn','Программа ГИА требует диаграммы в стандартных нотациях. Отметьте BPMN, ER или ArchiMate.']);
   if(!al.length) al.push(['ok','Сочетание критериев согласовано с требованиями программы ГИА.']);
   $('#alerts').innerHTML = al.map(([c,t])=>`<div class="alert ${c}"><span class="m">${c==='warn'?'[!]':c==='info'?'[i]':'[✓]'}</span><span>${t}</span></div>`).join('');
 
@@ -735,6 +735,7 @@ function render(){
     research
       ? (state.base==='open' ? `описать типовой процесс ${P.name} ${S.org} и подобрать открытые или синтетические данные` : state.base==='seek' ? `описать типовой процесс ${P.name} ${S.org} и найти организацию как источник данных` : `описать типовой процесс ${P.name} ${S.org}; данные ${S.ex} использовать для проверки метода`)
       : state.base==='seek' ? `подобрать организацию и получить доступ к данным процесса ${P.name}` : `описать ${S.ex}, схему информационных потоков и место ИТ-подразделения`,
+    `составить ${domainText}, чтобы все участники анализа работали с одним словарём`,
     `построить модель процесса ${P.name} AS-IS${state.deliv.includes('bpmn')?' в нотации BPMN':''} и измерить базовые значения показателей ${kpis.map(k=>'«'+k.t+'»').join(', ')||'(выбрать показатели)'}`,
     research ? `поставить задачу: входы и выходы процесса, ограничения, базовый подход для сравнения${babok.length?' ('+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
              : `сформулировать бизнес-проблему и требования к решению${babok.length?' ('+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
@@ -742,7 +743,7 @@ function render(){
   if(research){
     tasks.push(`обосновать ${M?'метод на основе '+b.mAll:'метод решения'} и подготовить данные`, 'построить и проверить модель, сравнить с базовым подходом', 'оценить применимость метода на типовом объекте и сформулировать рекомендации');
   } else {
-    tasks.push(b.hasSys ? `оценить текущую систему (${b.sysShort}) и обосновать выбор аналитических средств` : `сравнить классы ПО и обосновать выбор ${b.sysShort}`, `спроектировать процесс TO-BE${state.deliv.includes('arch')?' и архитектуру решения':''}${state.deliv.includes('er')?', модель данных':''}`);
+    tasks.push(b.hasSys ? `оценить текущую систему (${b.sysShort}) и обосновать выбор аналитических средств` : `сравнить классы ПО и обосновать выбор ${b.sysShort}`, `спроектировать процесс TO-BE${state.deliv.includes('arch')?' и архитектуру решения':''}, включая изменения модели предметной области`);
     if(state.deliv.includes('req')) tasks.push('разработать требования: техническое задание или user stories');
     if(state.deliv.includes('proto')) tasks.push(M?`реализовать прототип ${b.mAll} и оценить качество`:'реализовать прототип решения на данных организации');
     if(state.pm!=='none') tasks.push(`спланировать проект внедрения (${{pmbok:'PMBOK 7',gost:'каскад по ГОСТ 34',agile:'Scrum или Kanban',hybrid:'гибридная модель'}[state.pm]})${state.evm?' с контролем по EVM':''}`);
@@ -755,8 +756,8 @@ function render(){
     ['Введение (до 4 страниц)', 'Актуальность; цель и задачи; объект и предмет; инструменты и методы; публикации и апробация.'],
     ['Глава 1. Теоретические основы', `Обзор методов и инструментов по теме ${S.lit}; ${methods.length?'сравнение методов: '+methods.map(m=>m.t.toLowerCase()).join(', ')+'; ':''}анализ рынка ПО класса «${b.sysShort}» в табличной форме; выводы по главе.`],
     research
-      ? ['Глава 2. Типовой объект и постановка задачи', `Характеристика типового процесса ${P.name} ${S.org}: участники, входы и выходы, ограничения; ${state.base==='open'?'открытые и синтетические данные: состав, объём, разметка':state.base==='seek'?'критерии подбора организации как источника данных':'данные '+S.ex+' как материал для проверки метода'}; ${babok.length?'техники анализа: '+babok.map(x=>x.t.toLowerCase()).join(', ')+'; ':''}процесс AS-IS${state.deliv.includes('bpmn')?' (BPMN)':''}; базовый подход, с которым сравнивается метод${contours.length?'; контуры '+contours.map(c=>c.t.split(':')[0]).join(', '):''}${state.deliv.includes('er')?'; модель данных (ER)':''}.`]
-      : ['Глава 2. Анализ объекта и концепция решения', `${state.base==='seek'?'Критерии подбора организации и её характеристика. ':'Деятельность организации, '}схема информационных потоков, уровень ИТ-поддержки процессов; ${babok.length?'техники анализа: '+babok.map(x=>x.t.toLowerCase()).join(', ')+'; ':''}процесс ${P.name} AS-IS${state.deliv.includes('bpmn')?' (BPMN)':''}; требования к решению; варианты решения и критерии выбора ПО; ${state.deliv.includes('arch')?'архитектура TO-BE (ArchiMate)':'концепция TO-BE'}${contours.length?' по контурам '+contours.map(c=>c.t.split(':')[0]).join(', '):''}${state.deliv.includes('er')?'; модель данных (ER)':''}.`],
+      ? ['Глава 2. Типовой объект и постановка задачи', `Характеристика типового процесса ${P.name} ${S.org}: участники, входы и выходы, ограничения; ${state.base==='open'?'открытые и синтетические данные: состав, объём, разметка':state.base==='seek'?'критерии подбора организации как источника данных':'данные '+S.ex+' как материал для проверки метода'}; ${babok.length?'техники анализа: '+babok.map(x=>x.t.toLowerCase()).join(', ')+'; ':''}определения: ${domainText}; затем процесс AS-IS${state.deliv.includes('bpmn')?' (BPMN)':''}; базовый подход, с которым сравнивается метод${contours.length?'; контуры '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`]
+      : ['Глава 2. Анализ объекта и концепция решения', `${state.base==='seek'?'Критерии подбора организации и её характеристика. ':'Деятельность организации, '}схема информационных потоков, уровень ИТ-поддержки процессов; ${babok.length?'техники анализа: '+babok.map(x=>x.t.toLowerCase()).join(', ')+'; ':''}определения: ${domainText}; затем процесс ${P.name} AS-IS${state.deliv.includes('bpmn')?' (BPMN)':''}; требования к решению; варианты решения и критерии выбора ПО; ${state.deliv.includes('arch')?'архитектура TO-BE (ArchiMate)':'концепция TO-BE'}${contours.length?' по контурам '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`],
     ['Глава 3. Реализация и оценка', research
       ? `Постановка эксперимента, данные, ${M?'модель на основе '+b.mAll:'метод'}, метрики качества (${kpis.map(k=>k.m.split(',')[0]).join(', ')||'…'}), сравнение с базовым подходом, ограничения и рекомендации.`
       : `${state.deliv.includes('proto')?'Прототип и тестирование. ':''}${state.pm!=='none'?'Организация проектных работ по '+{pmbok:'PMBOK 7: устав, WBS, план-график, реестр рисков, заинтересованные стороны',gost:'ГОСТ 34: стадии, ТЗ, приёмочные испытания',agile:'Agile: бэклог, спринты, инкременты',hybrid:'гибридной модели: вехи каскада, спринты внутри'}[state.pm]+(state.evm?'; контроль по EVM':'')+'. ':''}Экономическая оценка: NPV, IRR, DPP, PI, TCO; влияние на показатели ${kpis.map(k=>'«'+k.t+'»').join(', ')||'…'}. ${state.deliv.includes('pilot')?'Результаты пилота и справка о внедрении.':''}`],
@@ -771,7 +772,7 @@ function render(){
 
   const tools = [];
   if(state.deliv.includes('bpmn')) tools.push('BPMN 2.0: Camunda Modeler, Bizagi');
-  if(state.deliv.includes('er')) tools.push('ER: draw.io, DBeaver, PostgreSQL');
+  if(state.deliv.includes('er')) tools.push('Глоссарий и ER: draw.io, DBeaver, PostgreSQL');
   if(state.deliv.includes('arch')) tools.push('ArchiMate: Archi');
   if(state.tobe>=3) tools.push({telecom:'BSS-стек: биллинг, CRM, каталог',gov:'BPM и СЭД: ELMA365, Directum',govmon:'аналитическая платформа ведомства, ГИС',logistics:'TMS/WMS: 1С:TMS, AXELOT',ecom:'OMS/PIM: 1С:УНФ, RetailCRM, Ensi',manuf:'MES/EAM: 1С:ERP, Галактика',health:'МИС: БАРС, 1С:Медицина',energy:'АСКУЭ, биллинг ЖКУ',edu:'LMS: Moodle, 1С:Университет',agro:'агро-ERP: 1С:АПК, ExactFarming',insurance:'страховой стек: Диасофт, Ортикон',bank:'BPM: Camunda, ELMA365'}[state.sector]);
   if(cid.includes('dwh')) tools.push('DWH: PostgreSQL, ClickHouse, Airflow');
@@ -792,6 +793,7 @@ function render(){
     'Название темы не более 11 слов; в заявлении указать, на материалах какой организации пишется работа',
     'Введение до 4 страниц: актуальность, цель и задачи, объект и предмет, методы, апробация',
     'Глава 1: обзор методов и анализ рынка ПО в табличной форме; глава 2: шесть шагов анализа объекта и концепция TO-BE; глава 3: реализация, проектные работы, тестирование, экономическая оценка',
+    'Раздел определений до диаграмм процессов: глоссарий, субъекты и роли, объекты и их цифровые двойники, ER-модель; один словарь у всех участников анализа',
     'Диаграммы в стандартных нотациях (BPMN, ArchiMate, ER) с текстовым описанием каждой',
     b.research ? 'Исследовательская форма: акцент на методе, объект типовой, сравнение с базовым подходом, код и данные прилагаются' : 'Практическая форма: проектные решения для конкретного предприятия типовыми средствами; справка о внедрении усиливает оценку',
     'Постановка начинается с проблемы организации, а не с метода или продукта',
@@ -840,7 +842,7 @@ function markdown(b, kv, tasks, ch, tools, checks, al){
   L.push('**8. Методы анализа и прогнозирования**'); METHODS.forEach(m=>L.push(`- ${mark(state.method.includes(m.id))} ${m.t}`)); L.push('');
   L.push('**9. Техники бизнес-анализа (BABOK)**'); BABOK.forEach(x=>L.push(`- ${mark(state.babok.includes(x.id))} ${x.t}`)); L.push('');
   L.push('**10. Управление проектом**'); [['pmbok','PMBOK 7'],['gost','Каскад по ГОСТ 34'],['agile','Agile'],['hybrid','Гибрид'],['none','Без раздела']].forEach(([v,t])=>L.push(`- ${mark(state.pm===v)} ${t}`)); L.push(`- ${mark(state.evm)} Контроль по методу освоенного объёма (EVM)`, '');
-  L.push('**11. Артефакты**'); [['bpmn','BPMN AS-IS и TO-BE'],['er','ER-диаграмма, модель данных'],['arch','Архитектура TO-BE (ArchiMate)'],['req','Требования: ТЗ или user stories'],['proto','Прототип'],['pilot','Пилот и справка о внедрении']].forEach(([v,t])=>L.push(`- ${mark(state.deliv.includes(v))} ${t}`)); L.push('');
+  L.push('**11. Артефакты**'); [['bpmn','BPMN AS-IS и TO-BE'],['er','ER-модель предметной области (обязательно)'],['arch','Архитектура TO-BE (ArchiMate)'],['req','Требования: ТЗ или user stories'],['proto','Прототип'],['pilot','Пилот и справка о внедрении']].forEach(([v,t])=>L.push(`- ${mark(state.deliv.includes(v))} ${t}`)); L.push('');
   return L.join('\n');
 }
 
