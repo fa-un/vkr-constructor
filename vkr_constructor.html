@@ -222,22 +222,22 @@ fieldset[hidden]{display:none}
 
 <fieldset id="fs-method" hidden>
   <legend>10. Методы анализа и прогнозирования</legend>
-  <p class="hint">Блок открыт, потому что выбран контур BI, DSS или ML/AI либо исследовательская форма. Правило MIT Sloan для аналитических капстоунов: постановка начинается с проблемы, а не с метода; модель либо предсказывает, либо предписывает; код сдаётся вместе с отчётом. Один основной метод и один базовый для сравнения.</p>
-  <div class="opts grid" id="g-method"></div>
+  <p class="hint">Блок открыт, потому что выбран контур BI, DSS или ML/AI либо исследовательская форма. Сначала вопрос, потом метод: три группы отвечают на разные вопросы. Выберите один основной метод; с чем его сравнивать и чем измерять качество, подставится в паспорт. Пометка «типично для процесса» стоит у методов, которые обычно применяют в выбранном процессе.</p>
+  <div id="g-method"></div>
 </fieldset>
 
 <fieldset>
   <legend>11. Управление проектом внедрения</legend>
-  <p class="hint">Третья глава по программе ГИА описывает организацию проектных работ. Для исследовательской формы раздел не нужен.</p>
-  <div class="opts row" id="g-pm">
-    <label class="opt"><input type="radio" name="pm" id="pm-pmbok" value="pmbok" checked><span class="box"></span><span><span class="t">PMBOK 8</span><span class="d">домены производительности, устав, WBS, риски</span></span></label>
-    <label class="opt"><input type="radio" name="pm" id="pm-gost" value="gost"><span class="box"></span><span><span class="t">Каскад по ГОСТ 34</span><span class="d">стадии создания АС, ТЗ, приёмка</span></span></label>
-    <label class="opt"><input type="radio" name="pm" id="pm-agile" value="agile"><span class="box"></span><span><span class="t">Agile</span><span class="d">Scrum, Kanban, инкременты</span></span></label>
-    <label class="opt"><input type="radio" name="pm" id="pm-hybrid" value="hybrid"><span class="box"></span><span><span class="t">Гибрид</span><span class="d">каскад на верхнем уровне, спринты внутри</span></span></label>
-    <label class="opt"><input type="radio" name="pm" id="pm-none" value="none"><span class="box"></span><span class="t">Без раздела</span></label>
+  <p class="hint">Третья глава по программе ГИА описывает, как проект пойдёт в организации. Выберите то, как внедрение будет устроено на самом деле: пометка «подходит для вашего выбора» стоит у типичного варианта для отрасли и уровня. Состав плана подставится в задачи и главу 3. Для исследовательской формы раздел не нужен.</p>
+  <div class="opts grid" id="g-pm">
+    <label class="opt"><input type="radio" name="pm" id="pm-pmbok" value="pmbok" checked><span class="box"></span><span><span class="t">PMBOK 8</span><span class="d">Когда: типовой проект внедрения с подрядчиком, есть бюджет, сроки и заказчик. План: устав, WBS, график, бюджет, риски</span><span class="tag" id="pmtag-pmbok"></span></span></label>
+    <label class="opt"><input type="radio" name="pm" id="pm-gost" value="gost"><span class="box"></span><span><span class="t">Каскад по ГОСТ 34</span><span class="d">Когда: госзаказчик или крупная организация, ТЗ и приёмка обязательны. План: стадии по ГОСТ 34.601, ТЗ, испытания, акт</span><span class="tag" id="pmtag-gost"></span></span></label>
+    <label class="opt"><input type="radio" name="pm" id="pm-agile" value="agile"><span class="box"></span><span><span class="t">Agile</span><span class="d">Когда: настройка или разработка своими силами, требования уточняются по ходу. План: бэклог, роли, спринты</span><span class="tag" id="pmtag-agile"></span></span></label>
+    <label class="opt"><input type="radio" name="pm" id="pm-hybrid" value="hybrid"><span class="box"></span><span><span class="t">Гибрид</span><span class="d">Когда: вендорский продукт с доработками. План: вехи и приёмка сверху, спринты внутри</span><span class="tag" id="pmtag-hybrid"></span></span></label>
+    <label class="opt"><input type="radio" name="pm" id="pm-none" value="none"><span class="box"></span><span><span class="t">Без раздела</span><span class="d">Только если руководитель разрешил не описывать проект внедрения</span></span></label>
   </div>
   <div class="opts" style="margin-top:6px">
-    <label class="opt"><input type="checkbox" name="evm" id="pm-evm" value="evm"><span class="box"></span><span><span class="t">Контроль хода проекта методом освоенного объёма (EVM)</span><span class="d">Рекомендован программой ГИА</span></span></label>
+    <label class="opt"><input type="checkbox" name="evm" id="pm-evm" value="evm"><span class="box"></span><span><span class="t">Контроль хода проекта методом освоенного объёма (EVM)</span><span class="d">Рекомендован программой ГИА. Нужны бюджет и график из плана: PV, EV, AC, индексы CPI и SPI</span></span></label>
   </div>
 </fieldset>
 
@@ -265,6 +265,7 @@ fieldset[hidden]{display:none}
   <div><h3>Задачи работы</h3><ol class="tasks" id="tasks"></ol></div>
   <div><h3>Структура по требованиям кафедры</h3><div class="chap" id="chap"></div></div>
   <div><h3>Каркас модели предметной области</h3><p class="hint">Заполняется до BPMN. Проверка строки: на каждый объект можно ответить, кто с ним работает, что делает, когда и зачем, и что при этом записывается. Каждая метрика ниже опирается на колонку «что фиксируется».</p><div class="tscroll"><table id="domt"><thead><tr><th>Объект</th><th>Свойства</th><th>Операции: роль → действие</th><th>Что фиксируется</th></tr></thead><tbody></tbody></table></div></div>
+  <div id="methblock" hidden><h3>Методы: с чем сравнить и чем измерить</h3><div class="tscroll"><table id="metht"><thead><tr><th>Метод</th><th>Для чего</th><th>Базовый подход для сравнения</th><th>Качество модели</th></tr></thead><tbody></tbody></table></div></div>
   <div><h3>Метрики и KPI</h3><div class="tscroll"><table id="kpit"><thead><tr><th>Показатель</th><th>Ед., лучше</th><th>Что фиксируется при операции</th><th>Источник</th></tr></thead><tbody></tbody></table></div></div>
   <div><h3>Инструменты</h3><div class="chips" id="tools"></div></div>
   <div><h3>Похожие темы</h3><div class="bank" id="bank"></div></div>
@@ -286,8 +287,8 @@ fieldset[hidden]{display:none}
       <li><b>Уровень AS-IS → TO-BE</b>: насколько глубоко меняем процесс. Задаёт глагол темы и класс решения. Шкала кумулятивная: 0–3 транзакционный контур, 4 хранилище и BI, 5 DSS и ML/AI.</li>
       <li><b>Контуры систем</b>: какие классы систем (OLTP, DWH, BI, DSS, ML/AI) затрагивает решение и какие из них уже есть.</li>
       <li><b>Метрики</b>: чем докажем эффект. Частные показатели отрасли и процесса плюс общие четырёх слоёв: финансы, клиент или гражданин, процесс, качество системы. Каждая метрика вычисляется из того, что фиксируется при операции.</li>
-      <li><b>Методы</b>: как считаем прогноз, аномалии или оптимум. Блок открывается контурами BI, DSS, ML/AI и исследовательской формой; у каждого метода написано, для чего он.</li>
-      <li><b>Проект</b>: как организуем внедрение в третьей главе.</li>
+      <li><b>Методы</b>: на какой вопрос отвечает модель: описать (BI), предсказать (ML/AI) или предписать (DSS). Блок открывается этими контурами и исследовательской формой; у каждого метода написано, для чего он, с чем сравнивать и чем измерять качество.</li>
+      <li><b>Проект</b>: как внедрение пойдёт в организации: с подрядчиком по PMBOK, по ГОСТ 34 с ТЗ и приёмкой, своими силами по Agile или гибридом. Конструктор подсказывает типичный вариант для отрасли и уровня и подставляет состав плана в главу 3.</li>
       <li><b>Артефакты</b>: какие документы и модели сдаём. ER-модель предметной области обязательна всегда.</li>
     </ol>
   </div>
@@ -469,18 +470,55 @@ const KPI_CATALOG = [
 const KPI_BY_ID = Object.fromEntries(KPI_CATALOG.map(k=>[k.id,k]));
 const KPIS = KPI_CATALOG;
 
+// Методы: c контур, why для чего, d примеры, base базовый подход для сравнения, q метрики качества.
 const METHODS = [
-  {id:'gd', c:'ml', t:'Регрессия с градиентным спуском', why:'оценить, как факторы влияют на показатель, и получить базовый прогноз', d:'линейная и логистическая регрессия, SGD', short:'регрессионной модели', aim:'прогнозирования'},
-  {id:'boost', c:'ml', t:'Градиентный бустинг', why:'точный прогноз или классификация по многим признакам: спрос, отток, риск', d:'CatBoost, LightGBM', short:'градиентного бустинга', aim:'прогнозирования'},
-  {id:'ts', c:'ml', t:'Временные ряды', why:'прогноз показателя по его истории с учётом сезонности', d:'ARIMA, экспоненциальное сглаживание, Prophet', short:'моделей временных рядов', aim:'прогнозирования'},
-  {id:'nn', c:'ml', t:'Нейронные сети', why:'сложные данные: изображения, тексты, многомерные ряды', d:'LSTM, трансформеры, спутниковые снимки', short:'нейросетевой модели', aim:'прогнозирования'},
-  {id:'anomaly', c:'ml', t:'Поиск аномалий', why:'найти нетипичные операции: фрод, сбои, выбросы', d:'Isolation Forest, контрольные карты', short:'детекции аномалий', aim:'выявления аномалий'},
-  {id:'opt', c:'dss', t:'Оптимизация', why:'выбрать лучший план при ограничениях: маршруты, расписания, ресурсы', d:'линейное программирование, VRP-маршрутизация', short:'оптимизационной модели', aim:'оптимизации'},
-  {id:'geo', c:'bi', t:'Геоаналитика', why:'увидеть закономерности на карте: где концентрируются события и спрос', d:'кластеризация точек, тепловые карты, пространственные индексы', short:'геоаналитической модели', aim:'пространственного анализа'},
-  {id:'llm', c:'ml', t:'Языковые модели', why:'разобрать тексты: классифицировать обращения, извлечь данные из документов', d:'классификация и извлечение из обращений, документов, отзывов', short:'языковой модели', aim:'классификации обращений'},
-  {id:'pm', c:'bi', t:'Process Mining', why:'восстановить реальный ход процесса по логам и найти узкие места', d:'PM4Py, журналы событий систем', short:'process mining', aim:'анализа'}
+  {id:'pm', c:'bi', t:'Process Mining', why:'восстановить реальный ход процесса по логам и найти узкие места', d:'PM4Py, журналы событий систем', base:'регламент процесса как он задуман', q:'соответствие регламенту (conformance), время на шагах', short:'process mining', aim:'анализа'},
+  {id:'geo', c:'bi', t:'Геоаналитика', why:'увидеть закономерности на карте: где концентрируются события и спрос', d:'кластеризация точек, тепловые карты, пространственные индексы', base:'таблица по районам без карты', q:'точность прогноза по зонам, полнота покрытия', short:'геоаналитической модели', aim:'пространственного анализа'},
+  {id:'ts', c:'ml', t:'Временные ряды', why:'прогноз показателя по его истории с учётом сезонности', d:'ARIMA, экспоненциальное сглаживание, Prophet', base:'наивный прогноз (последнее значение) и скользящее среднее', q:'MAPE и MAE на отложенном периоде', short:'моделей временных рядов', aim:'прогнозирования'},
+  {id:'gd', c:'ml', t:'Регрессия с градиентным спуском', why:'оценить, как факторы влияют на показатель, и получить базовый прогноз', d:'линейная и логистическая регрессия, SGD', base:'среднее по истории или текущее правило организации', q:'MAE и R²; для классификации precision и recall', short:'регрессионной модели', aim:'прогнозирования'},
+  {id:'boost', c:'ml', t:'Градиентный бустинг', why:'точный прогноз или классификация по многим признакам: спрос, отток, риск', d:'CatBoost, LightGBM', base:'логистическая или линейная регрессия', q:'ROC-AUC, precision и recall; для регрессии MAE', short:'градиентного бустинга', aim:'прогнозирования'},
+  {id:'anomaly', c:'ml', t:'Поиск аномалий', why:'найти нетипичные операции: фрод, сбои, выбросы', d:'Isolation Forest, контрольные карты', base:'пороговые правила, которые организация применяет сейчас', q:'precision и recall на размеченных случаях, доля ложных срабатываний', short:'детекции аномалий', aim:'выявления аномалий'},
+  {id:'llm', c:'ml', t:'Языковые модели', why:'разобрать тексты: классифицировать обращения, извлечь данные из документов', d:'классификация и извлечение из обращений, документов, отзывов', base:'правила по ключевым словам', q:'accuracy и F1 по классам', short:'языковой модели', aim:'классификации обращений'},
+  {id:'nn', c:'ml', t:'Нейронные сети', why:'сложные данные: изображения, тексты, многомерные ряды', d:'LSTM, трансформеры, спутниковые снимки', base:'градиентный бустинг или классическая модель той же задачи', q:'метрика задачи: MAPE, F1 или IoU', short:'нейросетевой модели', aim:'прогнозирования'},
+  {id:'opt', c:'dss', t:'Оптимизация', why:'выбрать лучший план при ограничениях: маршруты, расписания, ресурсы', d:'линейное программирование, VRP-маршрутизация', base:'текущий план, составленный вручную', q:'стоимость или время плана против ручного, соблюдение ограничений', short:'оптимизационной модели', aim:'оптимизации'}
 ];
 const METHOD_CONTOURS = ['bi','dss','ml'];
+const METHOD_GROUPS = [
+  {c:'bi', g:'Описать: что происходит на самом деле', d:'контур BI'},
+  {c:'ml', g:'Предсказать: что будет', d:'контур ML/AI'},
+  {c:'dss', g:'Предписать: что делать', d:'контур DSS'}
+];
+const GEO_PROCS = ['crime','traffic','forest','water','fish','delivery','route','crops','city','metering'];
+const OPT_PROCS = ['route','schedule','fieldplan','beds','fulfil','plan','repair'];
+// Какие методы типичны для процесса: по его показателям, тегу и названию.
+function suggestMethods(P, asis){
+  const s = new Set();
+  const has = ids => P.kpi.some(k=>ids.includes(k));
+  if(has(['forecast'])) { s.add('ts'); s.add('boost'); }
+  if(has(['churn','approval','hitrate','conversion','cor','loss','readmit','takerate'])) s.add('boost');
+  if(has(['detect','precision','leakage','techloss'])) s.add('anomaly');
+  if(/оптимизац/.test(P.tag) || OPT_PROCS.includes(P.id)) s.add('opt');
+  if(GEO_PROCS.includes(P.id)) s.add('geo');
+  if(/обращен|претенз|документ|отзыв|жалоб/.test(P.name)) s.add('llm');
+  if(/NDVI|спутник/.test(P.tag+' '+P.sys)) s.add('nn');
+  if(asis>=3 && has(['t2d','sla','react'])) s.add('pm');
+  return s;
+}
+
+// Управление проектом: when когда выбирать, plan состав плана для главы 3, tools инструменты.
+const PM = {
+  pmbok:  {t:'PMBOK 8', short:'PMBOK 8', when:'типовой проект внедрения с подрядчиком: есть бюджет, сроки и заказчик', plan:'устав проекта, реестр заинтересованных сторон, WBS, график, бюджет, реестр рисков, обучение пользователей', tools:'MS Project, GanttPRO'},
+  gost:   {t:'Каскад по ГОСТ 34', short:'ГОСТ 34', when:'госзаказчик или крупная организация: ТЗ и приёмка обязательны', plan:'стадии по ГОСТ 34.601, ТЗ по ГОСТ 34.602-2020, программа и методика испытаний, акт ввода в действие', tools:'шаблоны ГОСТ 34, MS Project'},
+  agile:  {t:'Agile', short:'Scrum или Kanban', when:'настройка или разработка своими силами, требования уточняются по ходу', plan:'бэклог из требований, роли (владелец продукта, команда), 4–6 спринтов с целями, критерии готовности из критериев приёмки', tools:'Jira, Kaiten'},
+  hybrid: {t:'Гибрид', short:'гибридная модель', when:'вендорский продукт с доработками: вехи и приёмка сверху, спринты внутри', plan:'вехи и приёмка по этапам, ТЗ на границы этапов, спринты внутри этапов, реестр рисков', tools:'MS Project и Kaiten'}
+};
+// Типичный подход: госсектор по контракту с ТЗ; уровень 5 с прототипом итеративно; малые изменения своими силами; иначе PMBOK.
+function suggestPm(){
+  if(GOV.has(state.sector)) return 'gost';
+  if(state.tobe>=5 && state.deliv.includes('proto')) return 'hybrid';
+  if(state.tobe<=2) return 'agile';
+  return 'pmbok';
+}
 
 const CONTOURS = [
   {id:'oltp', t:'OLTP: транзакционные системы', d:'ERP, CRM, биллинг, OMS, TMS, BPM; учёт операций и workflow', min:2},
@@ -765,7 +803,7 @@ function renderStatic(){
   $('#g-asis').innerHTML = LEVELS.map(l=>opt('asis',`asis-${l.n}`,l.n,l.t,l.d,state.asis===l.n,true,`<span class="n">${l.n}</span>`)).join('');
   $('#g-tobe').innerHTML = LEVELS.map(l=>opt('tobe',`tobe-${l.n}`,l.n,l.t,l.d,state.tobe===l.n,true,`<span class="n">${l.n}</span>`)).join('');
   $('#g-contour').innerHTML = CONTOURS.map(c=>opt('contour',`contour-${c.id}`,c.id,c.t,c.d,state.contour.includes(c.id),false,'',`уровень ${c.min}+`)).join('');
-  $('#g-method').innerHTML = METHODS.map(m=>opt('method',`method-${m.id}`,m.id,m.t,`Для чего: ${m.why}. Примеры: ${m.d}`,state.method.includes(m.id),false,'',`контур ${CONTOURS.find(c=>c.id===m.c).t.split(':')[0]}`)).join('');
+  $('#g-method').innerHTML = METHOD_GROUPS.map(g=>`<details open class="kg"><summary>${g.g} (${g.d})</summary><div class="opts grid" style="margin-top:8px">${METHODS.filter(m=>m.c===g.c).map(m=>opt('method',`method-${m.id}`,m.id,m.t,`Для чего: ${m.why}. Примеры: ${m.d}`,state.method.includes(m.id),false,'',' ')).join('')}</div></details>`).join('');
   $('#g-babok').innerHTML = BABOK.map(b=>opt('babok',`babok-${b.id}`,b.id,b.t,b.d,b.req||state.babok.includes(b.id),false,'',b.req?'обязательно по программе ГИА':'')).join('');
   BABOK.filter(b=>b.req).forEach(b=>{ $(`#babok-${b.id}`).disabled = true; });
 }
@@ -864,7 +902,7 @@ function render(){
   $('#pm-none').disabled = false;
   document.querySelectorAll('input[name="pm"]').forEach(i=>{ i.disabled = research && i.value!=='none'; });
   if(research){ state.pm='none'; $('#pm-none').checked=true; $('#pm-evm').checked=false; state.evm=false; }
-  else if(state.pm==='none' && !document.querySelector('input[name="pm"]:checked')) { state.pm='pmbok'; $('#pm-pmbok').checked=true; }
+  else if(state.pm==='none' && (!document.querySelector('input[name="pm"]:checked') || (LAST && LAST.research))) { state.pm=suggestPm(); $(`#pm-${state.pm}`).checked=true; }
   $('#pm-evm').disabled = research;
   $('#deliv-pilot').disabled = research || state.base==='open';
   $('#deliv-req').disabled = research;
@@ -874,6 +912,11 @@ function render(){
   state.deliv=[...document.querySelectorAll('input[name="deliv"]:checked')].map(i=>i.value);
   // методы доступны только при аналитическом контуре или в исследовательской форме
   const showMethods = research || state.contour.some(c=>METHOD_CONTOURS.includes(c));
+  { const Pcur = SECTORS[state.sector][state.ptype].find(p=>p.id===state.process);
+    const sug = suggestMethods(Pcur, state.asis);
+    METHODS.forEach(m=>{ const tg = document.querySelector(`#method-${m.id}`)?.closest('label')?.querySelector('.tag'); if(tg) tg.textContent = sug.has(m.id) ? 'типично для процесса' : ''; });
+    const rec = suggestPm();
+    Object.keys(PM).forEach(k=>{ const tg = $(`#pmtag-${k}`); if(tg) tg.textContent = (!research && k===rec) ? 'подходит для вашего выбора' : ''; }); }
   $('#fs-method').hidden = !showMethods;
   if(!showMethods){ document.querySelectorAll('input[name="method"]').forEach(i=>i.checked=false); state.method=[]; }
 
@@ -903,7 +946,10 @@ function render(){
   if(state.babok.includes('stake') && !state.stake) al.push(['info','Выбран анализ заинтересованных сторон, а стороны не перечислены: впишите роли в блоке 5, они попадут в главу 2.']);
   if(state.tobe===5 && !methods.length) al.push(['warn',`Уровень 5 предполагает конкретный метод прогнозирования, оптимизации или поиска аномалий. ${showMethods?'Отметьте метод в блоке 10.':'Добавьте контур DSS или ML/AI в блоке 8: откроется блок методов.'}`]);
   if(state.tobe===5 && !state.deliv.includes('proto')) al.push(['warn','Для уровня 5 прототип модели обязателен (блок 12): иначе аналитика остаётся декларацией. Код прототипа сдаётся вместе с текстом.']);
-  if(methods.length>2) al.push(['warn','Больше двух методов: для бакалаврской работы достаточно одного основного и одного базового для сравнения.']);
+  if(methods.length>2) al.push(['warn','Больше двух методов: для бакалаврской работы достаточно одного основного. Базовый подход для сравнения у каждого метода уже указан в паспорте.']);
+  methods.filter(m=>!state.contour.includes(m.c)).forEach(m=>al.push(['info',`Метод «${m.t}» относится к контуру ${CONTOURS.find(c=>c.id===m.c).t.split(':')[0]}, который не отмечен в блоке 8. Добавьте контур или выберите метод из отмеченных.`]));
+  if(!research && GOV.has(state.sector) && state.pm==='agile') al.push(['info','В государственной организации внедрение идёт по контракту с ТЗ и приёмкой: обычно это ГОСТ 34 или гибрид. Agile оставьте, если команда разрабатывает своими силами.']);
+  if(!research && state.evm && state.pm==='agile') al.push(['info','EVM при Agile считается по спринтам: бюджет спринта как PV, принятые задачи как EV. Проще выбрать гибрид или PMBOK.']);
   if(state.tobe<4 && methods.length) al.push(['info','Методы выбраны при целевом уровне ниже 4. Либо поднимите TO-BE, либо используйте метод только в аналитической главе.']);
   if(state.method.includes('opt') && !(state.sector==='logistics' || ['fulfil','delivery','route','schedule','fieldplan','beds'].includes(P.id))) al.push(['info','Оптимизационные модели лучше ложатся на распределение ресурсов: маршруты, склады, расписания, коечный фонд.']);
   if(state.method.includes('geo') && !['crime','traffic','forest','water','fish','delivery','route','crops','city'].includes(P.id)) al.push(['info','Геоаналитика уместна там, где есть координаты: происшествия, дороги, лес, вода, доставка, поля.']);
@@ -947,12 +993,12 @@ function render(){
              : `сформулировать проблему по схеме 5W1H (кто, что, где, когда, почему, как) и требования к решению${babokRest.length?' ('+babokRest.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
   ];
   if(research){
-    tasks.push(`обосновать ${M?'метод на основе '+b.mAll:'метод решения'} и подготовить данные`, 'построить и проверить модель, сравнить с базовым подходом', 'оценить применимость метода на типовом объекте и сформулировать рекомендации');
+    tasks.push(`обосновать ${M?'метод на основе '+b.mAll:'метод решения'} и подготовить данные`, `построить и проверить модель, сравнить с базовым подходом${methods.length?' ('+methods.map(m=>m.base).join('; ')+')':''}`, 'оценить применимость метода на типовом объекте и сформулировать рекомендации');
   } else {
     tasks.push(b.hasSys ? `оценить текущую систему (${b.sysShort}) и обосновать выбор аналитических средств` : `сравнить классы ПО и обосновать выбор ${b.sysShort}`, `спроектировать процесс TO-BE${state.deliv.includes('arch')?' и архитектуру решения':''}, включая изменения модели предметной области`);
     if(state.deliv.includes('req')) tasks.push('разработать требования: техническое задание или user stories');
-    if(state.deliv.includes('proto')) tasks.push(M?`реализовать прототип ${b.mAll} и оценить качество`:'реализовать прототип решения на данных организации');
-    if(state.pm!=='none') tasks.push(`спланировать проект внедрения (${{pmbok:'PMBOK 8',gost:'каскад по ГОСТ 34',agile:'Scrum или Kanban',hybrid:'гибридная модель'}[state.pm]})${state.evm?' с контролем по EVM':''}`);
+    if(state.deliv.includes('proto')) tasks.push(M?`реализовать прототип ${b.mAll}, сравнить с базовым подходом (${methods.map(m=>m.base).join('; ')}) и оценить качество`:'реализовать прототип решения на данных организации');
+    if(state.pm!=='none') tasks.push(`составить план внедрения по ${PM[state.pm].short}: ${PM[state.pm].plan}${state.evm?'; контроль хода по EVM':''}`);
     tasks.push('рассчитать экономический эффект: NPV, DPP, TCO, ROI');
     if(state.deliv.includes('pilot')) tasks.push('провести пилот, сравнить показатели до и после, получить справку о внедрении');
   }
@@ -965,8 +1011,8 @@ function render(){
       ? ['2. Типовой объект и постановка задачи', `1) типовой процесс ${P.name} ${S.org}: участники${people?' ('+people+')':''}, входы и выходы, ограничения. 2) Данные: ${state.base==='open'?'открытые или синтетические, их состав и объём':state.base==='seek'?'критерии подбора организации как источника':'данные '+S.ex+' для проверки метода'}. 3) ${domainText[0].toUpperCase()+domainText.slice(1)}. 4) Процесс AS-IS${state.deliv.includes('bpmn')?' в BPMN':''}. 5) Постановка задачи по 5W1H и базовый подход, с которым сравнивается метод${babok.length?' (техники: '+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}${contours.length?'. Контуры: '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`]
       : ['2. Анализ объекта и концепция решения', `1) ${state.base==='seek'?'Критерии подбора организации и её описание':'Организация: деятельность, системы, движение информации'}; участники проекта${people?': '+people:' (блок 5)'}${state.babok.includes('stake')?'; анализ заинтересованных сторон':''}. 2) ${domainText[0].toUpperCase()+domainText.slice(1)}. 3) Процесс ${P.name} AS-IS${state.deliv.includes('bpmn')?' в BPMN':''} и замеры показателей. 4) Проблема по 5W1H и требования к решению${babokRest.length?' (техники: '+babokRest.map(x=>x.t.toLowerCase()).join(', ')+')':''}. 5) Варианты решения и выбор класса ПО по критериям. 6) ${state.deliv.includes('arch')?'Архитектура TO-BE в ArchiMate':'Концепция TO-BE'}${contours.length?', контуры: '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`],
     ['3. Реализация и оценка', research
-      ? `1) Данные и постановка эксперимента. 2) ${M?'Модель на основе '+b.mAll:'Метод'}. 3) Показатели эффекта: ${kpis.map(k=>k.t).join(', ')||'…'}; метрики качества модели по методу. 4) Сравнение с базовым подходом. 5) Ограничения и рекомендации.`
-      : `${state.deliv.includes('proto')?'1) Прототип и его проверка. ':''}${state.pm!=='none'?(state.deliv.includes('proto')?'2) ':'1) ')+'План внедрения по '+{pmbok:'PMBOK 8: устав, состав работ, график, риски',gost:'ГОСТ 34: стадии, ТЗ, приёмка',agile:'Agile: бэклог, спринты',hybrid:'гибридной модели: вехи и спринты'}[state.pm]+(state.evm?', контроль по EVM':'')+'. ':''}${(state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+1}) Экономическая оценка: NPV, DPP, TCO; изменение показателей ${kpis.map(k=>'«'+k.t+'»').join(', ')||'…'}. ${state.deliv.includes('pilot')?((state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+2)+') Результаты пилота и справка о внедрении.':''}`],
+      ? `1) Данные и постановка эксперимента. 2) ${M?'Модель на основе '+b.mAll:'Метод'}. 3) Показатели эффекта: ${kpis.map(k=>k.t).join(', ')||'…'}; качество модели: ${methods.length?methods.map(m=>m.q).join('; '):'по методу'}. 4) Сравнение с базовым подходом${methods.length?': '+methods.map(m=>m.base).join('; '):''}. 5) Ограничения и рекомендации.`
+      : `${state.deliv.includes('proto')?'1) Прототип и его проверка. ':''}${state.pm!=='none'?(state.deliv.includes('proto')?'2) ':'1) ')+'План внедрения по '+PM[state.pm].short+': '+PM[state.pm].plan+(state.owner?'; владелец проекта: '+state.owner:'')+(state.exec?'; исполнитель: '+state.exec:'')+(state.evm?'; контроль хода по EVM':'')+'. ':''}${(state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+1}) Экономическая оценка: NPV, DPP, TCO; изменение показателей ${kpis.map(k=>'«'+k.t+'»').join(', ')||'…'}. ${state.deliv.includes('pilot')?((state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+2)+') Результаты пилота и справка о внедрении.':''}`],
     ['Заключение', `Выводы по задачам из введения; ${state.deliv.includes('pilot')?'значения показателей после пилота':'ожидаемые значения показателей'}; направления развития. Приложения: диаграммы, ТЗ, код, данные${state.deliv.includes('pilot')?', справка о внедрении':''}.`]
   ];
   $('#chap').innerHTML = ch.map(([h,t])=>`<div><b>${h}</b><span>${t}</span></div>`).join('');
@@ -979,6 +1025,8 @@ function render(){
     research ? 'сравнение с базовым подходом' : (GOV.has(state.sector)?'оценка бюджетной и социальной эффективности, TCO':'оценка эффективности: NPV, DPP, TCO')
   ].join('; ') + '. Подробнее: справочные материалы конструктора (по желанию).';
   $('#methods-line').textContent = methodsLine;
+  $('#methblock').hidden = !methods.length;
+  $('#metht tbody').innerHTML = methods.map(m=>`<tr><td><b>${m.t}</b></td><td>${m.why}</td><td>${m.base}</td><td>${m.q}</td></tr>`).join('');
   $('#indt tbody').innerHTML = SECTOR_ORDER.map(k=>{const I=INDUSTRY[k];return `<tr${k===state.sector?' class="on"':''}><td>${SECTORS[k].label}</td><td>${I.proc}</td><td>${I.data}</td><td>${I.kpi}</td><td>${I.reg}</td></tr>`;}).join('');
 
   const domRows = [
@@ -1004,7 +1052,7 @@ function render(){
   if(cid.includes('dss')) tools.push('DSS: сценарные модели, OR-Tools');
   if(cid.includes('ml') || b.research) tools.push('Python: pandas, scikit-learn');
   methods.forEach(m=>tools.push({gd:'scikit-learn: SGDRegressor',boost:'CatBoost, LightGBM',ts:'statsmodels, Prophet',nn:'PyTorch, Keras',anomaly:'scikit-learn: IsolationForest',opt:'OR-Tools, PuLP',geo:'GeoPandas, H3, QGIS',llm:'YandexGPT API, GigaChat, sentence-transformers',pm:'PM4Py'}[m.id]));
-  if(state.pm!=='none') tools.push(state.pm==='agile'?'Jira, Kaiten':'MS Project, GanttPRO');
+  if(state.pm!=='none') tools.push(PM[state.pm].tools);
   if(state.evm) tools.push('EVM: PV, EV, AC, CPI, SPI');
   if(!b.research) tools.push('Финмодель: NPV, DPP, TCO в Excel');
   $('#tools').innerHTML = tools.map(t=>`<span class="chip on">${t}</span>`).join('');
@@ -1044,7 +1092,7 @@ function markdown(b, kv, tasks, ch, tools, checks, al, domRows, methodsLine){
   L.push('## Каркас модели предметной области (заполнить до BPMN)', '', '| Объект | Свойства | Операции: роль → действие | Что фиксируется |', '|---|---|---|---|'); domRows.forEach(r=>L.push(`| ${r.join(' | ')} |`)); L.push('');
   const gov = GOV.has(state.sector);
   L.push('## Метрики и KPI', '', '| Показатель | Слой | Ед., лучше | Что фиксируется при операции | Источник |', '|---|---|---|---|---|'); b.kpis.forEach(k=>L.push(`| ${k.t} | ${k.general?'общий':'отраслевой'}, ${k.layer==='client'?(gov?'гражданин':'клиент'):LAYERS[k.layer]}${k.outcome?', результат миссии':''}${k.proxy?', промежуточный':''} | ${k.unit}, ${k.dir} | ${k.rec} | ${k.src} |`)); L.push('');
-  if(b.methods.length){ L.push('## Методы', ''); b.methods.forEach(m=>L.push(`- **${m.t}:** для чего: ${m.why}. Примеры: ${m.d}`)); L.push(''); }
+  if(b.methods.length){ L.push('## Методы', '', '| Метод | Для чего | Базовый подход для сравнения | Качество модели |', '|---|---|---|---|'); b.methods.forEach(m=>L.push(`| ${m.t} | ${m.why}. Примеры: ${m.d} | ${m.base} | ${m.q} |`)); L.push(''); }
   L.push('## Инструменты', '', tools.map(t=>`- ${t}`).join('\n'), '');
   L.push('## Чек-лист по программе ГИА', ''); checks.forEach(c=>L.push(`- [ ] ${c}`)); L.push('');
   L.push('## Источники', '',
@@ -1074,8 +1122,8 @@ function markdown(b, kv, tasks, ch, tools, checks, al, domRows, methodsLine){
     for(const [layer,title] of [['finance','Общие. Результат: финансы'],['client',gov?'Общие. Результат: гражданин и заявитель':'Общие. Результат: клиент'],['process','Общие. Процесс'],['quality','Общие. Качество системы (промежуточные)']]){
       L.push(`- ${title}`); general.filter(k=>k.layer===layer).forEach(k=>L.push(`  - ${mark(state.kpi.includes(k.id))} ${k.t} (${k.unit}, ${k.dir})`)); } }
   L.push('');
-  L.push(`**10. Методы анализа и прогнозирования**${$('#fs-method').hidden?' (блок скрыт: нет контура BI, DSS или ML/AI)':''}`); METHODS.forEach(m=>L.push(`- ${mark(state.method.includes(m.id))} ${m.t}`)); L.push('');
-  L.push('**11. Управление проектом**'); [['pmbok','PMBOK 8'],['gost','Каскад по ГОСТ 34'],['agile','Agile'],['hybrid','Гибрид'],['none','Без раздела']].forEach(([v,t])=>L.push(`- ${mark(state.pm===v)} ${t}`)); L.push(`- ${mark(state.evm)} Контроль по методу освоенного объёма (EVM)`, '');
+  L.push(`**10. Методы анализа и прогнозирования**${$('#fs-method').hidden?' (блок скрыт: нет контура BI, DSS или ML/AI)':''}`); METHOD_GROUPS.forEach(g=>{ L.push(`- ${g.g}`); METHODS.filter(m=>m.c===g.c).forEach(m=>L.push(`  - ${mark(state.method.includes(m.id))} ${m.t}`)); }); L.push('');
+  L.push('**11. Управление проектом**'); [...Object.entries(PM).map(([v,x])=>[v,x.t]),['none','Без раздела']].forEach(([v,t])=>L.push(`- ${mark(state.pm===v)} ${t}${v===suggestPm()&&state.form!=='research'?' (подходит для вашего выбора)':''}`)); L.push(`- ${mark(state.evm)} Контроль по методу освоенного объёма (EVM)`, '');
   L.push('**12. Артефакты**'); [['bpmn','BPMN AS-IS и TO-BE'],['er','ER-модель предметной области (обязательно)'],['arch','Архитектура TO-BE (ArchiMate)'],['req','Требования: ТЗ или user stories'],['proto','Прототип'],['pilot','Пилот и справка о внедрении']].forEach(([v,t])=>L.push(`- ${mark(state.deliv.includes(v))} ${t}`)); L.push('');
   return L.join('\n');
 }
