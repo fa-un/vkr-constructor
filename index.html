@@ -440,7 +440,7 @@ const KPI_CATALOG = [
   {id:'picktime', layer:'process', imp:'скорости сборки заказов', t:'Время комплектации заказа', unit:'минут на заказ', dir:'↓', rec:'время выдачи задания на отбор и время завершения сборки, число строк в заказе', src:'WMS, терминалы сбора данных'},
   {id:'pickacc', layer:'process', imp:'безошибочности сборки заказов', t:'Безошибочность сборки', unit:'% заказов без ошибок', dir:'↑', rec:'расхождение при контроле сборки или претензия клиента: заказ, строка, тип ошибки', src:'WMS, контроль на упаковке, претензии'},
   {id:'pickrate', layer:'process', imp:'производительности сборки', t:'Производительность сборки', unit:'строк в час на сборщика', dir:'↑', rec:'число собранных строк и рабочее время сборщика', src:'WMS, учёт рабочего времени'},
-  {id:'travel', layer:'process', imp:'сокращения пробега сборщика', t:'Пробег сборщика на заказ', unit:'метров на заказ', dir:'↓', rec:'маршрут обхода ячеек по заданию на отбор', src:'WMS, карта склада'},
+  {id:'travel', layer:'process', imp:'компактности маршрута сборщика', t:'Пробег сборщика на заказ', unit:'метров на заказ', dir:'↓', rec:'маршрут обхода ячеек по заданию на отбор', src:'WMS, карта склада'},
   {id:'oos', layer:'process', imp:'доступности товара на полке', t:'Отсутствие товара (out-of-stock)', unit:'% позиций', dir:'↓', rec:'позиция с нулевым остатком при наличии спроса', src:'учётная система, кассы'},
   {id:'turnover', layer:'finance', imp:'оборачиваемости запасов', t:'Оборачиваемость запасов', unit:'дней', dir:'↓', rec:'остатки и списания по позиции на дату', src:'WMS, учётная система'},
   {id:'otif', layer:'process', imp:'надёжности исполнения в срок', t:'В срок и в полном объёме (OTIF)', unit:'%', dir:'↑', rec:'плановая и фактическая дата, план и факт количества', src:'OMS, TMS'},
@@ -582,7 +582,7 @@ const SECTORS = {
     core:[
       {id:'stock', name:'складского учёта и движения товара', sys:'учётной системы (1С:Управление торговлей, 1С:УНФ)', kpi:['invacc','shrink','t2d','turnover'], tag:'приёмка, размещение, отбор, инвентаризация; артикулы и аналоги, партии; уровень 0–1 → 2'},
       {id:'inventory', name:'инвентаризации товара на складе', sys:'WMS', kpi:['invacc','shrink','invtime'], tag:'адресное хранение, штрихкоды и терминалы сбора данных; ФСБУ 28/2023, приказ Минфина 49н'},
-      {id:'picking', name:'комплектации заказов и размещения товара на складе', sys:'WMS с управлением размещением и контролем сборки по штрихкодам', kpi:['picktime','pickacc','pickrate','travel'], tag:'ABC/XYZ по потоку заказов, зоны быстрого отбора, маршрут обхода, контроль сборки на ТСД; уровень 2 → 3, с моделью размещения → 5'},
+      {id:'picking', name:'комплектации заказов и размещения товара на складе', sys:'WMS с управлением размещением', kpi:['picktime','pickacc','pickrate','travel'], tag:'контроль сборки по штрихкодам на ТСД, ABC/XYZ по потоку заказов, зоны быстрого отбора, маршрут обхода; уровень 2 → 3, с моделью размещения → 5'},
       {id:'receiving', name:'приёмки и размещения товара на складе', sys:'WMS с адресным хранением', kpi:['t2d','quality','invacc'], tag:'GS1, Честный знак'},
       {id:'replenish', name:'пополнения запасов и заказа поставщикам', sys:'системы управления запасами с автозаказом', kpi:['oos','turnover','fillrate','forecast'], tag:''},
       {id:'sales', name:'продаж и кассового обслуживания', sys:'кассовой и учётной системы с программой лояльности', kpi:['aov','conversion','revenue'], tag:'54-ФЗ'},
@@ -957,6 +957,7 @@ function build(){
   else if(state.deliv.includes('arch') && !state.deliv.includes('proto')) dir = 3;
   else if((state.sector==='ecom' && ['market','ads','pricing'].includes(P.id)) || (state.sector==='retail' && ['promo','sales'].includes(P.id))) dir = 7;
   else if(state.tobe-state.asis===1 && state.asis>=2) dir = 4;
+  if(!research && words(topic)>11){ const short = `${verb} процесса ${P.name} ${S.org}`; alts = [topic, ...alts.filter(a=>a!==short)]; topic = short; }
   alts = [...new Set(alts)].filter(a=>a!==topic);
   const solAll = state.tobe>=5 && methods.length ? mAll : sol;
   return {S,P,kpis,methods,babok,contours,M,mAll,solAll,research,sol,verb,topic,alts,dir,sysShort,hasSys};
@@ -1032,9 +1033,10 @@ function render(){
   $('#alerts').innerHTML = al.map(([c,t])=>`<div class="alert ${c}"><span class="m">${c==='warn'?'[!]':c==='info'?'[i]':'[✓]'}</span><span>${t}</span></div>`).join('');
 
   const materials = state.base==='real' ? S.ex : state.base==='seek' ? `организация отрасли «${S.label}», подбирается на первом этапе` : `открытые и синтетические данные отрасли «${S.label}»`;
+  const impList = kpis.length ? kpis.slice(0,3).map(k=>k.imp).join(', ') + (kpis.length>3 ? ' и других показателей' : '') : 'эффективности';
   const goal = research
-    ? `разработать и проверить ${M?'модель на основе '+b.mAll:'метод'} для повышения ${kpis.map(k=>k.imp).join(', ')||'эффективности'} процесса ${P.name} ${S.org}`
-    : `обеспечить повышение ${kpis.map(k=>k.imp).join(', ')||'эффективности'} процесса ${P.name} ${S.org} за счёт ${b.solAll}`;
+    ? `разработать и проверить ${M?'модель на основе '+b.mAll:'метод'} для повышения ${impList} процесса ${P.name} ${S.org}`
+    : `обеспечить повышение ${impList} процесса ${P.name} ${S.org} за счёт ${b.solAll}`;
   const kv = [
     ['Форма', research?'исследовательская работа':'работа практической направленности'],
     ['Материалы', materials],
