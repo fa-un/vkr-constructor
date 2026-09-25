@@ -966,7 +966,7 @@ function build(){
   else if((state.sector==='ecom' && ['market','ads','pricing'].includes(P.id)) || (state.sector==='retail' && ['promo','sales'].includes(P.id))) dir = 7;
   else if(state.tobe-state.asis===1 && state.asis>=2) dir = 4;
   if(!research && words(topic)>11){ const short = `${verb} процесса ${P.name} ${S.org}`; alts = [topic, ...alts.filter(a=>a!==short)]; topic = short; }
-  if(research && words(topic)>11){ const short = M ? `Модель ${M.aim} для процесса ${P.name} ${S.org}` : `Метод повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса ${P.name}`; alts = [topic, ...alts.filter(a=>a!==short)]; topic = short; }
+  if(research && words(topic)>11){ let short = M ? `Модель ${M.aim} для процесса ${P.name} ${S.org}` : `Метод повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса ${P.name}`; if(words(short)>11) short = `Метод повышения эффективности процесса ${P.name}`; alts = [topic, ...alts.filter(a=>a!==short)]; topic = short; }
   alts = [...new Set(alts)].filter(a=>a!==topic);
   const solAll = state.tobe>=5 && methods.length ? mAll : sol;
   return {S,P,kpis,methods,babok,contours,M,mAll,solAll,research,sol,verb,topic,alts,dir,sysShort,hasSys};
