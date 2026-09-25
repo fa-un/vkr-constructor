@@ -266,7 +266,7 @@ fieldset[hidden]{display:none}
 <aside class="panel" aria-live="polite">
   <div class="panel-head"><h2>Паспорт темы</h2><div><button type="button" id="copy">Скопировать Markdown</button> <button type="button" class="ghost" id="reset">Сбросить</button></div></div>
   <div id="alerts" style="display:flex;flex-direction:column;gap:8px"></div>
-  <div><div class="topic" id="topic"></div><div class="meta" id="meta"></div></div>
+  <div><div class="topic" id="topic"></div><div class="meta" id="meta"></div><div class="field" style="margin-top:8px"><label for="p-topic">Своя формулировка темы (необязательно)</label><input type="text" id="p-topic" name="topic" autocomplete="off" placeholder="впишите, если хотите свою формулировку: паспорт возьмёт её, а сгенерированная станет первым вариантом"><small>Счётчик слов и правило «не более 11 слов» действуют и для своей формулировки.</small></div></div>
   <div><h3>Варианты формулировки: по одному на каждый выбранный показатель и метод</h3><ul class="alts" id="alts"></ul></div>
   <dl class="kv" id="kv"></dl>
   <div><h3>Задачи работы</h3><ol class="tasks" id="tasks"></ol></div>
@@ -671,7 +671,7 @@ const SECTORS = {
       {id:'claims', name:'рассмотрения претензий клиентов', sys:'CRM с управлением обращениями', kpi:['react','quality','csat'], tag:''},
       {id:'fraud', name:'мониторинга операций и противодействия мошенничеству', sys:'антифрод-системы', kpi:['detect','precision','cost'], tag:''},
       {id:'aml', name:'внутреннего контроля по 115-ФЗ', sys:'AML-системы с риск-скорингом клиентов', kpi:['detect','cost','auto'], tag:'финансовый мониторинг'},
-      {id:'product', name:'вывода новых банковских продуктов', sys:'платформы продуктового каталога', kpi:['t2m','takerate','crosssell','revenue'], tag:''},
+      {id:'product', name:'вывода новых банковских продуктов', sys:'платформы продуктового каталога с оценкой рисков и эффективности', kpi:['t2m','takerate','rarm','launchacc','revenue'], tag:'оценка спроса, потерь и экономики продукта до запуска; продуктовый комитет'},
       {id:'creditproduct', name:'вывода новых кредитных продуктов', sys:'платформы продуктового каталога с оценкой рисков и эффективности', kpi:['takerate','cor','rarm','npl','t2m','launchacc'], tag:'оценка спроса и ожидаемых потерь по сегменту до запуска; продуктовый комитет; 590-П Банка России'}
     ],
     support:[
@@ -867,7 +867,7 @@ const BANK = [
 
 const $ = s => document.querySelector(s);
 const STORE = 'vkr-state-v6';
-const DEFAULT = {form:'practical', base:'real', sector:'ecom', ptype:'core', process:null, owner:'', exec:'', stake:'', asis:1, tobe:3, contour:['oltp'], kpi:['t2d'], method:[], babok:['stake','elicit','reqtypes','options'], pm:'pmbok', evm:false, deliv:['bpmn','er','req']};
+const DEFAULT = {form:'practical', base:'real', sector:'ecom', ptype:'core', process:null, owner:'', exec:'', stake:'', topic:'', asis:1, tobe:3, contour:['oltp'], kpi:['t2d'], method:[], babok:['stake','elicit','reqtypes','options'], pm:'pmbok', evm:false, deliv:['bpmn','er','req']};
 const state = JSON.parse(JSON.stringify(DEFAULT));
 
 function opt(name, id, value, title, desc, checked, radio=true, prefix='', tag=''){
@@ -908,7 +908,7 @@ function read(){
   const v = n => document.querySelector(`input[name="${n}"]:checked`)?.value;
   const all = n => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(i=>i.value);
   state.form=v('form'); state.base=v('base'); state.sector=v('sector'); state.ptype=v('ptype'); state.process=v('process');
-  state.owner=$('#p-owner').value.trim(); state.exec=$('#p-exec').value.trim(); state.stake=$('#p-stake').value.trim();
+  state.owner=$('#p-owner').value.trim(); state.exec=$('#p-exec').value.trim(); state.stake=$('#p-stake').value.trim(); state.topic=($('#p-topic').value||'').trim();
   state.asis=+v('asis'); state.tobe=+v('tobe'); state.pm=v('pm'); state.evm=!!v('evm');
   state.kpi=all('kpi'); state.contour=all('contour'); state.method=all('method'); state.babok=all('babok'); state.deliv=all('deliv');
 }
@@ -967,6 +967,7 @@ function build(){
   else if(state.tobe-state.asis===1 && state.asis>=2) dir = 4;
   if(!research && words(topic)>11){ const short = `${verb} процесса ${P.name} ${S.org}`; alts = [topic, ...alts.filter(a=>a!==short)]; topic = short; }
   if(research && words(topic)>11){ let short = M ? `Модель ${M.aim} для процесса ${P.name} ${S.org}` : `Метод повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса ${P.name}`; if(words(short)>11) short = `Метод повышения эффективности процесса ${P.name}`; alts = [topic, ...alts.filter(a=>a!==short)]; topic = short; }
+  if(state.topic){ alts = [topic, ...alts]; topic = state.topic; }
   alts = [...new Set(alts)].filter(a=>a!==topic);
   const solAll = state.tobe>=5 && methods.length ? mAll : sol;
   return {S,P,kpis,methods,babok,contours,M,mAll,solAll,research,sol,verb,topic,alts,dir,sysShort,hasSys};
@@ -1223,7 +1224,7 @@ function applyState(){
   renderStatic();
   set('form',state.form); set('base',state.base); set('sector',state.sector); set('ptype',state.ptype); set('pm',state.pm);
   $('#pm-evm').checked = !!state.evm;
-  $('#p-owner').value = state.owner||''; $('#p-exec').value = state.exec||''; $('#p-stake').value = state.stake||'';
+  $('#p-owner').value = state.owner||''; $('#p-exec').value = state.exec||''; $('#p-stake').value = state.stake||''; $('#p-topic').value = state.topic||'';
   renderProcesses(); set('process',state.process);
   document.querySelectorAll('input[name="deliv"]').forEach(i=>i.checked=state.deliv.includes(i.value));
 }
@@ -1235,7 +1236,7 @@ document.addEventListener('change', e=>{
   if(e.target.name==='tobe'){ const def=defaultContours(+e.target.value); document.querySelectorAll('input[name="contour"]').forEach(i=>i.checked=def.includes(i.value)); }
   render();
 });
-document.addEventListener('input', e=>{ if(e.target.matches('#p-owner, #p-exec, #p-stake')) render(); });
+document.addEventListener('input', e=>{ if(e.target.matches('#p-owner, #p-exec, #p-stake, #p-topic')) render(); });
 $('#copy').addEventListener('click', async ()=>{
   const txt = $('#md').value; let ok=false;
   try{ await navigator.clipboard.writeText(txt); ok=true; }catch(e){

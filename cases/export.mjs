@@ -22,6 +22,7 @@ click(`input[name=sector][value=${spec.sector}]`);
 click(`input[name=ptype][value=${spec.ptype}]`);
 click(`input[name=process][value=${spec.process}]`);
 type('#p-owner', spec.owner || ''); type('#p-exec', spec.exec || ''); type('#p-stake', spec.stake || '');
+if (spec.topic) type('#p-topic', spec.topic);
 click(`#asis-${spec.asis}`); click(`#tobe-${spec.tobe}`);
 if (spec.contours) for (const c of d.querySelectorAll('input[name=contour]')) check('#' + c.id, spec.contours.includes(c.value));
 for (const k of d.querySelectorAll('input[name=kpi]')) check('#' + k.id, (spec.kpi || []).includes(k.value));
