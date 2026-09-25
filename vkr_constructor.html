@@ -456,6 +456,9 @@ const KPI_CATALOG = [
   // Частные: банки и страхование
   {id:'approval', layer:'process', imp:'качества решений по заявкам', t:'Доля одобренных заявок (approval rate)', unit:'%', dir:'целевой диапазон', rec:'решение по заявке', src:'кредитный конвейер'},
   {id:'cor', layer:'finance', imp:'качества кредитного портфеля', t:'Стоимость риска (cost of risk)', unit:'% портфеля', dir:'↓', rec:'просрочка и резерв по договору', src:'кредитная система'},
+  {id:'rarm', layer:'finance', imp:'доходности продукта с учётом риска', t:'Маржа продукта с учётом риска (risk-adjusted margin)', unit:'% годовых', dir:'↑', rec:'процентный и комиссионный доход, ожидаемые потери и затраты по продукту и сегменту', src:'управленческий учёт, кредитный портфель'},
+  {id:'npl', layer:'finance', imp:'качества портфеля по новому продукту', t:'Доля просрочки 90+ (NPL)', unit:'% портфеля продукта', dir:'↓', rec:'событие выхода договора на просрочку: дни, сумма', src:'кредитная система'},
+  {id:'launchacc', layer:'quality', proxy:true, imp:'точности оценки продукта до запуска', t:'Точность прогноза спроса и потерь по продукту', unit:'% отклонения план-факт', dir:'↓', rec:'прогноз take rate и потерь до запуска и факт через 6–12 месяцев', src:'продуктовый комитет, портфель'},
   {id:'takerate', layer:'client', imp:'проникновения продукта', t:'Проникновение продукта (take rate)', unit:'% клиентов', dir:'↑', rec:'подключение продукта клиентом', src:'CRM, продуктовый каталог'},
   {id:'crosssell', layer:'finance', imp:'кросс-продаж', t:'Продуктов на клиента (cross-sell)', unit:'шт.', dir:'↑', rec:'число активных продуктов клиента', src:'CRM'},
   {id:'loss', layer:'finance', imp:'рентабельности страхового портфеля', t:'Коэффициент убыточности', unit:'%', dir:'↓', rec:'премия и выплаты по договору', src:'страховая система'},
@@ -507,7 +510,7 @@ function suggestMethods(P, asis){
   const s = new Set();
   const has = ids => P.kpi.some(k=>ids.includes(k));
   if(has(['forecast','oos'])) { s.add('ts'); s.add('boost'); }
-  if(has(['churn','approval','hitrate','conversion','cor','loss','readmit','takerate'])) s.add('boost');
+  if(has(['churn','approval','hitrate','conversion','cor','loss','readmit','takerate','npl','rarm'])) s.add('boost');
   if(has(['detect','precision','leakage','techloss','shrink'])) s.add('anomaly');
   if(/оптимизац/.test(P.tag) || OPT_PROCS.includes(P.id)) s.add('opt');
   if(GEO_PROCS.includes(P.id)) s.add('geo');
@@ -654,14 +657,15 @@ const SECTORS = {
       {id:'it', name:'эксплуатации ведомственных систем', sys:'ITSM-системы', kpi:['react','dora'], tag:''}
     ]},
   bank:{ label:'Банки', org:'коммерческого банка', ex:'АО «Банк Столичный»', lit:'цифровой трансформации банковского обслуживания и управления рисками', where:'банки-партнёры кафедры (Росбанк), МФО, банковские ИТ-подрядчики (Диасофт, Норбит, Ланит)',
-    kpi:['t2m','takerate','crosssell','approval','cor','conversion','cac','detect'],
+    kpi:['t2m','takerate','crosssell','approval','cor','rarm','npl','launchacc','conversion','cac','detect'],
     core:[
       {id:'credit', name:'кредитного конвейера для физических лиц', sys:'BPM-платформы с автоматическим скорингом', kpi:['t2d','approval','cor'], tag:''},
       {id:'onboard', name:'дистанционного онбординга клиентов', sys:'системы онбординга с биометрией', kpi:['t2d','conversion','csat'], tag:''},
       {id:'claims', name:'рассмотрения претензий клиентов', sys:'CRM с управлением обращениями', kpi:['react','quality','csat'], tag:''},
       {id:'fraud', name:'мониторинга операций и противодействия мошенничеству', sys:'антифрод-системы', kpi:['detect','precision','cost'], tag:''},
       {id:'aml', name:'внутреннего контроля по 115-ФЗ', sys:'AML-системы с риск-скорингом клиентов', kpi:['detect','cost','auto'], tag:'финансовый мониторинг'},
-      {id:'product', name:'вывода новых банковских продуктов', sys:'платформы продуктового каталога', kpi:['t2m','takerate','crosssell','revenue'], tag:''}
+      {id:'product', name:'вывода новых банковских продуктов', sys:'платформы продуктового каталога', kpi:['t2m','takerate','crosssell','revenue'], tag:''},
+      {id:'creditproduct', name:'вывода новых кредитных продуктов', sys:'платформы продуктового каталога с оценкой рисков и эффективности', kpi:['takerate','cor','rarm','npl','t2m','launchacc'], tag:'оценка спроса и ожидаемых потерь по сегменту до запуска; продуктовый комитет; 590-П Банка России'}
     ],
     support:[
       {id:'compliance', name:'подготовки регуляторной отчётности', sys:'системы регуляторной отчётности', kpi:['t2d','quality','cost'], tag:''},
@@ -785,6 +789,8 @@ const INDUSTRY = {
 const BANK = [
   // Из примерного перечня тем кафедры на 2023/24 (согласован с работодателями); who: организация-партнёр
   {s:'bank', p:'core', l:5, t:'Управление выводом новых банковских продуктов на основе оценки рисков и эффективности'},
+  {s:'bank', p:'core', l:5, t:'Оценка рисков и эффективности новых кредитных продуктов банка методами машинного обучения'},
+  {s:'bank', p:'core', l:5, t:'Совершенствование вывода кредитных продуктов банка на основе моделей машинного обучения'},
   {s:'bank', p:'core', l:3, t:'Развитие кредитного конвейера коммерческого банка на базе BPM-технологий и разработки микросервисов', src:'ФУ', who:'Норбит'},
   {s:'bank', p:'core', l:3, t:'Совершенствование процессов кредитного конвейера коммерческого банка на базе BPM-платформы Pega', src:'ФУ', who:'Норбит'},
   {s:'bank', p:'core', l:5, t:'Использование аналитики и машинного обучения в процессе кредитования юридических лиц', src:'ФУ', who:'Норбит'},
@@ -905,7 +911,8 @@ const plural = (n,a,b,c) => n%10===1&&n%100!==11?a:(n%10>=2&&n%10<=4&&(n%100<10|
 function build(){
   const S = SECTORS[state.sector];
   const P = S[state.ptype].find(p=>p.id===state.process);
-  const kpis = KPIS.filter(k=>state.kpi.includes(k.id)).map(k=>kpiView(k, state.sector));
+  const LAYER_RANK = {finance:0, client:1, process:2, quality:3};
+  const kpis = KPIS.filter(k=>state.kpi.includes(k.id)).map(k=>kpiView(k, state.sector)).sort((a,b)=>LAYER_RANK[a.layer]-LAYER_RANK[b.layer]);
   const methods = METHODS.filter(m=>state.method.includes(m.id));
   const babok = BABOK.filter(b=>state.babok.includes(b.id));
   const contours = CONTOURS.filter(c=>state.contour.includes(c.id)).map(c=>({...c, exists: state.asis>=c.min}));
@@ -929,7 +936,7 @@ function build(){
     topic = M ? rtopic(M)
               : `Метод повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса ${P.name} ${S.org}`;
     alts = [
-      ...kpis.map(k=>`Оценка влияния ${sol} на показатель «${k.t}» процесса ${P.name} ${S.org}`),
+      ...kpis.filter(k=>!k.proxy).map(k=>`Оценка влияния ${sol} на показатель «${k.t}» процесса ${P.name} ${S.org}`),
       ...methods.slice(1).map(rtopic),
       `Сравнительный анализ подходов к автоматизации процесса ${P.name} ${S.org} (обзорная тема: согласовать с руководителем)`,
       `Модель зрелости процесса ${P.name} ${S.org}: от уровня ${state.asis} к уровню ${state.tobe}`
@@ -952,6 +959,7 @@ function build(){
   else if((state.sector==='ecom' && ['market','ads','pricing'].includes(P.id)) || (state.sector==='retail' && ['promo','sales'].includes(P.id))) dir = 7;
   else if(state.tobe-state.asis===1 && state.asis>=2) dir = 4;
   if(!research && words(topic)>11){ const short = `${verb} процесса ${P.name} ${S.org}`; alts = [topic, ...alts.filter(a=>a!==short)]; topic = short; }
+  if(research && words(topic)>11){ const short = M ? `Модель ${M.aim} для процесса ${P.name} ${S.org}` : `Метод повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса ${P.name}`; alts = [topic, ...alts.filter(a=>a!==short)]; topic = short; }
   alts = [...new Set(alts)].filter(a=>a!==topic);
   const solAll = state.tobe>=5 && methods.length ? mAll : sol;
   return {S,P,kpis,methods,babok,contours,M,mAll,solAll,research,sol,verb,topic,alts,dir,sysShort,hasSys};
