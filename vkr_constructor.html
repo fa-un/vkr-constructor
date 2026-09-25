@@ -427,6 +427,10 @@ const KPI_CATALOG = [
   {id:'returnrate', layer:'process', imp:'доли заказов без возвратов', t:'Доля возвратов', unit:'% заказов', dir:'↓', rec:'событие возврата и его причина', src:'OMS, help-desk'},
   {id:'leakage', layer:'finance', imp:'полноты тарификации доходов', t:'Утечка доходов (revenue leakage)', unit:'% выручки', dir:'↓', rec:'оказанная услуга и факт её тарификации', src:'биллинг, revenue assurance'},
   // Частные: запасы, поставки, производство
+  {id:'invacc', layer:'process', imp:'точности учёта запасов', t:'Точность учёта запасов', unit:'% позиций без расхождений', dir:'↑', rec:'учётный и фактический остаток по позиции при пересчёте', src:'WMS или учётная система, акты инвентаризации'},
+  {id:'shrink', layer:'finance', imp:'сохранности товарных запасов', t:'Недостачи и потери товара', unit:'% от товарооборота', dir:'↓', rec:'расхождение при инвентаризации: позиция, количество, сумма, причина', src:'акты инвентаризации (ИНВ-3), учётная система'},
+  {id:'invtime', layer:'process', imp:'скорости инвентаризации', t:'Длительность инвентаризации', unit:'часов на склад или зону', dir:'↓', rec:'время начала и завершения пересчёта по зоне, число пересчитанных позиций', src:'терминалы сбора данных, WMS'},
+  {id:'oos', layer:'process', imp:'доступности товара на полке', t:'Отсутствие товара (out-of-stock)', unit:'% позиций', dir:'↓', rec:'позиция с нулевым остатком при наличии спроса', src:'учётная система, кассы'},
   {id:'turnover', layer:'finance', imp:'оборачиваемости запасов', t:'Оборачиваемость запасов', unit:'дней', dir:'↓', rec:'остатки и списания по позиции на дату', src:'WMS, учётная система'},
   {id:'otif', layer:'process', imp:'надёжности исполнения в срок', t:'В срок и в полном объёме (OTIF)', unit:'%', dir:'↑', rec:'плановая и фактическая дата, план и факт количества', src:'OMS, TMS'},
   {id:'fillrate', layer:'process', imp:'доступности запаса', t:'Доступность запаса (fill rate)', unit:'%', dir:'↑', rec:'запрос позиции и наличие на момент запроса', src:'WMS'},
@@ -498,9 +502,9 @@ const OPT_PROCS = ['route','schedule','fieldplan','beds','fulfil','plan','repair
 function suggestMethods(P, asis){
   const s = new Set();
   const has = ids => P.kpi.some(k=>ids.includes(k));
-  if(has(['forecast'])) { s.add('ts'); s.add('boost'); }
+  if(has(['forecast','oos'])) { s.add('ts'); s.add('boost'); }
   if(has(['churn','approval','hitrate','conversion','cor','loss','readmit','takerate'])) s.add('boost');
-  if(has(['detect','precision','leakage','techloss'])) s.add('anomaly');
+  if(has(['detect','precision','leakage','techloss','shrink'])) s.add('anomaly');
   if(/оптимизац/.test(P.tag) || OPT_PROCS.includes(P.id)) s.add('opt');
   if(GEO_PROCS.includes(P.id)) s.add('geo');
   if(/обращен|претенз|документ|отзыв|жалоб/.test(P.name)) s.add('llm');
@@ -561,6 +565,21 @@ const SECTORS = {
       {id:'it', name:'поддержки платформы интернет-магазина', sys:'ITSM-системы', kpi:['react','dora'], tag:''},
       {id:'procure', name:'закупок и работы с поставщиками', sys:'SRM-системы', kpi:['t2d','cost'], tag:''},
       {id:'hr', name:'найма и обучения операторов и сборщиков', sys:'HRM и LMS', kpi:['t2d','cost'], tag:''}
+    ]},
+  retail:{ label:'Торговля (розница и опт)', org:'торговой компании', ex:'ООО «ТоргСеть» (сеть магазинов, распределительный склад, оптовые отгрузки)', lit:'управления товарными запасами и складскими операциями торговой компании', where:'розничные сети и оптовые компании с собственным складом, дистрибьюторы, фирменные магазины производителей; партнёры кафедры 1С-Перспектива и Норбит',
+    kpi:['invacc','shrink','invtime','oos','turnover','fillrate','aov','conversion','otif','returnrate'],
+    core:[
+      {id:'inventory', name:'инвентаризации товара на складе', sys:'WMS', kpi:['invacc','shrink','invtime'], tag:'адресное хранение, штрихкоды и терминалы сбора данных; ФСБУ 28/2023, приказ Минфина 49н'},
+      {id:'receiving', name:'приёмки и размещения товара на складе', sys:'WMS с адресным хранением', kpi:['t2d','quality','invacc'], tag:'GS1, Честный знак'},
+      {id:'replenish', name:'пополнения запасов и заказа поставщикам', sys:'системы управления запасами с автозаказом', kpi:['oos','turnover','fillrate','forecast'], tag:''},
+      {id:'sales', name:'продаж и кассового обслуживания', sys:'кассовой и учётной системы с программой лояльности', kpi:['aov','conversion','revenue'], tag:'54-ФЗ'},
+      {id:'promo', name:'ценообразования и промо-акций', sys:'системы управления ценами и промо', kpi:['margin','revenue','forecast'], tag:''},
+      {id:'returns', name:'возвратов и претензий покупателей', sys:'модуля возвратов в учётной системе', kpi:['returnrate','csat','cost'], tag:''}
+    ],
+    support:[
+      {id:'procure', name:'закупок и работы с поставщиками', sys:'SRM-системы', kpi:['t2d','cost','otif'], tag:''},
+      {id:'hr', name:'найма и обучения персонала магазинов и склада', sys:'HRM и LMS', kpi:['t2d','cost'], tag:''},
+      {id:'it', name:'поддержки касс, терминалов сбора данных и учётной системы', sys:'ITSM-системы', kpi:['react','cost'], tag:''}
     ]},
   telecom:{ label:'Телеком', org:'оператора связи', ex:'ПАО «Регион-Телеком»', lit:'BSS/OSS-систем оператора связи и клиентского опыта', where:'региональные операторы, MVNO, разработчики биллинга (Nexign, Bercut, Forward), ИТ-подразделения федеральных операторов',
     kpi:['arpu','cac','leakage','t2m','conversion','detect'],
@@ -718,7 +737,7 @@ const SECTORS = {
       {id:'it', name:'ИТ-поддержки удалённых подразделений', sys:'ITSM-системы', kpi:['react','cost'], tag:''}
     ]}
 };
-const SECTOR_ORDER = ['ecom','telecom','logistics','gov','govmon','bank','manuf','insurance','health','energy','edu','agro'];
+const SECTOR_ORDER = ['ecom','retail','telecom','logistics','gov','govmon','bank','manuf','insurance','health','energy','edu','agro'];
 // Видимые показатели отрасли: общие с учётом ограничения biz/gov плюс частные из SECTORS[k].kpi.
 function sectorKpis(sector){
   const gov = GOV.has(sector);
@@ -743,6 +762,7 @@ const DIRECTIONS = {
 // В паспорт не попадает; таблица внизу страницы подсвечивает выбранную отрасль.
 const INDUSTRY = {
   ecom:      {proc:'APQC PCF (Retail), воронка AARRR', data:'GS1 (идентификация товаров), RFM-сегментация', kpi:'AARRR, ROMI, OTIF; отчёты Data Insight', reg:'152-ФЗ, 54-ФЗ (онлайн-кассы), правила маркетплейсов'},
+  retail:    {proc:'APQC PCF Retail, ARTS (NRF); порядок инвентаризации по ФСБУ 28/2023 и приказу Минфина 49н', data:'GS1 (GTIN, штрихкоды), Честный знак, ЕГАИС', kpi:'точность учёта запасов, недостачи (shrinkage), out-of-stock, оборачиваемость', reg:'381-ФЗ о торговле, 54-ФЗ, ФСБУ 5/2019 «Запасы», ФСБУ 28/2023 «Инвентаризация», 152-ФЗ'},
   telecom:   {proc:'TM Forum eTOM (процессы), TAM (системы)', data:'TM Forum SID', kpi:'TM Forum Business Metrics, ARPU, churn', reg:'126-ФЗ «О связи», требования Роскомнадзора'},
   logistics: {proc:'SCOR DS (Plan, Order, Source, Transform, Fulfill, Return)', data:'GS1, ЭТрН (электронные перевозочные документы)', kpi:'SCOR DS: надёжность, скорость, гибкость, стоимость', reg:'Устав автомобильного транспорта, ГИС ЭПД, 152-ФЗ'},
   gov:       {proc:'210-ФЗ, целевые модели госуслуг, стандарт клиентоцентричности', data:'СМЭВ, ЕСИА, ФРГУ', kpi:'методика Минцифры по цифровой зрелости, показатели «Госуслуг»', reg:'210-ФЗ, 59-ФЗ, 44-ФЗ, 149-ФЗ, ГОСТ Р 52294'},
@@ -774,6 +794,10 @@ const BANK = [
   {s:'gov', p:'support', l:3, t:'Оптимизация процесса управления документами на основе внедрения СЭД', src:'ФУ', who:'Норбит'},
   {s:'telecom', p:'support', l:3, t:'Внедрение BPM-платформы для управления процессами подбора персонала', src:'ФУ', who:'Норбит'},
   {s:'insurance', p:'support', l:3, t:'Разработка и внедрение low-code системы на базе Creatio для повышения эффективности документооборота', src:'ФУ', who:'Норбит'},
+  {s:'retail', p:'core', l:3, t:'Автоматизация процесса инвентаризации товара на складе торговой компании'},
+  {s:'retail', p:'core', l:3, t:'Автоматизация приёмки и размещения товара на складе торговой сети на основе WMS'},
+  {s:'retail', p:'core', l:5, t:'Прогнозирование спроса и автозаказ товара торговой сети на основе временных рядов'},
+  {s:'retail', p:'core', l:4, t:'Развитие аналитики продаж торговой компании по регионам, продуктам и каналам'},
   {s:'ecom', p:'core', l:5, t:'Прогнозирование спроса интернет-магазина по регионам доставки на основе градиентного бустинга'},
   {s:'ecom', p:'core', l:4, t:'Совершенствование ценообразования интернет-магазина на основе мониторинга прайс-агрегаторов'},
   {s:'ecom', p:'core', l:3, t:'Автоматизация распределённого фулфилмента интернет-магазина на основе OMS'},
@@ -900,6 +924,7 @@ function build(){
   } else {
     topic = `${verb} процесса ${P.name} ${S.org} на основе ${sol}`;
     alts = [
+      `${verb} процесса ${P.name} ${S.org}`,
       ...kpis.map(k=>`Повышение ${k.imp} процесса ${P.name} ${S.org} на основе ${sol}`),
       ...(kpis.length>1 ? [`Повышение ${kpis.map(k=>k.imp).join(', ')} процесса ${P.name} ${S.org}`] : []),
       ...methods.map(m=>`${verb} процесса ${P.name} ${S.org} на основе ${m.short}`),
@@ -911,7 +936,7 @@ function build(){
   if(state.tobe>=4 || methods.length) dir = 9;
   else if(state.ptype==='support' && P.id==='it') dir = 1;
   else if(state.deliv.includes('arch') && !state.deliv.includes('proto')) dir = 3;
-  else if(state.sector==='ecom' && ['market','ads','pricing'].includes(P.id)) dir = 7;
+  else if((state.sector==='ecom' && ['market','ads','pricing'].includes(P.id)) || (state.sector==='retail' && ['promo','sales'].includes(P.id))) dir = 7;
   else if(state.tobe-state.asis===1 && state.asis>=2) dir = 4;
   alts = [...new Set(alts)].filter(a=>a!==topic);
   const solAll = state.tobe>=5 && methods.length ? mAll : sol;
@@ -1072,7 +1097,7 @@ function render(){
   if(state.deliv.includes('bpmn')) tools.push('BPMN 2.0: Camunda Modeler, Bizagi');
   if(state.deliv.includes('er')) tools.push('Глоссарий и ER: draw.io, DBeaver, PostgreSQL');
   if(state.deliv.includes('arch')) tools.push('ArchiMate: Archi');
-  if(state.tobe>=3) tools.push({telecom:'BSS-стек: биллинг, CRM, каталог',gov:'BPM и СЭД: ELMA365, Directum',govmon:'аналитическая платформа ведомства, ГИС',logistics:'TMS/WMS: 1С:TMS, AXELOT',ecom:'OMS/PIM: 1С:УНФ, RetailCRM, Ensi',manuf:'MES/EAM: 1С:ERP, Галактика',health:'МИС: БАРС, 1С:Медицина',energy:'АСКУЭ, биллинг ЖКУ',edu:'LMS: Moodle, 1С:Университет',agro:'агро-ERP: 1С:АПК, ExactFarming',insurance:'страховой стек: Диасофт, Ортикон',bank:'BPM: Camunda, ELMA365'}[state.sector]);
+  if(state.tobe>=3) tools.push({telecom:'BSS-стек: биллинг, CRM, каталог',gov:'BPM и СЭД: ELMA365, Directum',govmon:'аналитическая платформа ведомства, ГИС',logistics:'TMS/WMS: 1С:TMS, AXELOT',ecom:'OMS/PIM: 1С:УНФ, RetailCRM, Ensi',retail:'учёт и склад: 1С:Управление торговлей, 1С:WMS, терминалы сбора данных',manuf:'MES/EAM: 1С:ERP, Галактика',health:'МИС: БАРС, 1С:Медицина',energy:'АСКУЭ, биллинг ЖКУ',edu:'LMS: Moodle, 1С:Университет',agro:'агро-ERP: 1С:АПК, ExactFarming',insurance:'страховой стек: Диасофт, Ортикон',bank:'BPM: Camunda, ELMA365'}[state.sector]);
   if(cid.includes('dwh')) tools.push('DWH: PostgreSQL, ClickHouse, Airflow');
   if(cid.includes('bi') || b.research) tools.push('BI: Yandex DataLens, Superset');
   if(cid.includes('dss')) tools.push('DSS: сценарные модели, OR-Tools');
