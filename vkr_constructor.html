@@ -123,6 +123,12 @@ fieldset[hidden]{display:none}
 .logic h2{margin-bottom:8px}
 .logic ul,.logic ol{margin:0;padding-left:20px;font-size:14px;display:flex;flex-direction:column;gap:5px}
 .logic p{font-size:14px;color:var(--muted);margin:0 0 8px}
+.ref{margin-top:30px;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:10px}
+.ref>p{font-size:14px;color:var(--muted);margin:0;max-width:84ch}
+.ref details p{font-size:13.5px;color:var(--muted);margin:8px 0}
+.ref ol{margin:8px 0 0;padding-left:20px;font-size:14px;display:flex;flex-direction:column;gap:5px}
+.ref table{margin-top:8px}
+.ref tr.on td{background:var(--surface-2);font-weight:600}
 .sources{margin-top:30px;border-top:1px solid var(--line);padding-top:18px}
 .sources ul{margin:0;padding-left:20px;font-size:13.5px;display:flex;flex-direction:column;gap:4px}
 .sources a{color:var(--accent-ink)}
@@ -224,7 +230,7 @@ fieldset[hidden]{display:none}
   <legend>11. Управление проектом внедрения</legend>
   <p class="hint">Третья глава по программе ГИА описывает организацию проектных работ. Для исследовательской формы раздел не нужен.</p>
   <div class="opts row" id="g-pm">
-    <label class="opt"><input type="radio" name="pm" id="pm-pmbok" value="pmbok" checked><span class="box"></span><span><span class="t">PMBOK 7</span><span class="d">домены производительности, устав, WBS, риски</span></span></label>
+    <label class="opt"><input type="radio" name="pm" id="pm-pmbok" value="pmbok" checked><span class="box"></span><span><span class="t">PMBOK 8</span><span class="d">домены производительности, устав, WBS, риски</span></span></label>
     <label class="opt"><input type="radio" name="pm" id="pm-gost" value="gost"><span class="box"></span><span><span class="t">Каскад по ГОСТ 34</span><span class="d">стадии создания АС, ТЗ, приёмка</span></span></label>
     <label class="opt"><input type="radio" name="pm" id="pm-agile" value="agile"><span class="box"></span><span><span class="t">Agile</span><span class="d">Scrum, Kanban, инкременты</span></span></label>
     <label class="opt"><input type="radio" name="pm" id="pm-hybrid" value="hybrid"><span class="box"></span><span><span class="t">Гибрид</span><span class="d">каскад на верхнем уровне, спринты внутри</span></span></label>
@@ -304,6 +310,46 @@ fieldset[hidden]{display:none}
   </div>
 </section>
 
+<section class="ref">
+  <h2>Справочные материалы (по желанию)</h2>
+  <p>Для паспорта они не нужны. Открывайте, когда руководитель спросит «по какой методологии» или когда нужна отраслевая нормативка.</p>
+  <details>
+    <summary>Порядок действий: от заявления до защиты</summary>
+    <ol>
+      <li><b>До 30 ноября.</b> Собрать паспорт в конструкторе, обсудить с руководителем, подать заявление (тема не длиннее 11 слов, организация в отдельном поле).</li>
+      <li><b>До 15 декабря.</b> Задание и план глав: задачи из паспорта становятся параграфами.</li>
+      <li><b>Декабрь и январь.</b> Глава 1: обзор публикаций, сравнение подходов, таблица рынка ПО. Параллельно доступ к данным организации.</li>
+      <li><b>До 1 марта.</b> Сдать главу 1. Начать главу 2: описание организации, словарь и ER-модель, BPMN AS-IS, замер показателей.</li>
+      <li><b>До 30 марта.</b> Сдать главу 2: проблема по 5W1H, требования, варианты решения, выбор по критериям, TO-BE.</li>
+      <li><b>До 30 апреля.</b> Глава 3: прототип или проект, план внедрения, экономическая оценка. Полный текст, введение и заключение.</li>
+      <li><b>До 17 мая.</b> Предзащита с отчётом «Антиплагиат». Доклад строится по заключению.</li>
+      <li><b>До 29 мая.</b> Отзыв руководителя, справка о внедрении при пилоте, защита.</li>
+    </ol>
+  </details>
+  <details>
+    <summary>Методологии: какая для чего</summary>
+    <p>Одна общая линия для всех тем: проблема → анализ объекта → концепция → реализация → оценка эффекта. Так требует программа ГИА, так же устроен международный стандарт ИС-исследований Design Science Research. Остальное берётся по ситуации.</p>
+    <div class="tscroll"><table>
+      <thead><tr><th>Для чего</th><th>Что взять</th><th>Когда</th></tr></thead>
+      <tbody>
+        <tr><td>Каркас всей работы</td><td>Программа ГИА кафедры; Design Science Research (Peffers, 2007) для обоснования во введении</td><td>всегда</td></tr>
+        <tr><td>Анализ во второй главе</td><td>BABOK v3: выявление требований, стейкхолдеры, первопричины, оценка вариантов; SIPOC и 5W1H для проблемы</td><td>всегда</td></tr>
+        <tr><td>Модели</td><td>BPMN 2.0 для процесса, ER для данных, ArchiMate для архитектуры; gap-таблица AS-IS / TO-BE</td><td>по выбранным артефактам</td></tr>
+        <tr><td>Требования и испытания</td><td>ТЗ по ГОСТ 34.602-2020 или user stories; приёмочные испытания по критериям приёмки (ГОСТ 34.603)</td><td>практическая форма</td></tr>
+        <tr><td>Модели данных и прогнозы</td><td>CRISP-DM: данные → подготовка → модель → оценка → эксплуатация; сравнение с базовым подходом</td><td>методы из блока 10, исследовательская форма</td></tr>
+        <tr><td>Управление проектом</td><td>PMBOK 8 (устав, работы, график, риски); ГОСТ 34.601 (стадии); Scrum (бэклог, спринты); гибрид</td><td>раздел проекта в главе 3</td></tr>
+        <tr><td>Улучшение с пилотом</td><td>DMAIC: определить, измерить, проанализировать, улучшить, удержать; план контроля показателей после внедрения</td><td>только при пилоте в организации</td></tr>
+        <tr><td>Оценка эффекта</td><td>Четыре группы из программы ГИА: финансовые (NPV, IRR, DPP, PI, ROI), затратные (TCO), комплексные (BSC), социальная эффективность; сравнение «с проектом и без проекта»</td><td>глава 3; для госсектора бюджетная и социальная эффективность</td></tr>
+      </tbody>
+    </table></div>
+  </details>
+  <details>
+    <summary>Отраслевая база: модели, данные, показатели, регуляторика</summary>
+    <p>Отрасль не меняет порядок работы. Она даёт термины для словаря и ER-модели, эталон для сверки BPMN, определения показателей и законы, которые входят в требования главы 2. Ваша отрасль выделена.</p>
+    <div class="tscroll"><table id="indt"><thead><tr><th>Отрасль</th><th>Процессы</th><th>Данные</th><th>Показатели</th><th>Регуляторика</th></tr></thead><tbody></tbody></table></div>
+  </details>
+</section>
+
 <section class="sources">
   <h2>Использованные источники</h2>
   <p>Требования и примеры тем взяты из документов ниже. Актуальный перечень тем кафедра публикует ежегодно на странице «Учебная работа. Бакалавриат».</p>
@@ -315,7 +361,8 @@ fieldset[hidden]{display:none}
     <li><a href="https://scm.mit.edu/thesis-and-capstone-research-projects/">MIT Center for Transportation &amp; Logistics: Thesis and Capstone Projects</a>: разделение capstone (со спонсором) и thesis (концептуальная), практичность и релевантность для отрасли.</li>
     <li><a href="https://mitsloan.mit.edu/programs/master-business-analytics/mit-sloan-analytics-capstone">MIT Sloan Analytics Capstone</a>: предиктивная или предписывающая постановка, проблема прежде метода, отчёт и передача кода.</li>
     <li><a href="https://cisr.mit.edu/content/classic-topics-enterprise-architecture">MIT CISR: Enterprise Architecture</a>: операционная модель и стадии зрелости архитектуры.</li>
-    <li>Стандарты и системы показателей: PMBOK Guide 7th ed. (PMI); BABOK v3 (IIBA); TM Forum Application Framework (TAM); SCOR (ASCM); DORA metrics; Balanced Scorecard (Kaplan, Norton); ГОСТ 34.601, ГОСТ Р 54869.</li>
+    <li>Методологии (справка): Peffers K. et al. A Design Science Research Methodology for Information Systems Research (JMIS, 2007); CRISP-DM; DMAIC; BABOK v3 (IIBA); PMBOK Guide 8th ed. (PMI, 2025); ГОСТ 34.601, ГОСТ 34.602-2020, ГОСТ 34.603, ГОСТ Р 54869; DORA metrics; Balanced Scorecard (Kaplan, Norton).</li>
+    <li>Отраслевая база (справка): TM Forum eTOM, SID, TAM; SCOR DS (ASCM); BIAN; ISA-95, ISO 22400; ACORD; HL7 FHIR; IEC CIM 61968/61970; APQC PCF; отраслевые законы и ГИС из таблицы в справочных материалах.</li>
   </ul>
 </section>
 </div>
@@ -645,6 +692,23 @@ const DIRECTIONS = {
   8:'Повышение эффективности деятельности компаний за счёт внедрения ИТ-решений', 9:'Использование средств бизнес-аналитики для управления организацией'
 };
 
+// Отраслевая база для справочного раздела: референсная модель процессов, модель данных, стандарт показателей, регуляторика.
+// В паспорт не попадает; таблица внизу страницы подсвечивает выбранную отрасль.
+const INDUSTRY = {
+  ecom:      {proc:'APQC PCF (Retail), воронка AARRR', data:'GS1 (идентификация товаров), RFM-сегментация', kpi:'AARRR, ROMI, OTIF; отчёты Data Insight', reg:'152-ФЗ, 54-ФЗ (онлайн-кассы), правила маркетплейсов'},
+  telecom:   {proc:'TM Forum eTOM (процессы), TAM (системы)', data:'TM Forum SID', kpi:'TM Forum Business Metrics, ARPU, churn', reg:'126-ФЗ «О связи», требования Роскомнадзора'},
+  logistics: {proc:'SCOR DS (Plan, Order, Source, Transform, Fulfill, Return)', data:'GS1, ЭТрН (электронные перевозочные документы)', kpi:'SCOR DS: надёжность, скорость, гибкость, стоимость', reg:'Устав автомобильного транспорта, ГИС ЭПД, 152-ФЗ'},
+  gov:       {proc:'210-ФЗ, целевые модели госуслуг, стандарт клиентоцентричности', data:'СМЭВ, ЕСИА, ФРГУ', kpi:'методика Минцифры по цифровой зрелости, показатели «Госуслуг»', reg:'210-ФЗ, 59-ФЗ, 44-ФЗ, 149-ФЗ, ГОСТ Р 52294'},
+  govmon:    {proc:'риск-ориентированный подход 248-ФЗ, ISO 31000', data:'ведомственные ГИС, СМЭВ', kpi:'результативность проверок, доля выявленных нарушений', reg:'248-ФЗ, 115-ФЗ, НК РФ (налоговый мониторинг), ведомственные регламенты'},
+  bank:      {proc:'BIAN Service Landscape', data:'ISO 20022, ЕБС', kpi:'cost of risk, approval rate, NPS', reg:'115-ФЗ, положения Банка России 716-П и 683-П, 152-ФЗ'},
+  manuf:     {proc:'ISA-95 (уровни 0–4), Lean и TPM', data:'ISA-95 B2MML, PLM-модель изделия', kpi:'ISO 22400 (OEE и показатели MES), SPC по ГОСТ Р ИСО 7870', reg:'ISO 9001, ISO 55000 (ТОиР), ТР ТС'},
+  insurance: {proc:'ACORD Framework', data:'ACORD Data Model, АИС страхования (НСИС)', kpi:'loss ratio, комбинированный коэффициент, renewal', reg:'4015-1 «Об организации страхового дела», отчётность Банка России'},
+  health:    {proc:'клинические рекомендации и маршруты пациента', data:'HL7 FHIR, приказ 947н об электронной медкарте', kpi:'показатели ЕГИСЗ и ОМС, время ожидания, повторные госпитализации', reg:'323-ФЗ, ЕГИСЗ, МДЛП, 152-ФЗ'},
+  energy:    {proc:'ISO 50001, регламенты сетевых компаний', data:'IEC CIM (61968/61970), ГИС ЖКХ', kpi:'SAIDI и SAIFI (IEEE 1366), потери, собираемость', reg:'35-ФЗ, 522-ФЗ (интеллектуальный учёт), ЖК РФ, ГИС ЖКХ'},
+  edu:       {proc:'ФГОС, регламенты приёмной кампании', data:'xAPI и SCORM, ФИС ГИА и приёма', kpi:'learning analytics: завершение, успеваемость, трудоустройство', reg:'273-ФЗ, суперсервис «Поступление в вуз онлайн», 152-ФЗ'},
+  agro:      {proc:'точное земледелие, технологические карты', data:'ISOBUS (ISO 11783), NDVI', kpi:'урожайность, продуктивность стада, себестоимость единицы', reg:'ФГИС «Зерно», «Меркурий», «Сатурн», 264-ФЗ'}
+};
+
 const BANK = [
   {s:'ecom', p:'core', l:5, t:'Прогнозирование спроса интернет-магазина по регионам доставки на основе градиентного бустинга'},
   {s:'ecom', p:'core', l:4, t:'Совершенствование ценообразования интернет-магазина на основе мониторинга прайс-агрегаторов'},
@@ -766,7 +830,7 @@ function build(){
     alts = [
       ...kpis.map(k=>`Оценка влияния ${sol} на показатель «${k.t}» процесса ${P.name} ${S.org}`),
       ...methods.slice(1).map(m=>`Разработка модели ${m.aim} в процессе ${P.name} ${S.org} на основе ${m.short}`),
-      `Сравнительный анализ подходов к автоматизации процесса ${P.name} ${S.org}`,
+      `Сравнительный анализ подходов к автоматизации процесса ${P.name} ${S.org} (обзорная тема: согласовать с руководителем)`,
       `Модель зрелости процесса ${P.name} ${S.org}: от уровня ${state.asis} к уровню ${state.tobe}`
     ];
   } else {
@@ -866,7 +930,8 @@ function render(){
     ['Цель', goal],
     ['Зрелость', `${state.asis} «${LEVELS[state.asis].t}» → ${state.tobe} «${LEVELS[state.tobe].t}»`],
     ['Контуры', contours.length ? contours.map(c=>`${c.t.split(':')[0]} (${c.exists?'есть, развивается':'создаётся'})`).join(', ') : 'не выбраны'],
-    ['Направление', `${b.dir}. ${DIRECTIONS[b.dir]} (ориентир по приложению А программы ГИА)`]
+    ['Направление', `${b.dir}. ${DIRECTIONS[b.dir]} (ориентир по приложению А программы ГИА)`],
+    ['Методы', '<span id="methods-line"></span>']
   ];
   $('#kv').innerHTML = kv.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('');
 
@@ -887,24 +952,34 @@ function render(){
     tasks.push(b.hasSys ? `оценить текущую систему (${b.sysShort}) и обосновать выбор аналитических средств` : `сравнить классы ПО и обосновать выбор ${b.sysShort}`, `спроектировать процесс TO-BE${state.deliv.includes('arch')?' и архитектуру решения':''}, включая изменения модели предметной области`);
     if(state.deliv.includes('req')) tasks.push('разработать требования: техническое задание или user stories');
     if(state.deliv.includes('proto')) tasks.push(M?`реализовать прототип ${b.mAll} и оценить качество`:'реализовать прототип решения на данных организации');
-    if(state.pm!=='none') tasks.push(`спланировать проект внедрения (${{pmbok:'PMBOK 7',gost:'каскад по ГОСТ 34',agile:'Scrum или Kanban',hybrid:'гибридная модель'}[state.pm]})${state.evm?' с контролем по EVM':''}`);
+    if(state.pm!=='none') tasks.push(`спланировать проект внедрения (${{pmbok:'PMBOK 8',gost:'каскад по ГОСТ 34',agile:'Scrum или Kanban',hybrid:'гибридная модель'}[state.pm]})${state.evm?' с контролем по EVM':''}`);
     tasks.push('рассчитать экономический эффект: NPV, DPP, TCO, ROI');
     if(state.deliv.includes('pilot')) tasks.push('провести пилот, сравнить показатели до и после, получить справку о внедрении');
   }
   $('#tasks').innerHTML = tasks.map(t=>`<li>${t}</li>`).join('');
 
   const ch = [
-    ['Введение (до 4 страниц)', 'Актуальность; цель и задачи; объект и предмет; инструменты и методы; публикации и апробация.'],
-    ['Глава 1. Теоретические основы', `Обзор методов и инструментов по теме ${S.lit}; ${methods.length?'сравнение методов: '+methods.map(m=>m.t.toLowerCase()).join(', ')+'; ':''}анализ рынка ПО класса «${b.sysShort}» в табличной форме; выводы по главе.`],
+    ['Введение (до 4 страниц)', 'Актуальность; цель и задачи; объект и предмет; кому полезен результат; методы (строка «Методы» паспорта); апробация.'],
+    ['1. Теоретические основы', `Обзор публикаций по теме ${S.lit}; ${methods.length?'сравнение методов: '+methods.map(m=>m.t.toLowerCase()).join(', ')+'; ':''}анализ рынка ПО класса «${b.sysShort}» в таблице (окончательный выбор продукта в главе 2); выводы по главе.`],
     research
-      ? ['Глава 2. Типовой объект и постановка задачи', `1) типовой процесс ${P.name} ${S.org}: участники${people?' ('+people+')':''}, входы и выходы, ограничения. 2) Данные: ${state.base==='open'?'открытые или синтетические, их состав и объём':state.base==='seek'?'критерии подбора организации как источника':'данные '+S.ex+' для проверки метода'}. 3) ${domainText[0].toUpperCase()+domainText.slice(1)}. 4) Процесс AS-IS${state.deliv.includes('bpmn')?' в BPMN':''}. 5) Постановка задачи по 5W1H и базовый подход, с которым сравнивается метод${babok.length?' (техники: '+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}${contours.length?'. Контуры: '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`]
-      : ['Глава 2. Анализ объекта и концепция решения', `1) ${state.base==='seek'?'Критерии подбора организации и её описание':'Организация: деятельность, системы, движение информации'}; участники проекта${people?': '+people:' (блок 5)'}${state.babok.includes('stake')?'; анализ заинтересованных сторон':''}. 2) ${domainText[0].toUpperCase()+domainText.slice(1)}. 3) Процесс ${P.name} AS-IS${state.deliv.includes('bpmn')?' в BPMN':''} и замеры показателей. 4) Проблема по 5W1H и требования к решению${babokRest.length?' (техники: '+babokRest.map(x=>x.t.toLowerCase()).join(', ')+')':''}. 5) Варианты решения и выбор класса ПО по критериям. 6) ${state.deliv.includes('arch')?'Архитектура TO-BE в ArchiMate':'Концепция TO-BE'}${contours.length?', контуры: '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`],
-    ['Глава 3. Реализация и оценка', research
+      ? ['2. Типовой объект и постановка задачи', `1) типовой процесс ${P.name} ${S.org}: участники${people?' ('+people+')':''}, входы и выходы, ограничения. 2) Данные: ${state.base==='open'?'открытые или синтетические, их состав и объём':state.base==='seek'?'критерии подбора организации как источника':'данные '+S.ex+' для проверки метода'}. 3) ${domainText[0].toUpperCase()+domainText.slice(1)}. 4) Процесс AS-IS${state.deliv.includes('bpmn')?' в BPMN':''}. 5) Постановка задачи по 5W1H и базовый подход, с которым сравнивается метод${babok.length?' (техники: '+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}${contours.length?'. Контуры: '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`]
+      : ['2. Анализ объекта и концепция решения', `1) ${state.base==='seek'?'Критерии подбора организации и её описание':'Организация: деятельность, системы, движение информации'}; участники проекта${people?': '+people:' (блок 5)'}${state.babok.includes('stake')?'; анализ заинтересованных сторон':''}. 2) ${domainText[0].toUpperCase()+domainText.slice(1)}. 3) Процесс ${P.name} AS-IS${state.deliv.includes('bpmn')?' в BPMN':''} и замеры показателей. 4) Проблема по 5W1H и требования к решению${babokRest.length?' (техники: '+babokRest.map(x=>x.t.toLowerCase()).join(', ')+')':''}. 5) Варианты решения и выбор класса ПО по критериям. 6) ${state.deliv.includes('arch')?'Архитектура TO-BE в ArchiMate':'Концепция TO-BE'}${contours.length?', контуры: '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`],
+    ['3. Реализация и оценка', research
       ? `1) Данные и постановка эксперимента. 2) ${M?'Модель на основе '+b.mAll:'Метод'}. 3) Показатели эффекта: ${kpis.map(k=>k.t).join(', ')||'…'}; метрики качества модели по методу. 4) Сравнение с базовым подходом. 5) Ограничения и рекомендации.`
-      : `${state.deliv.includes('proto')?'1) Прототип и его проверка. ':''}${state.pm!=='none'?(state.deliv.includes('proto')?'2) ':'1) ')+'План внедрения по '+{pmbok:'PMBOK 7: устав, состав работ, график, риски',gost:'ГОСТ 34: стадии, ТЗ, приёмка',agile:'Agile: бэклог, спринты',hybrid:'гибридной модели: вехи и спринты'}[state.pm]+(state.evm?', контроль по EVM':'')+'. ':''}${(state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+1}) Экономическая оценка: NPV, DPP, TCO; изменение показателей ${kpis.map(k=>'«'+k.t+'»').join(', ')||'…'}. ${state.deliv.includes('pilot')?((state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+2)+') Результаты пилота и справка о внедрении.':''}`],
-    ['Заключение', 'Выводы по задачам, достигнутые значения показателей, направления развития.']
+      : `${state.deliv.includes('proto')?'1) Прототип и его проверка. ':''}${state.pm!=='none'?(state.deliv.includes('proto')?'2) ':'1) ')+'План внедрения по '+{pmbok:'PMBOK 8: устав, состав работ, график, риски',gost:'ГОСТ 34: стадии, ТЗ, приёмка',agile:'Agile: бэклог, спринты',hybrid:'гибридной модели: вехи и спринты'}[state.pm]+(state.evm?', контроль по EVM':'')+'. ':''}${(state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+1}) Экономическая оценка: NPV, DPP, TCO; изменение показателей ${kpis.map(k=>'«'+k.t+'»').join(', ')||'…'}. ${state.deliv.includes('pilot')?((state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+2)+') Результаты пилота и справка о внедрении.':''}`],
+    ['Заключение', `Выводы по задачам из введения; ${state.deliv.includes('pilot')?'значения показателей после пилота':'ожидаемые значения показателей'}; направления развития. Приложения: диаграммы, ТЗ, код, данные${state.deliv.includes('pilot')?', справка о внедрении':''}.`]
   ];
   $('#chap').innerHTML = ch.map(([h,t])=>`<div><b>${h}</b><span>${t}</span></div>`).join('');
+
+  const methodsLine = [
+    'анализ литературы и рынка ПО',
+    `бизнес-анализ${babok.length?' ('+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}`,
+    `моделирование${state.deliv.includes('bpmn')?' BPMN':''}, ER${state.deliv.includes('arch')?', ArchiMate':''}`,
+    ...(methods.length?[methods.map(m=>m.t.toLowerCase()).join(', ')]:[]),
+    research ? 'сравнение с базовым подходом' : (GOV.has(state.sector)?'оценка бюджетной и социальной эффективности, TCO':'оценка эффективности: NPV, DPP, TCO')
+  ].join('; ') + '. Подробнее: справочные материалы конструктора (по желанию).';
+  $('#methods-line').textContent = methodsLine;
+  $('#indt tbody').innerHTML = SECTOR_ORDER.map(k=>{const I=INDUSTRY[k];return `<tr${k===state.sector?' class="on"':''}><td>${SECTORS[k].label}</td><td>${I.proc}</td><td>${I.data}</td><td>${I.kpi}</td><td>${I.reg}</td></tr>`;}).join('');
 
   const domRows = [
     ['Предмет процесса: заказ, заявка, обращение, тариф, объект контроля', 'идентификатор, статус, даты, суммы, количество', 'клиент или гражданин → подаёт; исполнитель → обрабатывает; система → фиксирует', kpis.length?kpis.map(k=>k.rec).join('; '):'по выбранным показателям'],
@@ -946,22 +1021,23 @@ function render(){
     'Диаграммы в стандартных нотациях (BPMN, ArchiMate, ER) с текстовым описанием каждой',
     b.research ? 'Исследовательская форма: акцент на методе, объект типовой, сравнение с базовым подходом, код и данные прилагаются' : 'Практическая форма: проектные решения для конкретного предприятия типовыми средствами; справка о внедрении усиливает оценку',
     'Постановка начинается с проблемы организации, а не с метода или продукта',
-    'Литература: не менее 15 источников, половина из академических журналов (ориентир ВШЭ)',
+    'Список источников: не менее 60, из них не меньше половины научные статьи',
+    'Заголовки глав без слова «глава»; выводы по главе начинаются с глагола; заимствования не более 15%',
     'Календарь: заявление до 30 ноября; задание и план до 15 декабря; глава 1 до 1 марта; глава 2 до 30 марта; полный текст до 30 апреля; предзащита с отчётом «Антиплагиат» до 17 мая; отзыв и справка о внедрении до 29 мая'
   ];
   $('#check').innerHTML = checks.map(t=>`<div><span class="m">[ ]</span><span>${t}</span></div>`).join('');
 
-  $('#md').value = markdown(b, kv, tasks, ch, tools, checks, al, domRows);
+  $('#md').value = markdown(b, kv, tasks, ch, tools, checks, al, domRows, methodsLine);
   try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){}
 }
 
-function markdown(b, kv, tasks, ch, tools, checks, al, domRows){
+function markdown(b, kv, tasks, ch, tools, checks, al, domRows, methodsLine){
   const S=b.S, P=b.P;
   const mark = (on)=> on?'[x]':'[ ]';
   const L = [];
   L.push(`# Паспорт темы ВКР`, '', `**Тема:** ${b.topic}  `, `Слов в названии: ${words(b.topic)} из 11`, '');
   if(al.some(a=>a[0]!=='ok')){ L.push('## Предупреждения и подсказки', ''); al.filter(a=>a[0]!=='ok').forEach(a=>L.push(`- ${a[0]==='warn'?'⚠':'ℹ'} ${a[1]}`)); L.push(''); }
-  L.push('## Паспорт', ''); kv.forEach(([k,v])=>L.push(`- **${k}:** ${v}`)); L.push('');
+  L.push('## Паспорт', ''); kv.forEach(([k,v])=>L.push(`- **${k}:** ${k==='Методы'?methodsLine:v}`)); L.push('');
   L.push('**Варианты формулировки**', ''); b.alts.forEach((a,i)=>L.push(`${i+1}. ${a} (${words(a)} сл.)`)); L.push('');
   L.push('## Задачи работы', ''); tasks.forEach((t,i)=>L.push(`${i+1}. ${t}`)); L.push('');
   L.push('## Структура работы', ''); ch.forEach(([h,t])=>L.push(`### ${h}`, '', t, ''));
@@ -978,7 +1054,8 @@ function markdown(b, kv, tasks, ch, tools, checks, al, domRows){
     '- MIT CTL Thesis and Capstone: https://scm.mit.edu/thesis-and-capstone-research-projects/',
     '- MIT Sloan Analytics Capstone: https://mitsloan.mit.edu/programs/master-business-analytics/mit-sloan-analytics-capstone',
     '- MIT CISR Enterprise Architecture: https://cisr.mit.edu/content/classic-topics-enterprise-architecture',
-    '- PMBOK 7, BABOK v3, TM Forum TAM, SCOR, DORA, Balanced Scorecard, ГОСТ 34.601', '',
+    '- Методологии (справка): Design Science Research (Peffers, 2007); CRISP-DM; DMAIC; BABOK v3; PMBOK 8; ГОСТ 34.601, 34.602-2020, 34.603',
+    '- Отраслевая база (справка): eTOM и SID, SCOR DS, BIAN, ISA-95 и ISO 22400, ACORD, HL7 FHIR, IEC CIM, APQC PCF', '',
     `_Сформировано конструктором тем ВКР, ${new Date().toLocaleDateString('ru-RU')}_`);
   L.push('', '## Выбранные опции (для справки)', '');
   L.push('**1. Форма работы**');
@@ -998,7 +1075,7 @@ function markdown(b, kv, tasks, ch, tools, checks, al, domRows){
       L.push(`- ${title}`); general.filter(k=>k.layer===layer).forEach(k=>L.push(`  - ${mark(state.kpi.includes(k.id))} ${k.t} (${k.unit}, ${k.dir})`)); } }
   L.push('');
   L.push(`**10. Методы анализа и прогнозирования**${$('#fs-method').hidden?' (блок скрыт: нет контура BI, DSS или ML/AI)':''}`); METHODS.forEach(m=>L.push(`- ${mark(state.method.includes(m.id))} ${m.t}`)); L.push('');
-  L.push('**11. Управление проектом**'); [['pmbok','PMBOK 7'],['gost','Каскад по ГОСТ 34'],['agile','Agile'],['hybrid','Гибрид'],['none','Без раздела']].forEach(([v,t])=>L.push(`- ${mark(state.pm===v)} ${t}`)); L.push(`- ${mark(state.evm)} Контроль по методу освоенного объёма (EVM)`, '');
+  L.push('**11. Управление проектом**'); [['pmbok','PMBOK 8'],['gost','Каскад по ГОСТ 34'],['agile','Agile'],['hybrid','Гибрид'],['none','Без раздела']].forEach(([v,t])=>L.push(`- ${mark(state.pm===v)} ${t}`)); L.push(`- ${mark(state.evm)} Контроль по методу освоенного объёма (EVM)`, '');
   L.push('**12. Артефакты**'); [['bpmn','BPMN AS-IS и TO-BE'],['er','ER-модель предметной области (обязательно)'],['arch','Архитектура TO-BE (ArchiMate)'],['req','Требования: ТЗ или user stories'],['proto','Прототип'],['pilot','Пилот и справка о внедрении']].forEach(([v,t])=>L.push(`- ${mark(state.deliv.includes(v))} ${t}`)); L.push('');
   return L.join('\n');
 }
