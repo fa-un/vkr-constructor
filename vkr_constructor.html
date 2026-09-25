@@ -924,11 +924,12 @@ function build(){
   const verb = state.asis<=1 ? 'Автоматизация' : state.asis<=3 ? 'Совершенствование' : 'Развитие аналитического обеспечения';
   let topic, alts;
   if(research){
-    topic = M ? `Разработка модели ${M.aim} в процессе ${P.name} ${S.org} на основе ${M.short}`
+    const rtopic = m => m.id==='opt' ? `Разработка оптимизационной модели процесса ${P.name} ${S.org}` : `Разработка модели ${m.aim} в процессе ${P.name} ${S.org} на основе ${m.short}`;
+    topic = M ? rtopic(M)
               : `Метод повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса ${P.name} ${S.org}`;
     alts = [
       ...kpis.map(k=>`Оценка влияния ${sol} на показатель «${k.t}» процесса ${P.name} ${S.org}`),
-      ...methods.slice(1).map(m=>`Разработка модели ${m.aim} в процессе ${P.name} ${S.org} на основе ${m.short}`),
+      ...methods.slice(1).map(rtopic),
       `Сравнительный анализ подходов к автоматизации процесса ${P.name} ${S.org} (обзорная тема: согласовать с руководителем)`,
       `Модель зрелости процесса ${P.name} ${S.org}: от уровня ${state.asis} к уровню ${state.tobe}`
     ];
@@ -1013,7 +1014,7 @@ function render(){
   if(!research && GOV.has(state.sector) && state.pm==='agile') al.push(['info','В государственной организации внедрение идёт по контракту с ТЗ и приёмкой: обычно это ГОСТ 34 или гибрид. Agile оставьте, если команда разрабатывает своими силами.']);
   if(!research && state.evm && state.pm==='agile') al.push(['info','EVM при Agile считается по спринтам: бюджет спринта как PV, принятые задачи как EV. Проще выбрать гибрид или PMBOK.']);
   if(state.tobe<4 && methods.length) al.push(['info','Методы выбраны при целевом уровне ниже 4. Либо поднимите TO-BE, либо используйте метод только в аналитической главе.']);
-  if(state.method.includes('opt') && !(state.sector==='logistics' || ['fulfil','delivery','route','schedule','fieldplan','beds'].includes(P.id))) al.push(['info','Оптимизационные модели лучше ложатся на распределение ресурсов: маршруты, склады, расписания, коечный фонд.']);
+  if(state.method.includes('opt') && !(state.sector==='logistics' || OPT_PROCS.includes(P.id) || P.id==='delivery')) al.push(['info','Оптимизационные модели лучше ложатся на распределение ресурсов: маршруты, склады, расписания, коечный фонд.']);
   if(state.method.includes('geo') && !['crime','traffic','forest','water','fish','delivery','route','crops','city'].includes(P.id)) al.push(['info','Геоаналитика уместна там, где есть координаты: происшествия, дороги, лес, вода, доставка, поля.']);
   const cid = contours.map(c=>c.id);
   if(!cid.length) al.push(['warn','Не выбран ни один контур систем: укажите, какие классы систем затрагивает решение.']);
