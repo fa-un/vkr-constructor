@@ -479,7 +479,9 @@ const KPIS = KPI_CATALOG;
 
 // Методы: c контур, why для чего, d примеры, base базовый подход для сравнения, q метрики качества.
 const METHODS = [
-  {id:'pm', c:'bi', t:'Process Mining', why:'восстановить реальный ход процесса по логам и найти узкие места', d:'PM4Py, журналы событий систем', base:'регламент процесса как он задуман', q:'соответствие регламенту (conformance), время на шагах', short:'process mining', aim:'анализа'},
+  {id:'olap', c:'bi', t:'Многомерный анализ и дашборды', why:'разложить показатель по срезам: регионы, продукты, каналы продаж и продвижения, периоды; увидеть, где теряется результат', d:'витрины и OLAP, план-факт, ABC/XYZ, RFM, воронка по каналам', base:'сводные таблицы в Excel, собираемые вручную', q:'доля показателей, считаемых автоматически; время подготовки отчёта; глубина срезов', short:'многомерного анализа', aim:'анализа'},
+  {id:'pm', c:'bi', t:'Process Mining', why:'восстановить реальный ход процесса по логам систем и найти узкие места', d:'PM4Py, журналы событий систем', base:'регламент процесса как он задуман', q:'соответствие регламенту (conformance), время на шагах', short:'process mining', aim:'анализа'},
+  {id:'tm', c:'bi', t:'Task Mining', why:'зафиксировать, как сотрудники реально выполняют операции на рабочих местах, и найти ручные шаги для автоматизации', d:'запись действий пользователя, карта ручных операций, кандидаты для RPA', base:'хронометраж и интервью', q:'доля времени на ручные операции; число выявленных кандидатов на автоматизацию', short:'task mining', aim:'анализа'},
   {id:'geo', c:'bi', t:'Геоаналитика', why:'увидеть закономерности на карте: где концентрируются события и спрос', d:'кластеризация точек, тепловые карты, пространственные индексы', base:'таблица по районам без карты', q:'точность прогноза по зонам, полнота покрытия', short:'геоаналитической модели', aim:'пространственного анализа'},
   {id:'ts', c:'ml', t:'Временные ряды', why:'прогноз показателя по его истории с учётом сезонности', d:'ARIMA, экспоненциальное сглаживание, Prophet', base:'наивный прогноз (последнее значение) и скользящее среднее', q:'MAPE и MAE на отложенном периоде', short:'моделей временных рядов', aim:'прогнозирования'},
   {id:'gd', c:'ml', t:'Регрессия с градиентным спуском', why:'оценить, как факторы влияют на показатель, и получить базовый прогноз', d:'линейная и логистическая регрессия, SGD', base:'среднее по истории или текущее правило организации', q:'MAE и R²; для классификации precision и recall', short:'регрессионной модели', aim:'прогнозирования'},
@@ -509,6 +511,8 @@ function suggestMethods(P, asis){
   if(/обращен|претенз|документ|отзыв|жалоб/.test(P.name)) s.add('llm');
   if(/NDVI|спутник/.test(P.tag+' '+P.sys)) s.add('nn');
   if(asis>=3 && has(['t2d','sla','react'])) s.add('pm');
+  if(asis>=2 && has(['revenue','margin','conversion','romi','aov','arpu','volume'])) s.add('olap');
+  if(asis>=1 && asis<=3 && has(['cost','auto','quality'])) s.add('tm');
   return s;
 }
 
@@ -1058,7 +1062,7 @@ function render(){
   if(cid.includes('bi') || b.research) tools.push('BI: Yandex DataLens, Superset');
   if(cid.includes('dss')) tools.push('DSS: сценарные модели, OR-Tools');
   if(cid.includes('ml') || b.research) tools.push('Python: pandas, scikit-learn');
-  methods.forEach(m=>tools.push({gd:'scikit-learn: SGDRegressor',boost:'CatBoost, LightGBM',ts:'statsmodels, Prophet',nn:'PyTorch, Keras',anomaly:'scikit-learn: IsolationForest',opt:'OR-Tools, PuLP',geo:'GeoPandas, H3, QGIS',llm:'YandexGPT API, GigaChat, sentence-transformers',pm:'PM4Py'}[m.id]));
+  methods.forEach(m=>tools.push({olap:'витрины и дашборды: DataLens, Superset',tm:'Task mining: PIX, Kryon',gd:'scikit-learn: SGDRegressor',boost:'CatBoost, LightGBM',ts:'statsmodels, Prophet',nn:'PyTorch, Keras',anomaly:'scikit-learn: IsolationForest',opt:'OR-Tools, PuLP',geo:'GeoPandas, H3, QGIS',llm:'YandexGPT API, GigaChat, sentence-transformers',pm:'PM4Py'}[m.id]));
   if(state.pm!=='none') tools.push(PM[state.pm].tools);
   if(state.evm) tools.push('EVM: PV, EV, AC, CPI, SPI');
   if(!b.research) tools.push('Финмодель: NPV, DPP, TCO в Excel');
