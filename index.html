@@ -191,12 +191,13 @@ fieldset[hidden]{display:none}
 </fieldset>
 
 <fieldset>
-  <legend>5. Участники проекта</legend>
-  <p class="hint">Кто отвечает за результат, кто делает работу и кого она затрагивает. Указывайте роли и подразделения, а не фамилии: они попадают в паспорт, в анализ заинтересованных сторон и в главу 2.</p>
+  <legend>5. Участники проекта и проблема</legend>
+  <p class="hint">Кто отвечает за результат, кто делает работу и кого она затрагивает. Указывайте роли и подразделения, а не фамилии: они попадают в паспорт, в анализ заинтересованных сторон и в главу 2. Ниже одной-двумя фразами проблема: что наблюдается и против какого критерия (показатель хуже норматива, плана или конкурентов) и чем это плохо для организации. Предполагаемую причину можно добавить с пометкой «предположительно»: она проверяется анализом первопричин в главе 2, а не фиксируется в заявлении.</p>
   <div class="fields">
     <div class="field"><label for="p-owner">Владелец проекта</label><input type="text" id="p-owner" name="owner" autocomplete="off" placeholder="например: директор по логистике, начальник отдела продуктов"><small>Заказчик со стороны организации: принимает решение и отвечает за эффект по KPI</small></div>
     <div class="field"><label for="p-exec">Исполнитель</label><input type="text" id="p-exec" name="exec" autocomplete="off" placeholder="например: ИТ-отдел организации, подрядчик-интегратор, рабочая группа отдела"><small>Кто выполняет работы проекта внедрения. Студент в работе выступает аналитиком и проектировщиком; если он же настраивает систему, укажите это здесь</small></div>
     <div class="field"><label for="p-stake">Заинтересованные стороны</label><textarea class="f" id="p-stake" name="stake" rows="2" placeholder="например: операторы склада, курьеры, клиенты, бухгалтерия, ИТ-служба, регулятор"></textarea><small>Помимо владельца и исполнителя, через запятую: чьи интересы и ограничения учитываются в требованиях</small></div>
+    <div class="field"><label for="p-problem">Проблема</label><textarea class="f" id="p-problem" name="problem" rows="3" placeholder="например: сборка заказа занимает дольше норматива, а часть заказов уходит с ошибками; растут штрафы и переделки. Предположительно товар размещается по свободным ячейкам без учёта частоты отбора"></textarea><small>Что наблюдается, против какого критерия и чем плохо; причина отдельно и как предположение. Не «нет системы» и не «нужно сократить»: это решение и цель, а не проблема. Текст попадает в паспорт, во введение и в задачу о проблеме; в исследовательской форме это нерешённый вопрос: чего не дают существующие подходы</small></div>
   </div>
 </fieldset>
 
@@ -267,7 +268,7 @@ fieldset[hidden]{display:none}
   <div class="panel-head"><h2>Паспорт темы</h2><div><button type="button" id="copy">Скопировать Markdown</button> <button type="button" class="ghost" id="reset">Сбросить</button></div></div>
   <div id="alerts" style="display:flex;flex-direction:column;gap:8px"></div>
   <div><div class="topic" id="topic"></div><div class="meta" id="meta"></div><div class="field" style="margin-top:8px"><label for="p-topic">Своя формулировка темы (необязательно)</label><input type="text" id="p-topic" name="topic" autocomplete="off" placeholder="впишите, если хотите свою формулировку: паспорт возьмёт её, а сгенерированная станет первым вариантом"><small>Счётчик слов и правило «не более 11 слов» действуют и для своей формулировки.</small></div></div>
-  <div><h3>Варианты формулировки: по одному на каждый выбранный показатель и метод</h3><ul class="alts" id="alts"></ul></div>
+  <div><h3>Варианты формулировки: по одному на показатель и метод, не длиннее 11 слов</h3><ul class="alts" id="alts"></ul></div>
   <dl class="kv" id="kv"></dl>
   <div><h3>Задачи работы</h3><ol class="tasks" id="tasks"></ol></div>
   <div><h3>Структура по требованиям кафедры</h3><div class="chap" id="chap"></div></div>
@@ -867,7 +868,7 @@ const BANK = [
 
 const $ = s => document.querySelector(s);
 const STORE = 'vkr-state-v6';
-const DEFAULT = {form:'practical', base:'real', sector:'ecom', ptype:'core', process:null, owner:'', exec:'', stake:'', topic:'', asis:1, tobe:3, contour:['oltp'], kpi:['t2d'], method:[], babok:['stake','elicit','reqtypes','options'], pm:'pmbok', evm:false, deliv:['bpmn','er','req']};
+const DEFAULT = {form:'practical', base:'real', sector:'ecom', ptype:'core', process:null, owner:'', exec:'', stake:'', topic:'', problem:'', asis:1, tobe:3, contour:['oltp'], kpi:['t2d'], method:[], babok:['stake','elicit','reqtypes','options'], pm:'pmbok', evm:false, deliv:['bpmn','er','req']};
 const state = JSON.parse(JSON.stringify(DEFAULT));
 
 function opt(name, id, value, title, desc, checked, radio=true, prefix='', tag=''){
@@ -908,7 +909,7 @@ function read(){
   const v = n => document.querySelector(`input[name="${n}"]:checked`)?.value;
   const all = n => [...document.querySelectorAll(`input[name="${n}"]:checked`)].map(i=>i.value);
   state.form=v('form'); state.base=v('base'); state.sector=v('sector'); state.ptype=v('ptype'); state.process=v('process');
-  state.owner=$('#p-owner').value.trim(); state.exec=$('#p-exec').value.trim(); state.stake=$('#p-stake').value.trim(); state.topic=($('#p-topic').value||'').trim();
+  state.owner=$('#p-owner').value.trim(); state.exec=$('#p-exec').value.trim(); state.stake=$('#p-stake').value.trim(); state.topic=($('#p-topic').value||'').trim(); state.problem=($('#p-problem').value||'').trim();
   state.asis=+v('asis'); state.tobe=+v('tobe'); state.pm=v('pm'); state.evm=!!v('evm');
   state.kpi=all('kpi'); state.contour=all('contour'); state.method=all('method'); state.babok=all('babok'); state.deliv=all('deliv');
 }
@@ -965,10 +966,11 @@ function build(){
   else if(state.deliv.includes('arch') && !state.deliv.includes('proto')) dir = 3;
   else if((state.sector==='ecom' && ['market','ads','pricing'].includes(P.id)) || (state.sector==='retail' && ['promo','sales'].includes(P.id))) dir = 7;
   else if(state.tobe-state.asis===1 && state.asis>=2) dir = 4;
+  const fullTopic = topic;
   if(!research && words(topic)>11){ const short = `${verb} процесса ${P.name} ${S.org}`; alts = [topic, ...alts.filter(a=>a!==short)]; topic = short; }
   if(research && words(topic)>11){ let short = M ? `Модель ${M.aim} для процесса ${P.name} ${S.org}` : `Метод повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса ${P.name}`; if(words(short)>11) short = `Метод повышения эффективности процесса ${P.name}`; alts = [topic, ...alts.filter(a=>a!==short)]; topic = short; }
   if(state.topic){ alts = [topic, ...alts]; topic = state.topic; }
-  alts = [...new Set(alts)].filter(a=>a!==topic);
+  alts = [...new Set(alts)].filter(a=>a!==topic && (words(a)<=11 || a===fullTopic));
   const solAll = state.tobe>=5 && methods.length ? mAll : sol;
   return {S,P,kpis,methods,babok,contours,M,mAll,solAll,research,sol,verb,topic,alts,dir,sysShort,hasSys};
 }
@@ -1023,6 +1025,10 @@ function render(){
   if(state.kpi.length===0) al.push(['warn','Не выбран показатель: без количественной метрики нельзя обосновать эффект в третьей главе.']);
   if(kpis.length && !kpis.some(isOutcome)) al.push(['warn',`Нет результатного показателя (финансы, ${clientWord} или результат миссии отрасли). Показатели процесса и качества системы объясняют механизм, но эффект для организации доказывается результатом: ${gov?'экономией бюджета, стоимостью услуги, удовлетворённостью граждан':'выручкой, стоимостью операции, удержанием, удовлетворённостью'}.`]);
   if(kpis.length && kpis.every(k=>k.proxy)) al.push(['warn','Выбраны только показатели качества системы: они измеряют артефакт (модель, данные, автоматизацию), а не процесс и не результат.']);
+  if(!state.problem) al.push(['info', research ? 'Не сформулирована проблема (блок 5): какой вопрос не решён и чего не дают существующие подходы. Без этого метод выбран раньше задачи.' : 'Не сформулирована проблема (блок 5): что наблюдается, против какого критерия и чем это плохо. Программа ГИА требует начинать постановку с проблемы организации; без неё цель читается как внедрение ради внедрения.']);
+  if(state.problem && /^(нет|отсутств[а-яё]*|не хватает|не внедрен[а-яё]*|внедр[а-яё]*|автоматиз[а-яё]*|разработ[а-яё]*|создан[а-яё]*)(?=[\s,:.]|$)/i.test(state.problem)) al.push(['info','Проблема сформулирована через решение или его отсутствие. Назовите, что наблюдается и против какого критерия: «сборка заказа дольше норматива, часть заказов с ошибками, растут штрафы».']);
+  if(state.problem && /^(необходим[а-яё]*|нужн[а-яё]*|надо|следует|требуется|повысить|снизить|сократить|увеличить|улучшить)(?=[\s,:.]|$)/i.test(state.problem)) al.push(['info','Проблема сформулирована как цель («нужно сократить…»). Цель уже есть в паспорте; здесь опишите текущее состояние: сколько сейчас, какой критерий, чем плохо.']);
+  if(state.problem && /потому что|из-за|по причине|так как/i.test(state.problem) && !/предположительн|гипотез|вероятн|возможно/i.test(state.problem)) al.push(['info','В проблеме названа причина как факт. Причина проверяется анализом первопричин в главе 2: добавьте «предположительно» или вынесите её из формулировки.']);
   if(!state.owner && !research) al.push(['info','Не указан владелец проекта (блок 5): без заказчика со стороны организации некому принять результат и подтвердить эффект по KPI.']);
   if(state.babok.includes('stake') && !state.stake) al.push(['info','Выбран анализ заинтересованных сторон, а стороны не перечислены: впишите роли в блоке 5, они попадут в главу 2.']);
   if(state.tobe===5 && !methods.length) al.push(['warn',`Уровень 5 предполагает конкретный метод прогнозирования, оптимизации или поиска аномалий. ${showMethods?'Отметьте метод в блоке 10.':'Добавьте контур DSS или ML/AI в блоке 8: откроется блок методов.'}`]);
@@ -1053,8 +1059,9 @@ function render(){
     ['Владелец проекта', state.owner || (research ? 'в исследовательской форме не обязателен; при наличии организации — заказчик данных' : 'не указан: впишите роль в блоке 5')],
     ['Исполнитель', state.exec || 'не указан: впишите в блоке 5'],
     ['Стороны', state.stake || 'не указаны: впишите роли в блоке 5'],
+    ['Проблема', state.problem || (research ? 'не сформулирована: впишите в блоке 5, какой вопрос не решён и чего не дают существующие подходы' : 'не сформулирована: впишите в блоке 5, что наблюдается, против какого критерия и чем это плохо')],
     ['Объект', `${state.ptype==='core'?'основной':'поддерживающий'} процесс ${P.name} ${research?(/(компании|организации)$/.test(S.org)?'типовой ':'типового ')+S.org:S.org}`],
-    ['Предмет', research?`методы и модели повышения ${kpis[0]?kpis[0].imp:'эффективности'} процесса`:`методы и средства ${b.solAll} в процессе ${P.name}`],
+    ['Предмет', research?`методы и модели повышения ${kpis[0]?kpis[0].imp:'эффективности'} в процессе ${P.name}`:`методы и средства ${b.solAll} в процессе ${P.name}`],
     ['Цель', goal],
     ['Зрелость', `${state.asis} «${LEVELS[state.asis].t}» → ${state.tobe} «${LEVELS[state.tobe].t}»`],
     ['Контуры', contours.length ? contours.map(c=>`${c.t.split(':')[0]} (${c.exists?'есть, развивается':'создаётся'})`).join(', ') : 'не выбраны'],
@@ -1071,8 +1078,8 @@ function render(){
     ...(state.babok.includes('stake') ? [`провести анализ заинтересованных сторон${state.stake?' ('+state.stake+')':''}: роли, влияние и интерес, ожидания от результата${state.owner?'; владелец проекта: '+state.owner:''}`] : []),
     `составить ${domainText}. Цель: один словарь у всех, кто участвует в анализе`,
     `построить модель процесса ${P.name} AS-IS${state.deliv.includes('bpmn')?' в нотации BPMN':''} и измерить базовые значения показателей ${kpis.map(k=>'«'+k.t+'»').join(', ')||'(выбрать показатели)'}`,
-    research ? `поставить задачу по схеме 5W1H: входы и выходы процесса, ограничения, базовый подход для сравнения${babokRest.length?' ('+babokRest.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
-             : `сформулировать проблему по схеме 5W1H (кто, что, где, когда, почему, как) и требования к решению${babokRest.length?' ('+babokRest.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
+    research ? `поставить задачу${state.problem?' исходя из проблемы «'+state.problem+'»':''} по схеме 5W1H: входы и выходы процесса, ограничения, базовый подход для сравнения${babokRest.length?' ('+babokRest.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
+             : `${state.problem?'уточнить проблему «'+state.problem+'»':'сформулировать проблему'} по схеме 5W1H (кто, что, где, когда, почему, как) и требования к решению${babokRest.length?' ('+babokRest.map(x=>x.t.toLowerCase()).join(', ')+')':''}`
   ];
   if(research){
     tasks.push(`обосновать ${M?'метод на основе '+b.mAll:'метод решения'} и подготовить данные`, `построить и проверить модель, сравнить с базовым подходом${methods.length?' ('+methods.map(m=>m.base).join('; ')+')':''}`, 'оценить применимость метода на типовом объекте и сформулировать рекомендации');
@@ -1082,19 +1089,19 @@ function render(){
     if(state.deliv.includes('proto')) tasks.push(M?`реализовать прототип ${b.mAll}, сравнить с базовым подходом (${methods.map(m=>m.base).join('; ')}) и оценить качество`:'реализовать прототип решения на данных организации');
     if(state.pm!=='none') tasks.push(`составить план внедрения по ${PM[state.pm].short}: ${PM[state.pm].plan}${state.evm?'; контроль хода по EVM':''}`);
     tasks.push('рассчитать экономический эффект: NPV, DPP, TCO, ROI');
-    if(state.deliv.includes('pilot')) tasks.push('провести пилот, сравнить показатели до и после, получить справку о внедрении');
+    if(state.deliv.includes('pilot')) tasks.push('провести пилот, сравнить показатели до и после и с периодом без проекта (сезонность, изменение потока), получить справку о внедрении');
   }
   $('#tasks').innerHTML = tasks.map(t=>`<li>${t}</li>`).join('');
 
   const ch = [
-    ['Введение (до 4 страниц)', 'Актуальность; цель и задачи; объект и предмет; новизна и практическая значимость (кому полезен результат и где применим); инструменты и методы (строка «Методы» паспорта); публикации и апробация.'],
+    ['Введение (до 4 страниц)', `Актуальность и проблема${state.problem?' («'+state.problem+'»)':''}; цель и задачи; объект и предмет; новизна и практическая значимость (кому полезен результат и где применим); инструменты и методы (строка «Методы» паспорта); публикации и апробация.`],
     ['1. Теоретические основы', `Обзор публикаций по теме ${S.lit}; ${methods.length?'сравнение методов: '+methods.map(m=>m.t.toLowerCase()).join(', ')+'; ':''}анализ рынка ПО класса «${b.sysShort}» в таблице (окончательный выбор продукта в главе 2); выводы по главе.`],
     research
-      ? ['2. Типовой объект и постановка задачи', `1) типовой процесс ${P.name} ${S.org}: участники${people?' ('+people+')':''}, входы и выходы, ограничения. 2) Данные: ${state.base==='open'?'открытые или синтетические, их состав и объём':state.base==='seek'?'критерии подбора организации как источника':'данные '+S.ex+' для проверки метода'}. 3) ${domainText[0].toUpperCase()+domainText.slice(1)}. 4) Процесс AS-IS${state.deliv.includes('bpmn')?' в BPMN':''}. 5) Постановка задачи по 5W1H и базовый подход, с которым сравнивается метод${babok.length?' (техники: '+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}${contours.length?'. Контуры: '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`]
-      : ['2. Анализ объекта и концепция решения', `1) ${state.base==='seek'?'Критерии подбора организации и её описание':'Организация: деятельность, системы, схема информационных потоков (автоматизированные и ручные), ИТ-подразделение'}; участники проекта${people?': '+people:' (блок 5)'}${state.babok.includes('stake')?'; анализ заинтересованных сторон':''}. 2) ${domainText[0].toUpperCase()+domainText.slice(1)}. 3) Процесс ${P.name} AS-IS${state.deliv.includes('bpmn')?' в BPMN':''} и замеры показателей. 4) Проблема по 5W1H и требования к решению: ожидаемые эффекты, функции, бюджет, сроки, интеграция с ядром ИТ-ландшафта${babokRest.length?' (техники: '+babokRest.map(x=>x.t.toLowerCase()).join(', ')+')':''}. 5) Варианты решения: класс ПО с типовыми выгодами по данным исследовательских компаний, лидеры и нишевые продукты, взвешенная оценка по критериям (функциональность и зрелость, TCO, ИБ, интеграция, позиции на рынке РФ, SLA, персонал). 6) ${state.deliv.includes('arch')?'Архитектура TO-BE в ArchiMate':'Концепция TO-BE'}, 1–2 варианта${contours.length?', контуры: '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`],
+      ? ['2. Типовой объект и постановка задачи', `1) типовой процесс ${P.name} ${S.org}: участники${people?' ('+people+')':''}, входы и выходы, ограничения. 2) Данные: ${state.base==='open'?'открытые или синтетические, их состав и объём':state.base==='seek'?'критерии подбора организации как источника':'данные '+S.ex+' для проверки метода'}. 3) ${domainText[0].toUpperCase()+domainText.slice(1)}. 4) Процесс AS-IS${state.deliv.includes('bpmn')?' в BPMN':''}. 5) Постановка задачи${state.problem?' («'+state.problem+'»)':''} по 5W1H и базовый подход, с которым сравнивается метод${babok.length?' (техники: '+babok.map(x=>x.t.toLowerCase()).join(', ')+')':''}${contours.length?'. Контуры: '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`]
+      : ['2. Анализ объекта и концепция решения', `1) ${state.base==='seek'?'Критерии подбора организации и её описание':'Организация: деятельность, системы, схема информационных потоков (автоматизированные и ручные), ИТ-подразделение'}; участники проекта${people?': '+people:' (блок 5)'}${state.babok.includes('stake')?'; анализ заинтересованных сторон':''}. 2) ${domainText[0].toUpperCase()+domainText.slice(1)}. 3) Процесс ${P.name} AS-IS${state.deliv.includes('bpmn')?' в BPMN':''} и замеры показателей. 4) Проблема${state.problem?' («'+state.problem+'»)':''} по 5W1H и требования к решению: ожидаемые эффекты, функции, бюджет, сроки, интеграция с ядром ИТ-ландшафта${babokRest.length?' (техники: '+babokRest.map(x=>x.t.toLowerCase()).join(', ')+')':''}. 5) Варианты решения: класс ПО с типовыми выгодами по данным исследовательских компаний, лидеры и нишевые продукты, взвешенная оценка по критериям (функциональность и зрелость, TCO, ИБ, интеграция, позиции на рынке РФ, SLA, персонал). 6) ${state.deliv.includes('arch')?'Архитектура TO-BE в ArchiMate':'Концепция TO-BE'}, 1–2 варианта${contours.length?', контуры: '+contours.map(c=>c.t.split(':')[0]).join(', '):''}.`],
     ['3. Реализация и оценка', research
-      ? `1) Данные и постановка эксперимента. 2) ${M?'Модель на основе '+b.mAll:'Метод'}. 3) Показатели эффекта: ${kpis.map(k=>k.t).join(', ')||'…'}; качество модели: ${methods.length?methods.map(m=>m.q).join('; '):'по методу'}. 4) Сравнение с базовым подходом${methods.length?': '+methods.map(m=>m.base).join('; '):''}. 5) Ограничения и рекомендации.`
-      : `${state.deliv.includes('proto')?'1) Прототип и его тестирование по критериям приёмки. ':''}${state.pm!=='none'?(state.deliv.includes('proto')?'2) ':'1) ')+'План внедрения по '+PM[state.pm].short+': '+PM[state.pm].plan+(state.owner?'; владелец проекта: '+state.owner:'')+(state.exec?'; исполнитель: '+state.exec:'')+(state.evm?'; контроль хода по EVM':'')+'. ':''}${(state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+1}) Экономическая оценка: затраты по операциям до и после (трудоёмкость × ставка × частота, приложение Ж программы ГИА), ${GOV.has(state.sector)?'бюджетная и социальная эффективность, TCO':'NPV, IRR, DPP, PI, TCO'}; изменение показателей ${kpis.map(k=>'«'+k.t+'»').join(', ')||'…'}. ${state.deliv.includes('pilot')?((state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+2)+') Результаты пилота и справка о внедрении.':''}`],
+      ? `1) Данные и постановка эксперимента. 2) ${M?'Модель на основе '+b.mAll:'Метод'}. 3) Качество модели на данных: ${methods.length?methods.map(m=>m.q).join('; '):'по методу'}; сравнение с базовым подходом${methods.length?': '+methods.map(m=>m.base).join('; '):''}. 4) Ожидаемое влияние на показатели ${kpis.filter(k=>!k.proxy).map(k=>'«'+k.t+'»').join(', ')||'процесса'}: расчёт на исторических данных, а не наблюдение. 5) Ограничения и рекомендации.`
+      : `${state.deliv.includes('proto')?'1) Прототип и его тестирование по критериям приёмки. ':''}${state.pm!=='none'?(state.deliv.includes('proto')?'2) ':'1) ')+'План внедрения по '+PM[state.pm].short+': '+PM[state.pm].plan+(state.owner?'; владелец проекта: '+state.owner:'')+(state.exec?'; исполнитель: '+state.exec:'')+(state.evm?'; контроль хода по EVM':'')+'. ':''}${(state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+1}) Экономическая оценка: затраты по операциям до и после (трудоёмкость × ставка × частота, приложение Ж программы ГИА), ${GOV.has(state.sector)?'бюджетная и социальная эффективность, TCO':'NPV, IRR, DPP, PI, TCO'}; изменение показателей ${kpis.map(k=>'«'+k.t+'»').join(', ')||'…'}. ${state.deliv.includes('pilot')?((state.deliv.includes('proto')?1:0)+(state.pm!=='none'?1:0)+2)+') Результаты пилота: показатели до и после в сравнении с периодом без проекта; справка о внедрении.':''}`],
     ['Заключение', `Выводы по задачам из введения; ${state.deliv.includes('pilot')?'значения показателей после пилота':'ожидаемые значения показателей'}; направления развития. Приложения: диаграммы, ТЗ, код, данные${state.deliv.includes('pilot')?', справка о внедрении':''}.`]
   ];
   $('#chap').innerHTML = ch.map(([h,t])=>`<div><b>${h}</b><span>${t}</span></div>`).join('');
@@ -1203,7 +1210,7 @@ function markdown(b, kv, tasks, ch, tools, checks, al, domRows, methodsLine){
   [['real','Реальная организация есть'],['seek','Организации пока нет, будем искать'],['open','Открытые и синтетические данные']].forEach(([v,t])=>L.push(`- ${mark(state.base===v)} ${t}`)); L.push('');
   L.push('**3. Отрасль**'); SECTOR_ORDER.forEach(k=>L.push(`- ${mark(state.sector===k)} ${SECTORS[k].label}`)); L.push('');
   L.push(`**4. Процесс** (${state.ptype==='core'?'основной':'поддерживающий'})`); S[state.ptype].forEach(p=>L.push(`- ${mark(p.id===P.id)} ${p.name}${p.tag?' — '+p.tag:''}`)); L.push('');
-  L.push('**5. Участники проекта**'); L.push(`- Владелец проекта: ${state.owner||'—'}`, `- Исполнитель: ${state.exec||'—'}`, `- Заинтересованные стороны: ${state.stake||'—'}`, '');
+  L.push('**5. Участники проекта и проблема**'); L.push(`- Владелец проекта: ${state.owner||'—'}`, `- Исполнитель: ${state.exec||'—'}`, `- Заинтересованные стороны: ${state.stake||'—'}`, `- Проблема: ${state.problem||'—'}`, '');
   L.push('**6. Техники бизнес-анализа (BABOK)**'); BABOK.forEach(x=>L.push(`- ${mark(state.babok.includes(x.id))} ${x.t}`)); L.push('');
   L.push('**7. Уровень автоматизации**'); L.push(`- AS-IS: ${state.asis} «${LEVELS[state.asis].t}»`, `- TO-BE: ${state.tobe} «${LEVELS[state.tobe].t}»`, '');
   L.push('**8. Контуры систем**'); CONTOURS.forEach(c=>L.push(`- ${mark(state.contour.includes(c.id))} ${c.t}${state.contour.includes(c.id)?(state.asis>=c.min?' (есть, развивается)':' (создаётся)'):''}`)); L.push('');
@@ -1224,7 +1231,7 @@ function applyState(){
   renderStatic();
   set('form',state.form); set('base',state.base); set('sector',state.sector); set('ptype',state.ptype); set('pm',state.pm);
   $('#pm-evm').checked = !!state.evm;
-  $('#p-owner').value = state.owner||''; $('#p-exec').value = state.exec||''; $('#p-stake').value = state.stake||''; $('#p-topic').value = state.topic||'';
+  $('#p-owner').value = state.owner||''; $('#p-exec').value = state.exec||''; $('#p-stake').value = state.stake||''; $('#p-topic').value = state.topic||''; $('#p-problem').value = state.problem||'';
   renderProcesses(); set('process',state.process);
   document.querySelectorAll('input[name="deliv"]').forEach(i=>i.checked=state.deliv.includes(i.value));
 }
@@ -1236,7 +1243,7 @@ document.addEventListener('change', e=>{
   if(e.target.name==='tobe'){ const def=defaultContours(+e.target.value); document.querySelectorAll('input[name="contour"]').forEach(i=>i.checked=def.includes(i.value)); }
   render();
 });
-document.addEventListener('input', e=>{ if(e.target.matches('#p-owner, #p-exec, #p-stake, #p-topic')) render(); });
+document.addEventListener('input', e=>{ if(e.target.matches('#p-owner, #p-exec, #p-stake, #p-topic, #p-problem')) render(); });
 $('#copy').addEventListener('click', async ()=>{
   const txt = $('#md').value; let ok=false;
   try{ await navigator.clipboard.writeText(txt); ok=true; }catch(e){
