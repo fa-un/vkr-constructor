@@ -37,7 +37,15 @@ const head = `<!-- Сформировано конструктором тем В
 const out = resolve(here, basename(process.argv[2]).replace(/\.json$/, '.md'));
 const refs = spec.refs || [];
 const refsSection = refs.length ? '\n## Обзоры рынка и отраслевые стандарты\n\n' + refs.map(r=>'- ' + r).join('\n') + '\n' : '';
-writeFileSync(out, head + $('#md').value + refsSection);
+const ipb = $('#indprob');
+const indProb = ipb && !ipb.hidden ? (ipb.textContent.split('введении: ')[1] || '').trim() : '';
+const probs = spec.problems || [];
+const problemSection = (probs.length || indProb)
+  ? '\n## Проблематика\n\n'
+    + (probs.length ? '### Что решает работа\n\n' + probs.map(p=>'- ' + p).join('\n') + '\n\n' : '')
+    + (indProb ? '### Проблемы отрасли (2025–2026)\n\n' + indProb + '\n' : '')
+  : '';
+writeFileSync(out, head + $('#md').value + problemSection + refsSection);
 console.log(out, '|', $('#topic').textContent, '|', $('#meta').textContent.slice(0, 16));
 const warn = [...d.querySelectorAll('#alerts .alert.warn')].map(x => x.textContent);
 if (warn.length) console.log('предупреждения:\n' + warn.join('\n'));
