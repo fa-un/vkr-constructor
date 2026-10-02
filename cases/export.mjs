@@ -35,7 +35,9 @@ for (const x of d.querySelectorAll('input[name=deliv]')) check('#' + x.id, (spec
 
 const head = `<!-- Сформировано конструктором тем ВКР (https://fa-un.github.io/vkr-constructor/) из ${basename(process.argv[2])}: node cases/export.mjs.\n${spec.note || ''}\nРекомендуемая формулировка темы: «${spec.topic || $('#topic').textContent}». -->\n\n`;
 const out = resolve(here, basename(process.argv[2]).replace(/\.json$/, '.md'));
-writeFileSync(out, head + $('#md').value);
+const refs = spec.refs || [];
+const refsSection = refs.length ? '\n## Обзоры рынка и отраслевые стандарты\n\n' + refs.map(r=>'- ' + r).join('\n') + '\n' : '';
+writeFileSync(out, head + $('#md').value + refsSection);
 console.log(out, '|', $('#topic').textContent, '|', $('#meta').textContent.slice(0, 16));
 const warn = [...d.querySelectorAll('#alerts .alert.warn')].map(x => x.textContent);
 if (warn.length) console.log('предупреждения:\n' + warn.join('\n'));

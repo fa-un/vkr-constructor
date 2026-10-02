@@ -358,6 +358,7 @@ fieldset[hidden]{display:none}
     <summary>Отраслевая база: модели, данные, показатели, регуляторика</summary>
     <p>Отрасль не меняет порядок работы. Она даёт термины для словаря и ER-модели, эталон для сверки BPMN, определения показателей и законы, которые входят в требования главы 2. Ваша отрасль выделена.</p>
     <div class="tscroll"><table id="indt"><thead><tr><th>Отрасль</th><th>Процессы</th><th>Данные</th><th>Показатели</th><th>Регуляторика</th></tr></thead><tbody></tbody></table></div>
+    <p id="indprob" class="hint" hidden></p>
   </details>
 </section>
 
@@ -367,6 +368,7 @@ fieldset[hidden]{display:none}
   <ul>
     <li><a href="https://www.fa.ru/upload/constructor/25e/aq8tn5o7tdtrk0u483iohmk0qa0u83m9/GIA_BI_2025.pdf">Программа ГИА по направлению 38.03.05 «Бизнес-информатика», кафедра бизнес-информатики Финуниверситета, 2025</a>: формы ВКР, объём, структура глав, методы оценки эффективности, календарь, приложение А с научными направлениями и примерами тем.</li>
     <li><a href="https://www.fa.ru/university/structure/scientific-educational-departments/itabd/bi/study/bak/">Страница бакалавриата кафедры бизнес-информатики</a>: <a href="https://www.fa.ru/upload/constructor/d2a/2i5qxpr7h0n9c5t3tex0oen7gb46v8wt/Temy-VKR-2023-BAKI.pdf">примерный перечень тем 2023/24</a> (согласован с Норбит, 1С-Перспектива, Рэдмэдробот, Технологии доверия), <a href="https://www.fa.ru/upload/constructor/845/c5h3ws50v5n6dg06n6dpzvj248e1md0c/DK-VKR-bakalavry-2023.pdf">дорожная карта ВКР 2023</a>, <a href="https://www.fa.ru/upload/constructor/6ce/ea7uahwfymummbkh0rxlcsvcc42s6kf5/Obrazets_Zayavlenie_VKR_BAK.docx">образец заявления</a>, приказы о закреплении тем 2026 года. Проверено 25.09.2026: программа ГИА на странице по-прежнему в редакции 2025.</li>
+    <li>Обзоры рынка логистики (справочно, для формулировки проблемы и актуальности): <a href="https://ancor.ru/press/insights/trendy-i-klyuchevye-izmeneniya-na-rynke-transportnoy-logistiki-v-rossii-v-2025-godu/">ANCOR, тренды транспортной логистики 2025</a>, <a href="https://sber.pro/publication/trendi-razvitiya-logistiki-rossii-v-2025-godu/">СберПро, тренды логистики 2025</a>, <a href="https://www.megaresearch.ru/new_reality/tehnologii-it-logistiki-v-rossii-v-2025-godu-glubokaya-cifrovaya-transformaciya-gruzoperevozok">MegaResearch, IT-логистика в России 2025</a>; переход на электронные перевозочные документы (140-ФЗ): <a href="https://kontur.ru/logistika/spravka/22576-elektronnye_transportnye_nakladnye">Контур.Логистика об ЭТрН с 1 сентября 2026</a>, <a href="https://v8.1c.ru/metod/article/elektronnye-perevozochnye-dokumenty-epd-s-1-sentyabrya-2026-goda.htm">1С: ЭПД с 1 сентября 2026 года</a>.</li>
     <li><a href="https://www.fa.ru/for-applicants/educational-programs/bachelor/cifrovaya-trans-uprav-biznesom-o/">Программа «Цифровая трансформация управления бизнесом»</a>: профильные дисциплины, партнёры-работодатели.</li>
     <li><a href="https://www.hse.ru/data/2015/05/26/1097029628/Требования%20к%20выпускным%20квалификационным%20..акультет%20бизнеса%20и%20%20менеджмента.pdf">Требования к ВКР бакалавров факультета бизнеса и менеджмента НИУ ВШЭ</a>: справочно: типы работ, три элемента ВКР, норма по литературе.</li>
     <li><a href="https://scm.mit.edu/thesis-and-capstone-research-projects/">MIT Center for Transportation &amp; Logistics: Thesis and Capstone Projects</a>: разделение capstone (со спонсором) и thesis (концептуальная), практичность и релевантность для отрасли.</li>
@@ -782,7 +784,7 @@ const INDUSTRY = {
   ecom:      {proc:'APQC PCF (Retail), воронка AARRR', data:'GS1 (идентификация товаров), RFM-сегментация', kpi:'AARRR, ROMI, OTIF; отчёты Data Insight', reg:'152-ФЗ, 54-ФЗ (онлайн-кассы), правила маркетплейсов'},
   retail:    {proc:'APQC PCF Retail, ARTS (NRF); порядок инвентаризации по ФСБУ 28/2023 и приказу Минфина 49н', data:'GS1 (GTIN, штрихкоды), Честный знак, ЕГАИС', kpi:'точность учёта запасов, недостачи (shrinkage), out-of-stock, оборачиваемость', reg:'381-ФЗ о торговле, 54-ФЗ, ФСБУ 5/2019 «Запасы», ФСБУ 28/2023 «Инвентаризация», 152-ФЗ'},
   telecom:   {proc:'TM Forum eTOM (процессы), TAM (системы)', data:'TM Forum SID', kpi:'TM Forum Business Metrics, ARPU, churn', reg:'126-ФЗ «О связи», требования Роскомнадзора'},
-  logistics: {proc:'SCOR DS (Plan, Order, Source, Transform, Fulfill, Return)', data:'GS1, ЭТрН (электронные перевозочные документы)', kpi:'SCOR DS: надёжность, скорость, гибкость, стоимость', reg:'Устав автомобильного транспорта, ГИС ЭПД, 152-ФЗ'},
+  logistics: {proc:'SCOR DS (Plan, Order, Source, Transform, Fulfill, Return)', data:'GS1, ЭТрН и ЭПЛ в ГИС ЭПД (обмен через аккредитованного оператора ИС ЭПД)', kpi:'SCOR DS: надёжность, скорость, гибкость, стоимость', reg:'Устав автомобильного транспорта, 140-ФЗ: с 01.09.2026 ЭПД обязательны, до 01.03.2027 период без штрафов, реестр экспедиторов «ГосЛог», 152-ФЗ', prob:'~30% мелких и средних автоперевозчиков работают в убыток (ANCOR, 2025); дефицит водителей, логистов и ИТ-кадров при растущих зарплатах; издержки растут, маржинальность падает; драйвер e-commerce — последняя миля и региональные маршруты; рынок IT-логистики растёт около 20% в год (MegaResearch), основные направления автоматизации — TMS, маршрутизация с ИИ, ЭДО перевозочных документов'},
   gov:       {proc:'210-ФЗ, целевые модели госуслуг, стандарт клиентоцентричности', data:'СМЭВ, ЕСИА, ФРГУ', kpi:'методика Минцифры по цифровой зрелости, показатели «Госуслуг»', reg:'210-ФЗ, 59-ФЗ, 44-ФЗ, 149-ФЗ, ГОСТ Р 52294'},
   govmon:    {proc:'риск-ориентированный подход 248-ФЗ, ISO 31000', data:'ведомственные ГИС, СМЭВ', kpi:'результативность проверок, доля выявленных нарушений', reg:'248-ФЗ, 115-ФЗ, НК РФ (налоговый мониторинг), ведомственные регламенты'},
   bank:      {proc:'BIAN Service Landscape', data:'ISO 20022, ЕБС', kpi:'cost of risk, approval rate, NPS', reg:'115-ФЗ, положения Банка России 716-П и 683-П, 152-ФЗ'},
@@ -1117,6 +1119,9 @@ function render(){
   $('#methblock').hidden = !methods.length;
   $('#metht tbody').innerHTML = methods.map(m=>`<tr><td><b>${m.t}</b></td><td>${m.why}</td><td>${m.base}</td><td>${m.q}</td></tr>`).join('');
   $('#indt tbody').innerHTML = SECTOR_ORDER.map(k=>{const I=INDUSTRY[k];return `<tr${k===state.sector?' class="on"':''}><td>${SECTORS[k].label}</td><td>${I.proc}</td><td>${I.data}</td><td>${I.kpi}</td><td>${I.reg}</td></tr>`;}).join('');
+  const Icur=INDUSTRY[state.sector], ipb=$('#indprob');
+  ipb.hidden = !Icur.prob;
+  if(Icur.prob) ipb.innerHTML = `<b>Проблематика рынка («${SECTORS[state.sector].label}», 2025–2026)</b> — источник формулировок для поля «Проблема» и актуальности во введении: ${Icur.prob}.`;
 
   const domRows = [
     ['Предмет процесса: заказ, заявка, обращение, тариф, объект контроля', 'идентификатор, статус, даты, суммы, количество', 'клиент или гражданин → подаёт; исполнитель → обрабатывает; система → фиксирует', kpis.length?kpis.map(k=>k.rec).join('; '):'по выбранным показателям'],

@@ -1,0 +1,27 @@
+{
+  "note": "Планирование маршрутов и загрузка транспорта в логистической компании: сравнение методов (оптимизация VRP, геоаналитика) и выбор показателей процесса. Исследовательская форма, открытые или синтетические данные. Формулировка темы студента длиннее лимита (13 слов из 11); сокращённый вариант — «Выбор методов и показателей планирования маршрутов и загрузки транспорта» (10 слов).",
+  "topic": "Выбор методов и показателей для процесса планирования маршрутов и загрузки транспорта логистической компании",
+  "form": "research", "base": "open", "sector": "logistics", "ptype": "core", "process": "route",
+  "owner": "",
+  "exec": "студент как аналитик и разработчик модели",
+  "stake": "диспетчеры и логисты, водители и курьеры, клиенты (доставка B2C и B2B)",
+  "problem": "стоимость доставки заказа и доля маршрутов с недогрузом выше норматива при ручном планировании диспетчером. Предположительно план составляется по опыту и простым правилам, а сравнение методов и выбор показателей для процесса не выполнены",
+  "asis": 2, "tobe": 4, "contours": ["oltp", "dwh", "bi", "dss"],
+  "kpi": ["cpd", "otif", "utilization", "forecast"],
+  "methods": ["opt", "geo"], "babok": ["stake", "rootcause", "reqtypes", "options", "accept"],
+  "deliv": ["bpmn", "er", "proto"],
+  "refs": [
+    "SCOR DS (ASCM): референсная модель процессов ЦП и метрики надёжности, скорости, гибкости, стоимости — https://www.ascm.org/corporate-solutions/standards-tools/scor-ds/",
+    "ГОСТ Р ИСО 9001-2015: СМК, процессный подход (PDCA, риск-ориентированность) — https://urfu.ru/fileadmin/user_upload/common_files/standarts/GOST_R_ISO_9001-2015__2_.pdf",
+    "ГОСТ 34.601-90: стадии создания автоматизированных систем (модель жизненного цикла ИС) — https://docs.cntd.ru/document/1200006921",
+    "ГОСТ 34.602-2020: техническое задание на создание АС — https://docs.cntd.ru/document/1200181804",
+    "ISO/IEC/IEEE 29148:2018: требования к системам и программному обеспечению — https://www.iso.org/standard/72089.html",
+    "ANCOR, тренды рынка транспортной логистики РФ 2025 (~30% мелких перевозчиков в убыток, дефицит кадров, TMS и ИИ) — https://ancor.ru/press/insights/trendy-i-klyuchevye-izmeneniya-na-rynke-transportnoy-logistiki-v-rossii-v-2025-godu/",
+    "СберПро, тренды развития логистики России в 2025 году (дефицит кадров, рост тарифов) — https://sber.pro/publication/trendi-razvitiya-logistiki-rossii-v-2025-godu/",
+    "MegaResearch, IT-логистика в России 2025 (рынок +20%/год, цифровая трансформация) — https://www.megaresearch.ru/new_reality/tehnologii-it-logistiki-v-rossii-v-2025-godu-glubokaya-cifrovaya-transformaciya-gruzoperevozok",
+    "Коммерсантъ, «Логистика ищет баланс»: рынок 2024–2025, переориентация потоков, рост цен — https://www.kommersant.ru/doc/8142437",
+    "Контур.Логистика: переход на ЭТрН и ЭПД с 01.09.2026 (140-ФЗ), период без штрафов до 01.03.2027 — https://kontur.ru/logistika/spravka/22576-elektronnye_transportnye_nakladnye",
+    "1С: электронные перевозочные документы с 01.09.2026, ГИС ЭПД и операторы ИС ЭПД — https://v8.1c.ru/metod/article/elektronnye-perevozochnye-dokumenty-epd-s-1-sentyabrya-2026-goda.htm",
+    "Минтранс: ГИС ЭПД, реестр аккредитованных операторов — https://mintrans.gov.ru/activities/214/376/377"
+  ]
+}
