@@ -301,24 +301,38 @@ _Сформировано конструктором тем ВКР, 02.10.2026_
 
 ## Обзоры рынка и отраслевые стандарты
 
-- Рынок. Т—Ж, «Рынок недвижимости в 2025 году: итоги» (рыночная ипотека под 19–22% заградительна, доля сделок с ипотекой 77% в III кв. 2025) — https://t-j.ru/realty-summary2025/
-- Рынок. Домклик, аналитический центр: обзоры рынка недвижимости и ипотеки (спрос на первичное жильё в ноябре 2025 +11% г/г) — https://blog.domclick.ru/analytics
-- Рынок. Calltouch, «Что происходит на рынке недвижимости в 2025 году» (09.12.2025: продажи новостроек в деньгах −8% за 8 месяцев, Авито 64% регионального эконом-сегмента, Циан 43% премиум-Москвы) — https://www.calltouch.ru/blog/s-vidom-na-analitiku-chto-proishodit-na-rynke-nedvizhimosti-v-2025-godu/
-- Рынок. Callibri, «Как обрабатывают лиды на рынке недвижимости» (23.09.2025: стоимость заявки выросла почти втрое за январь–июнь 2025, где теряются лиды) — https://callibri.ru/blog/issledovanie-klientskih-obrashcheniy-rynka-nedvizhimosti-2025
-- Рынок. Semantiqo/Sostav, кейс квалифицированных лидов (05.09.2025: конверсия лида в сделку 4–5%, до 15–20% с квалификацией) — https://www.sostav.ru/blogs/283843/67029
-- Рынок. Стройгазета, «Большинство россиян ищут квартиру на онлайн-ресурсах» (66% заходят на «Авито») — https://stroygaz.ru/news/dwelling/bolshinstvo-rossiyan-ishchut-kvartiru-na-onlayn-resursakh/
-- Внедрения. Zillow, пресс-релиз о natural language search (01.2023: первый крупный маркетплейс с поиском фразой «$700K homes in Charlotte with a backyard») — https://zillow.mediaroom.com/2023-01-26-Zillows-new-AI-powered-natural-language-search-is-a-first-in-real-estate
-- Внедрения. CNews, «Домклик запустил подбор недвижимости с искусственным интеллектом» (10.2024: подбор по текстовому запросу через GigaChat) — https://www.cnews.ru/news/line/2024-10-18_domklik_zapustil_podbor
-- Внедрения. Repliers, документация NLP-поиска объявлений (промпт → структурированный запрос API; контекст уточнений через nlpId — реализация накопления критериев между запросами) — https://help.repliers.com/en/article/utilizing-ai-powered-nlp-for-real-estate-listing-searches-1fvddra/
-- Внедрения. РБК Тренды, «Как ИИ упрощает поиск жилья» (модерация объявлений, персональная поддержка, платформа Lethub) — https://trends.rbc.ru/trends/industry/65c3927e9a7947a7163436ad
-- Методы. QuintoAndar/RecSys 2026, «LLM-Based Re-Ranking for Real Estate Search» (LLM-реранкер в проде, 960k пар запрос-объект, A/B: CTR +5,3%, записи на просмотр +4,8%) — https://arxiv.org/pdf/2607.14835
-- Методы. SSRN, «A Grounded, Explainable Natural Language Interface for Real Estate» (open-source LLM, ответ заземлён на атрибуты объектов) — https://papers.ssrn.com/sol3/Delivery.cfm/6742158.pdf?abstractid=6742158&mirid=1
-- Методы. Preprints.org, «Study on Real Estate Search Model Using RAG Applied Property Graph» (RAG по графу атрибутов объектов) — https://www.preprints.org/manuscript/202509.2273
-- Методы. Superlinked, «Building an Agentic NLQ System for Real Estate Search» (семантический поиск: эмбеддинги объявлений + векторная БД Qdrant, реранкер cross-encoder) — https://superlinked.com/blog/real-estate-nlq-agent
-- Продукты. SmartAgent: CRM и база объектов для риелторов с AI-автоматизацией, агрегация Авито/ЦИАН — https://smartagent.ru/
-- Продукты. domXpert: AI-риелтор — поиск, оценка и подбор объектов — https://aixpert.ru/domxpert/
-- Продукты. Контур.Реестро, «Нейросети в сфере недвижимости: ИИ для риелторов и агентств» (брифование клиента, подборки, бронирование показов, онлайн-показы) — https://kontur.ru/reestro/blog/53545-ii_v_nedvizhimosti_dlya_rieltorov_i_agentstv
-- Продукты. MANGO Office, рейтинг CRM для агентств недвижимости (Kvartus, RecRM, Bitrix24, amoCRM) — https://www.mango-office.ru/journal/for-marketing/crm-marketing/crm-dlya-agentstv-nedvizhimosti/
-- Стандарт. ГОСТ 34.601-90: стадии создания автоматизированных систем — https://docs.cntd.ru/document/1200006921
-- Стандарт. ГОСТ 34.602-2020: техническое задание на создание АС — https://docs.cntd.ru/document/1200181804
-- Стандарт. ISO/IEC/IEEE 29148:2018: требования к системам и программному обеспечению — https://www.iso.org/standard/72089.html
+### Рынок
+
+- Т—Ж, «Рынок недвижимости в 2025 году: итоги» (рыночная ипотека под 19–22% заградительна, доля сделок с ипотекой 77% в III кв. 2025) — https://t-j.ru/realty-summary2025/
+- Домклик, аналитический центр: обзоры рынка недвижимости и ипотеки (спрос на первичное жильё в ноябре 2025 +11% г/г) — https://blog.domclick.ru/analytics
+- Calltouch, «Что происходит на рынке недвижимости в 2025 году» (09.12.2025: продажи новостроек в деньгах −8% за 8 месяцев, Авито 64% регионального эконом-сегмента, Циан 43% премиум-Москвы) — https://www.calltouch.ru/blog/s-vidom-na-analitiku-chto-proishodit-na-rynke-nedvizhimosti-v-2025-godu/
+- Callibri, «Как обрабатывают лиды на рынке недвижимости» (23.09.2025: стоимость заявки выросла почти втрое за январь–июнь 2025, где теряются лиды) — https://callibri.ru/blog/issledovanie-klientskih-obrashcheniy-rynka-nedvizhimosti-2025
+- Semantiqo/Sostav, кейс квалифицированных лидов (05.09.2025: конверсия лида в сделку 4–5%, до 15–20% с квалификацией) — https://www.sostav.ru/blogs/283843/67029
+- Стройгазета, «Большинство россиян ищут квартиру на онлайн-ресурсах» (66% заходят на «Авито») — https://stroygaz.ru/news/dwelling/bolshinstvo-rossiyan-ishchut-kvartiru-na-onlayn-resursakh/
+
+### Внедрения
+
+- Zillow, пресс-релиз о natural language search (01.2023: первый крупный маркетплейс с поиском фразой «$700K homes in Charlotte with a backyard») — https://zillow.mediaroom.com/2023-01-26-Zillows-new-AI-powered-natural-language-search-is-a-first-in-real-estate
+- CNews, «Домклик запустил подбор недвижимости с искусственным интеллектом» (10.2024: подбор по текстовому запросу через GigaChat) — https://www.cnews.ru/news/line/2024-10-18_domklik_zapustil_podbor
+- Repliers, документация NLP-поиска объявлений (промпт → структурированный запрос API; контекст уточнений через nlpId — реализация накопления критериев между запросами) — https://help.repliers.com/en/article/utilizing-ai-powered-nlp-for-real-estate-listing-searches-1fvddra/
+- РБК Тренды, «Как ИИ упрощает поиск жилья» (модерация объявлений, персональная поддержка, платформа Lethub) — https://trends.rbc.ru/trends/industry/65c3927e9a7947a7163436ad
+
+### Методы
+
+- QuintoAndar/RecSys 2026, «LLM-Based Re-Ranking for Real Estate Search» (LLM-реранкер в проде, 960k пар запрос-объект, A/B: CTR +5,3%, записи на просмотр +4,8%) — https://arxiv.org/pdf/2607.14835
+- SSRN, «A Grounded, Explainable Natural Language Interface for Real Estate» (open-source LLM, ответ заземлён на атрибуты объектов) — https://papers.ssrn.com/sol3/Delivery.cfm/6742158.pdf?abstractid=6742158&mirid=1
+- Preprints.org, «Study on Real Estate Search Model Using RAG Applied Property Graph» (RAG по графу атрибутов объектов) — https://www.preprints.org/manuscript/202509.2273
+- Superlinked, «Building an Agentic NLQ System for Real Estate Search» (семантический поиск: эмбеддинги объявлений + векторная БД Qdrant, реранкер cross-encoder) — https://superlinked.com/blog/real-estate-nlq-agent
+
+### Продукты
+
+- SmartAgent: CRM и база объектов для риелторов с AI-автоматизацией, агрегация Авито/ЦИАН — https://smartagent.ru/
+- domXpert: AI-риелтор — поиск, оценка и подбор объектов — https://aixpert.ru/domxpert/
+- Контур.Реестро, «Нейросети в сфере недвижимости: ИИ для риелторов и агентств» (брифование клиента, подборки, бронирование показов, онлайн-показы) — https://kontur.ru/reestro/blog/53545-ii_v_nedvizhimosti_dlya_rieltorov_i_agentstv
+- MANGO Office, рейтинг CRM для агентств недвижимости (Kvartus, RecRM, Bitrix24, amoCRM) — https://www.mango-office.ru/journal/for-marketing/crm-marketing/crm-dlya-agentstv-nedvizhimosti/
+
+### Стандарт
+
+- ГОСТ 34.601-90: стадии создания автоматизированных систем — https://docs.cntd.ru/document/1200006921
+- ГОСТ 34.602-2020: техническое задание на создание АС — https://docs.cntd.ru/document/1200181804
+- ISO/IEC/IEEE 29148:2018: требования к системам и программному обеспечению — https://www.iso.org/standard/72089.html

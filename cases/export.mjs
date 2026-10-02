@@ -36,7 +36,11 @@ for (const x of d.querySelectorAll('input[name=deliv]')) check('#' + x.id, (spec
 const head = `<!-- Сформировано конструктором тем ВКР (https://fa-un.github.io/vkr-constructor/) из ${basename(process.argv[2])}: node cases/export.mjs.\n${spec.note || ''}\nРекомендуемая формулировка темы: «${spec.topic || $('#topic').textContent}». -->\n\n`;
 const out = resolve(here, basename(process.argv[2]).replace(/\.json$/, '.md'));
 const refs = spec.refs || [];
-const refsSection = refs.length ? '\n## Обзоры рынка и отраслевые стандарты\n\n' + refs.map(r=>'- ' + r).join('\n') + '\n' : '';
+const refParts = refs.map(r => typeof r === 'string'
+  ? {s: '- ' + r, g: false}
+  : {s: '### ' + r.t + '\n\n' + r.items.map(i=>'- ' + i).join('\n'), g: true});
+const refsBody = refParts.map((p,i)=>(i===0 ? '' : (p.g || refParts[i-1].g ? '\n\n' : '\n')) + p.s).join('');
+const refsSection = refs.length ? '\n## Обзоры рынка и отраслевые стандарты\n\n' + refsBody + '\n' : '';
 const ipb = $('#indprob');
 const indProb = ipb && !ipb.hidden ? (ipb.textContent.split('введении: ')[1] || '').trim() : '';
 const probs = spec.problems || [];
