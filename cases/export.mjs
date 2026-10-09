@@ -49,7 +49,30 @@ const problemSection = (probs.length || indProb)
     + (probs.length ? '### Что решает работа\n\n' + probs.map(p=>'- ' + p).join('\n') + '\n\n' : '')
     + (indProb ? '### Проблемы отрасли (2025–2026)\n\n' + indProb + '\n' : '')
   : '';
-writeFileSync(out, head + $('#md').value + problemSection + refsSection);
+const binding = spec.data_binding;
+const bindingSection = binding
+  ? '\n## Реальная интеграционная привязка\n\n'
+    + `- **Провайдер данных:** ${binding.provider}\n`
+    + `- **Документация:** ${binding.documentation}\n`
+    + `- **Endpoint:** \`${binding.endpoint}\`\n`
+    + `- **Авторизация:** ${binding.authorization}\n`
+    + `- **Тестовый материал:** ${binding.sample}\n\n`
+    + '### Что подтверждено\n\n'
+    + (binding.verified || []).map(x=>'- ' + x).join('\n') + '\n\n'
+    + '### Что требует подтверждения\n\n'
+    + (binding.unknown || []).map(x=>'- ' + x).join('\n') + '\n'
+  : '';
+const architectureSection = spec.architecture?.length
+  ? '\n## Архитектура решения\n\n'
+    + '| Модуль | Ответственность |\n|---|---|\n'
+    + spec.architecture.map(x=>`| ${x.name} | ${x.responsibility} |`).join('\n') + '\n'
+  : '';
+const stagesSection = spec.stages?.length
+  ? '\n## Этапность реализации\n\n'
+    + '| Этап | Объём | Персистентность | Критерий готовности |\n|---|---|---|---|\n'
+    + spec.stages.map(x=>`| ${x.id}. ${x.name} | ${x.scope} | ${x.persistence} | ${x.acceptance} |`).join('\n') + '\n'
+  : '';
+writeFileSync(out, head + $('#md').value + problemSection + bindingSection + architectureSection + stagesSection + refsSection);
 console.log(out, '|', $('#topic').textContent, '|', $('#meta').textContent.slice(0, 16));
 const warn = [...d.querySelectorAll('#alerts .alert.warn')].map(x => x.textContent);
 if (warn.length) console.log('предупреждения:\n' + warn.join('\n'));
