@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Metrapi — тестовая выдача</title>
+  <style>
+    :root { color-scheme: dark; --bg:#101318; --card:#191e27; --muted:#9aa5b5; --accent:#8bb8ff; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:#f4f7fb; font:16px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { max-width:1180px; margin:0 auto; padding:32px 20px 56px; }
+    h1 { margin:0 0 8px; font-size:clamp(28px,4vw,44px); }
+    .eyebrow { margin:0 0 8px; color:var(--accent); font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+    .lead { margin:0 0 28px; color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:22px; }
+    .card { overflow:hidden; border:1px solid #293241; border-radius:18px; background:var(--card); box-shadow:0 12px 32px #0004; }
+    .gallery { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; padding:4px; background:#090b0f; }
+    .photo-card { display:block; overflow:hidden; aspect-ratio:4/3; border-radius:10px; background:#242a33; }
+    .photo-card:first-child { grid-column:span 2; aspect-ratio:16/9; }
+    .photo-card img { width:100%; height:100%; display:block; object-fit:cover; transition:transform .2s ease, filter .2s ease; }
+    .photo-card:hover img { transform:scale(1.04); filter:brightness(1.1); }
+    .body { padding:18px; }
+    .score { margin-bottom:14px; padding:10px 12px; border:1px solid #40516b; border-radius:12px; background:#202b3b; }
+    .score-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; }
+    .score-head strong { color:#b9d5ff; font-size:18px; line-height:1; }
+    .feedback { display:flex; gap:5px; margin-left:auto; }
+    .feedback button { width:30px; height:28px; padding:0; border:1px solid #45546a; border-radius:8px; background:#18212e; color:#aab7c8; cursor:pointer; font-size:15px; line-height:1; }
+    .feedback button:hover, .feedback button[aria-pressed="true"] { border-color:var(--accent); background:#2b415e; color:#fff; }
+    .feedback button.favorite[aria-pressed="true"] { border-color:#e4b85b; background:#57451f; color:#ffe39a; }
+    .score-track { position:relative; height:8px; border-radius:999px; background:linear-gradient(90deg,#cf4e55 0%,#e4a047 48%,#58bd70 100%); }
+    .score-marker { position:absolute; top:50%; width:14px; height:14px; border:3px solid #fff; border-radius:50%; background:#17202c; box-shadow:0 1px 5px #0008; transform:translate(-50%,-50%); }
+    .source { color:var(--accent); font-size:13px; text-transform:uppercase; letter-spacing:.06em; }
+    h2 { margin:5px 0 10px; font-size:21px; }
+    dl { display:grid; grid-template-columns:auto 1fr; gap:6px 12px; margin:0; }
+    dt { color:var(--muted); } dd { margin:0; text-align:right; }
+    .price { margin-top:16px; padding:10px 12px; border-radius:10px; background:#252d39; color:#ffd98b; }
+    footer { margin-top:28px; color:var(--muted); font-size:13px; }
+    @media (max-width:600px) { .gallery { grid-template-columns:repeat(3,1fr); } }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">Дипломный проект · прототип рекомендательной системы</p>
+    <h1>Поиск недвижимости по естественному языку</h1>
+    <p class="lead">Тестовая выдача Metrapi · Санкт-Петербург · продажа · 1-комнатные квартиры · анонимный режим API</p>
+    <section class="grid" id="listings"></section>
+    <footer>
+      <details>
+        <summary>Методика прототипа и ограничения</summary>
+        <p><strong>Фильтрация:</strong> выборка получена через REST API Metrapi по параметрам продажи квартир в Санкт-Петербурге. <strong>Ранжирование:</strong> текущий прототип считает балл 0–100 по близости к метро, полноте адреса и района, а также наличию фотографий. В полноценной версии веса должны формироваться из критериев пользователя, извлечённых из диалога: более ранние и явно заданные требования получают больший вес, а последующие уточнения перестраивают фильтры и порядок выдачи.</p>
+        <p>Фотографии загружаются с CDN источников. Цены и ссылки на первоисточник скрыты анонимным доступом.</p>
+      </details>
+    </footer>
+  </main>
+  <script src="./listings.js"></script>
+  <script>
+    let listings = Array.isArray(window.__METRAPI_LISTINGS__) ? window.__METRAPI_LISTINGS__ : [];
+    const escapeHtml = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const listingsNode = document.querySelector('#listings');
+    const feedback = new Map();
+    const favorites = new Set();
+
+    const estimateScore = item => {
+      const minutes = Number((item.metro_distance || '').match(/\d+/)?.[0]);
+      let score = 60;
+      score += Number.isFinite(minutes) ? Math.max(0, 30 - minutes * 0.8) : 8;
+      score += item.address ? 4 : 0;
+      score += item.district ? 3 : 0;
+      score += Math.min(5, (item.photos?.length || 0) / 5);
+      return Math.round(Math.min(100, score));
+    };
+
+    const render = () => {
+      listingsNode.innerHTML = listings.map((item, index) => `
+        <article class="card">
+          <div class="body">
+            <div class="score" aria-label="Оценка релевантности ${item.score} из 100">
+              <div class="score-head"><span>Релевантность</span><strong>${item.score}/100</strong><div class="feedback" aria-label="Обратная связь">
+                <button type="button" data-feedback="like" data-index="${index}" aria-label="Нравится" aria-pressed="${feedback.get(index) === 'like'}">👍</button>
+                <button type="button" data-feedback="dislike" data-index="${index}" aria-label="Не подходит" aria-pressed="${feedback.get(index) === 'dislike'}">👎</button>
+                <button type="button" class="favorite" data-feedback="favorite" data-index="${index}" aria-label="В избранное" aria-pressed="${favorites.has(index)}">${favorites.has(index) ? '★' : '☆'}</button>
+              </div></div>
+              <div class="score-track"><i class="score-marker" style="left:${item.score}%"></i></div>
+            </div>
+            <div class="source">${escapeHtml(item.source)}</div>
+            <h2>${escapeHtml(item.title)}</h2>
+            <dl>
+              <dt>Адрес</dt><dd>${escapeHtml(item.address || '—')}</dd>
+              <dt>Район</dt><dd>${escapeHtml(item.district || '—')}</dd>
+              <dt>Метро</dt><dd>${escapeHtml(item.metro || '—')}${item.metro_distance ? ` · ${escapeHtml(item.metro_distance)}` : ''}</dd>
+            </dl>
+            <div class="price">Цена скрыта анонимным доступом</div>
+          </div>
+          <div class="gallery">
+            ${item.photos.map((photo, index) => `<a class="photo-card" href="${photo}" target="_blank" rel="noreferrer"><img loading="lazy" alt="${escapeHtml(item.title)} — фото ${index + 1}" src="${photo}"></a>`).join('')}
+          </div>
+        </article>
+      `).join('');
+    };
+
+    listingsNode.addEventListener('click', event => {
+      const button = event.target.closest('[data-feedback]');
+      if (!button) return;
+      const index = Number(button.dataset.index);
+      const value = button.dataset.feedback;
+      if (value === 'favorite') {
+        favorites.has(index) ? favorites.delete(index) : favorites.add(index);
+        render();
+        return;
+      }
+      feedback.set(index, feedback.get(index) === value ? null : value);
+      render();
+    });
+
+    if (listings.length) {
+      listings = listings.slice(0, 10).map(item => ({
+        source: item.source,
+        title: item.title,
+        address: item.address,
+        district: item.district,
+        metro: item.metro,
+        metro_distance: item.metro_distance,
+        photos: Array.isArray(item.photos) ? item.photos : []
+      })).map(item => ({ ...item, score: estimateScore(item) }))
+        .sort((left, right) => right.score - left.score);
+      render();
+    } else {
+      listingsNode.innerHTML = '<p class="lead">Локальный снимок выборки не найден.</p>';
+    }
+
+  </script>
+</body>
+</html>
