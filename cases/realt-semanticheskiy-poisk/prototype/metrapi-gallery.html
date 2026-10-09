@@ -12,6 +12,19 @@
     h1 { margin:0 0 8px; font-size:clamp(28px,4vw,44px); }
     .eyebrow { margin:0 0 8px; color:var(--accent); font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
     .lead { margin:0 0 28px; color:var(--muted); }
+    .search-panel { margin:0 0 26px; padding:18px; border:1px solid #293241; border-radius:18px; background:#151a22; }
+    .search-panel label { display:block; margin-bottom:8px; color:#dce7f5; font-weight:650; }
+    .search-row { display:flex; gap:10px; }
+    .search-row textarea { flex:1; min-height:56px; resize:vertical; padding:12px 14px; border:1px solid #40516b; border-radius:12px; background:#0e1218; color:#f4f7fb; font:inherit; }
+    .search-row button { align-self:stretch; padding:0 18px; border:0; border-radius:12px; background:#6e9fe9; color:#08101b; cursor:pointer; font-weight:700; }
+    .search-row button:hover { background:#9fc4ff; }
+    .pipeline { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:14px; }
+    .pipeline-block { min-width:0; padding:10px 12px; border-radius:10px; background:#202733; }
+    .pipeline-block h3 { margin:0 0 5px; font-size:12px; color:#b9d5ff; text-transform:uppercase; letter-spacing:.06em; }
+    .pipeline-block p { margin:0; color:#d6dee9; font-size:13px; overflow-wrap:anywhere; }
+    .pipeline-block.unresolved { background:#302b22; }
+    .pipeline-block.unresolved h3 { color:#ffd98b; }
+    .query-note { margin:12px 0 0; color:var(--muted); font-size:13px; }
     .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:22px; }
     .card { overflow:hidden; border:1px solid #293241; border-radius:18px; background:var(--card); box-shadow:0 12px 32px #0004; }
     .gallery { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; padding:4px; background:#090b0f; }
@@ -36,6 +49,7 @@
     .price { margin-top:16px; padding:10px 12px; border-radius:10px; background:#252d39; color:#ffd98b; }
     footer { margin-top:28px; color:var(--muted); font-size:13px; }
     @media (max-width:600px) { .gallery { grid-template-columns:repeat(3,1fr); } }
+    @media (max-width:700px) { .search-row { flex-direction:column; } .search-row button { min-height:44px; } .pipeline { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
@@ -43,6 +57,19 @@
     <p class="eyebrow">Дипломный проект · прототип рекомендательной системы</p>
     <h1>Поиск недвижимости по естественному языку</h1>
     <p class="lead">Тестовая выдача Metrapi · Санкт-Петербург · продажа · 1-комнатные квартиры · анонимный режим API</p>
+    <section class="search-panel" aria-labelledby="search-title">
+      <label id="search-title" for="query">Опишите, что вы ищете</label>
+      <div class="search-row">
+        <textarea id="query">Однокомнатная квартира в Санкт-Петербурге, поближе к метро</textarea>
+        <button id="search" type="button">Сформировать выдачу</button>
+      </div>
+      <div class="pipeline" aria-live="polite">
+        <div class="pipeline-block"><h3>Жёсткие фильтры</h3><p id="hard-filters">—</p></div>
+        <div class="pipeline-block"><h3>Мягкие предпочтения</h3><p id="soft-preferences">—</p></div>
+        <div class="pipeline-block unresolved"><h3>Не проверяется в MVP</h3><p id="unresolved">—</p></div>
+      </div>
+      <p class="query-note" id="query-note">Локальный снимок Metrapi · запрос к внешнему API не выполняется</p>
+    </section>
     <section class="grid" id="listings"></section>
     <footer>
       <details>
@@ -57,17 +84,71 @@
     let listings = Array.isArray(window.__METRAPI_LISTINGS__) ? window.__METRAPI_LISTINGS__ : [];
     const escapeHtml = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
     const listingsNode = document.querySelector('#listings');
+    const queryNode = document.querySelector('#query');
+    const hardFiltersNode = document.querySelector('#hard-filters');
+    const softPreferencesNode = document.querySelector('#soft-preferences');
+    const unresolvedNode = document.querySelector('#unresolved');
+    const queryNoteNode = document.querySelector('#query-note');
     const feedback = new Map();
     const favorites = new Set();
 
-    const estimateScore = item => {
+    const parseQuery = text => {
+      const query = text.toLowerCase().replaceAll('ё', 'е');
+      const hard = [];
+      const soft = [];
+      const unresolved = [];
+      const apiParams = { deal_type:'sale', realty_type:'flat', region:'Санкт-Петербург', locality:'Санкт-Петербург', limit:10, offset:0 };
+      const roomMatch = query.match(/(?:^|\s)([1-5])\s*(?:-?комн(?:атн(?:ая|ую|ых)?)?|комнат)/);
+
+      if (query.includes('санкт-петербург') || query.includes('спб') || query.includes('петербург')) {
+        hard.push('город: Санкт-Петербург');
+      }
+      if (roomMatch) {
+        apiParams.rooms = Number(roomMatch[1]);
+        hard.push(`комнат: ${roomMatch[1]}`);
+      } else if (query.includes('однокомнат')) {
+        apiParams.rooms = 1;
+        hard.push('комнат: 1');
+      }
+      const maxPriceMatch = query.match(/до\s*([\d\s]+(?:[,.]\d+)?)\s*(?:млн|миллион)/);
+      if (maxPriceMatch) {
+        apiParams.max_price_mln = Number(maxPriceMatch[1].replace(/\s/g, '').replace(',', '.'));
+        hard.push(`цена до ${apiParams.max_price_mln} млн`);
+      }
+      const metroMatch = query.match(/(\d+)\s*мин(?:ут(?:ы|а)?)?.{0,12}метр|метр.{0,12}(\d+)\s*мин/);
+      if (metroMatch) {
+        const minutes = Number(metroMatch[1] || metroMatch[2]);
+        soft.push(`метро ≤ ${minutes} мин`);
+        apiParams.metro_time_preference = minutes;
+      } else if (query.includes('метро') || query.includes('поближе')) {
+        soft.push('ближе к метро');
+      }
+      if (query.includes('балкон')) soft.push('балкон (мягкое предпочтение)');
+      if (query.includes('юг') || query.includes('южн')) unresolved.push('ориентация окон на юг');
+      if (query.includes('школ')) unresolved.push('время до школы');
+      if (query.includes('уют')) unresolved.push('«уютная» — неструктурированный признак');
+      return { hard, soft, unresolved, apiParams, rooms:apiParams.rooms, metroMinutes:apiParams.metro_time_preference };
+    };
+
+    const estimateScore = (item, criteria) => {
       const minutes = Number((item.metro_distance || '').match(/\d+/)?.[0]);
       let score = 60;
-      score += Number.isFinite(minutes) ? Math.max(0, 30 - minutes * 0.8) : 8;
+      if (Number.isFinite(criteria.metroMinutes) && Number.isFinite(minutes)) {
+        score += minutes <= criteria.metroMinutes ? 28 : Math.max(0, 28 - (minutes - criteria.metroMinutes) * 1.2);
+      } else {
+        score += Number.isFinite(minutes) ? Math.max(0, 30 - minutes * 0.8) : 8;
+      }
       score += item.address ? 4 : 0;
       score += item.district ? 3 : 0;
       score += Math.min(5, (item.photos?.length || 0) / 5);
       return Math.round(Math.min(100, score));
+    };
+
+    const updateCriteriaPanel = criteria => {
+      hardFiltersNode.textContent = criteria.hard.join(' · ') || 'нет';
+      softPreferencesNode.textContent = criteria.soft.join(' · ') || 'нет';
+      unresolvedNode.textContent = criteria.unresolved.join(' · ') || 'нет';
+      queryNoteNode.textContent = `Локальный снимок Metrapi · API-параметры: ${JSON.stringify(criteria.apiParams)} · запрос к внешнему API не выполняется`;
     };
 
     const render = () => {
@@ -112,8 +193,7 @@
       render();
     });
 
-    if (listings.length) {
-      listings = listings.slice(0, 10).map(item => ({
+    const allListings = listings.slice(0, 10).map(item => ({
         source: item.source,
         title: item.title,
         address: item.address,
@@ -121,12 +201,23 @@
         metro: item.metro,
         metro_distance: item.metro_distance,
         photos: Array.isArray(item.photos) ? item.photos : []
-      })).map(item => ({ ...item, score: estimateScore(item) }))
+      }));
+
+    const runQuery = () => {
+      const criteria = parseQuery(queryNode.value);
+      updateCriteriaPanel(criteria);
+      feedback.clear();
+      favorites.clear();
+      listings = allListings
+        .filter(item => !criteria.rooms || item.title.startsWith(`${criteria.rooms}-комн`))
+        .map(item => ({ ...item, score: estimateScore(item, criteria) }))
         .sort((left, right) => right.score - left.score);
-      render();
-    } else {
-      listingsNode.innerHTML = '<p class="lead">Локальный снимок выборки не найден.</p>';
-    }
+      listingsNode.innerHTML = listings.length ? '' : '<p class="lead">В локальном снимке нет объектов, соответствующих жёстким фильтрам.</p>';
+      if (listings.length) render();
+    };
+
+    document.querySelector('#search').addEventListener('click', runQuery);
+    runQuery();
 
   </script>
 </body>

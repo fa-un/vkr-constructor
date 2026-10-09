@@ -62,6 +62,13 @@ const bindingSection = binding
     + '### Что требует подтверждения\n\n'
     + (binding.unknown || []).map(x=>'- ' + x).join('\n') + '\n'
   : '';
+const prototype = spec.prototype;
+const prototypeSection = prototype
+  ? '\n## Материалы прототипа\n\n'
+    + `${prototype.description}\n\n`
+    + (prototype.files || []).map(x => `- [${x.label}](${x.path})`).join('\n')
+    + '\n\n'
+  : '';
 const architectureSection = spec.architecture?.length
   ? '\n## Архитектура решения\n\n'
     + '| Модуль | Ответственность |\n|---|---|\n'
@@ -72,7 +79,7 @@ const stagesSection = spec.stages?.length
     + '| Этап | Объём | Персистентность | Критерий готовности |\n|---|---|---|---|\n'
     + spec.stages.map(x=>`| ${x.id}. ${x.name} | ${x.scope} | ${x.persistence} | ${x.acceptance} |`).join('\n') + '\n'
   : '';
-writeFileSync(out, head + $('#md').value + problemSection + bindingSection + architectureSection + stagesSection + refsSection);
+writeFileSync(out, head + $('#md').value + problemSection + bindingSection + prototypeSection + architectureSection + stagesSection + refsSection);
 console.log(out, '|', $('#topic').textContent, '|', $('#meta').textContent.slice(0, 16));
 const warn = [...d.querySelectorAll('#alerts .alert.warn')].map(x => x.textContent);
 if (warn.length) console.log('предупреждения:\n' + warn.join('\n'));
