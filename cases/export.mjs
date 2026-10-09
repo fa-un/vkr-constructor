@@ -50,7 +50,7 @@ const problemSection = (probs.length || indProb)
     + (indProb ? '### Проблемы отрасли (2025–2026)\n\n' + indProb + '\n' : '')
   : '';
 const mdBody = spec.materials
-  ? $('#md').value.replace(/\*\*Материалы:\*\*[^\n]*/, `**Материалы:** ${spec.materials}`)
+  ? $('#md').value.replace(/\*\*Материалы:\*\*[^\n]*/, `**Материалы:** ${spec.materials}${spec.source_data ? `\n- **Источник данных:** ${spec.source_data}` : ''}`)
   : $('#md').value;
 const binding = spec.data_binding;
 const bindingSection = binding
